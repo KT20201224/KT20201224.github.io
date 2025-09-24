@@ -1,12 +1,14 @@
 ---
-title: "<% tp.file.title %>"
-pubDate: <% tp.date.now("YYYY-MM-DD") %>
+title: 두번째 테스트(이게보이는내용인가)
+pubDate: 2024-09-24
 description: ""
-author: "KT"
-tags: ["기술", "개발"]
+author: KT
+tags:
+  - 기술
+  - 개발
 draft: false
-category: "기술"
-readingTime: "5분"
+category: 기술
+readingTime: 5분
 ---
 
 # <% tp.file.title %>
