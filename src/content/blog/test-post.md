@@ -11,7 +11,7 @@ tags: ['test', 'obsidian']
 이 글은 옵시디언에서 작성해서 자동으로 블로그에 올라온 첫 번째 포스트입니다!
 
 테스트 이미지입니다.
-![Pasted image 20250924223320.png](/images/blog/Pasted image 20250924223320.png)
+![Pasted image 20250924223320.png](/images/blog/Pasted image%2020250924223320.png)
 
 ## 테스트 내용
 
