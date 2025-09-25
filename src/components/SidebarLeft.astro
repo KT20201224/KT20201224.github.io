@@ -2,22 +2,62 @@
 <aside class="sidebar-left">
   <div class="profile-section">
     <div class="profile-image">
-      <div class="avatar">KT</div>
+      <img
+        class="profile-photo"
+        src="/images/jerry_profile.jpg"
+        alt="프로필"
+        width="96"
+        height="96"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
-    <h2>KT</h2>
-    <p class="bio">웹 개발자</p>
+    <h2 class="profile-name">Jerry</h2>
   </div>
 
-  <nav class="sidebar-nav">
-    <h3>Links</h3>
+  <div class="contact-me">
+    <h3>Contact Me</h3>
     <ul>
       <li>
-        <a href="https://github.com/KT20201224" target="_blank">GitHub</a>
+        <a>📧</a>
+        <a href="mailto:rudxo0525@gmail.com">rudxo0525@gmail.com </a>
       </li>
-      <li><a href="mailto:your-email@example.com">Email</a></li>
-      <li><a href="/about">About</a></li>
+      <li>
+        <a>📱</a>
+        <a href="tel:+821033671828">+82 10-3367-1828 </a>
+      </li>
+      <li>
+        <a>🐈‍⬛</a>
+        <a
+          href="https://github.com/KT20201224"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Github
+        </a>
+      </li>
+      <li>
+        <a>🆃</a>
+        <a
+          href="https://lets-post-it.tistory.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tistory
+        </a>
+      </li>
+      <li>
+        <a>🆅</a>
+        <a
+          href="https://velog.io/@rude/posts"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Velog
+        </a>
+      </li>
     </ul>
-  </nav>
+  </div>
 
   <div class="stats-section"></div>
 </aside>
@@ -30,7 +70,66 @@
     height: fit-content;
     background: rgb(var(--gray-light));
     border-radius: 12px;
-    padding: 2em;
+    padding: 1em;
     border: 1px solid rgb(var(--gray-lighter));
+  }
+
+  .profile-section {
+    text-align: center; /* 안쪽 텍스트와 이미지 모두 가운데 정렬 */
+    display: flex; /* 세로 정렬 쉽게 */
+    flex-direction: column; /* 위에서 아래로 */
+    align-items: center; /* 수평 가운데 */
+    gap: 0.5rem; /* 요소 사이 간격 (이미지-이름) */
+  }
+
+  .profile-image {
+    display: grid;
+    place-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .contact-me {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    border: 1px solid rgb(var(--gray-lighter));
+    border-radius: 10px;
+    background: white;
+  }
+
+  .contact-me h3 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: rgb(var(--black));
+  }
+
+  .contact-me ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .contact-me li + li {
+    margin-top: 0.5rem;
+  }
+
+  .contact-me a {
+    text-decoration: none;
+    color: rgb(var(--gray-dark));
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .contact-me a:hover {
+    color: rgb(var(--accent));
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .profile-photo {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
   }
 </style>
