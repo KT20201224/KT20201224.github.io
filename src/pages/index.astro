@@ -50,6 +50,8 @@ const posts = (await getCollection("blog"))
           </div>
           <a href="/blog" class="view-all">모든 포스트 보기 →</a>
         </section>
+        <!-- 테크 뉴스 섹션 -->
+        <section class="tech-news"></section>
       </main>
     </div>
     <Footer />
@@ -244,8 +246,7 @@ const posts = (await getCollection("blog"))
       grid-template-columns: 1fr;
     }
 
-    .sidebar-left,
-    .sidebar-right {
+    .sidebar-left {
       display: none;
     }
   }
