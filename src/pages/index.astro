@@ -1,174 +1,262 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import SidebarLeft from "../components/SidebarLeft.astro";
 
 // 최신 포스트 3개 가져오기
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-).slice(0, 3);
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="ko">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<!-- 히어로 섹션 -->
-			<section class="hero">
-				<h1>안녕하세요, KT입니다</h1>
-				<p class="hero-description">
-					개발과 기술에 대한 생각을 기록하는 공간입니다.
-				</p>
-			</section>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <div class="layout">
+      <SidebarLeft />
 
-			<!-- 최신 포스트 섹션 -->
-			<section class="recent-posts">
-				<h2>최신 포스트</h2>
-				<div class="post-grid">
-					{posts.map((post) => (
-						<article class="post-card">
-							<h3>
-								<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
-							</h3>
-							<time datetime={post.data.pubDate.toISOString()}>
-								{post.data.pubDate.toLocaleDateString('ko-KR')}
-							</time>
-							<p>{post.data.description}</p>
-						</article>
-					))}
-				</div>
-				<a href="/blog" class="view-all">모든 포스트 보기 →</a>
-			</section>
+      <!-- 메인 컨텐츠 영역 -->
+      <main class="main-content">
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+          <h1>안녕하세요, KT입니다</h1>
+          <p class="hero-description">
+            개발과 기술에 대한 생각을 기록하는 공간입니다.
+          </p>
+        </section>
 
-			<!-- 소개 섹션 -->
-			<section class="about">
-				<h2>About</h2>
-				<p>
-					기술 블로그를 통해 배운 것들을 정리하고 공유합니다.
-					주로 웹 개발, 프로그래밍, 그리고 새로운 기술에 대해 다룹니다.
-				</p>
-			</section>
-		</main>
-		<Footer />
-	</body>
+        <!-- 최신 포스트 섹션 -->
+        <section class="recent-posts">
+          <h2>최신 포스트</h2>
+          <div class="post-grid">
+            {
+              posts.map((post) => (
+                <a href={`/blog/${post.id}/`} class="post-card">
+                  <h3>{post.data.title}</h3>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString("ko-KR")}
+                  </time>
+                  <p>{post.data.description}</p>
+                </a>
+              ))
+            }
+          </div>
+          <a href="/blog" class="view-all">모든 포스트 보기 →</a>
+        </section>
+      </main>
+    </div>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	main {
-		width: calc(100% - 2em);
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 2em 1em;
-	}
+  /* 2컬럼 레이아웃 */
+  .layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2em;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1em;
+  }
 
-	.hero {
-		text-align: center;
-		padding: 4em 0;
-		margin-bottom: 3em;
-	}
+  .profile-section {
+    text-align: center;
+    margin-bottom: 2em;
+  }
 
-	.hero h1 {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-		color: rgb(var(--accent));
-	}
+  .avatar {
+    width: 80px;
+    height: 80px;
+    background: rgb(var(--accent));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 auto 1em;
+  }
 
-	.hero-description {
-		font-size: 1.25rem;
-		color: rgb(var(--gray));
-		max-width: 600px;
-		margin: 0 auto;
-	}
+  .profile-section h2 {
+    margin: 0 0 0.5em 0;
+    font-size: 1.5rem;
+  }
 
-	.recent-posts {
-		margin-bottom: 4em;
-	}
+  .bio {
+    color: rgb(var(--gray-dark));
+    margin: 0;
+  }
 
-	.recent-posts h2 {
-		margin-bottom: 2em;
-		font-size: 2rem;
-	}
+  .sidebar-nav h3,
+  .stats-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1em;
+    color: rgb(var(--black));
+  }
 
-	.post-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2em;
-		margin-bottom: 2em;
-	}
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-	.post-card {
-		background: rgb(var(--gray-light));
-		padding: 1.5em;
-		border-radius: 8px;
-		border: 1px solid rgb(var(--gray-lighter));
-	}
+  .sidebar-nav li {
+    margin-bottom: 0.75em;
+  }
 
-	.post-card h3 {
-		margin: 0 0 0.5em 0;
-		font-size: 1.25rem;
-	}
+  .sidebar-nav a {
+    color: rgb(var(--gray-dark));
+    text-decoration: none;
+    padding: 0.5em;
+    display: block;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
 
-	.post-card h3 a {
-		color: rgb(var(--black));
-		text-decoration: none;
-	}
+  .sidebar-nav a:hover {
+    background: rgb(var(--gray-lighter));
+    color: rgb(var(--accent));
+  }
 
-	.post-card h3 a:hover {
-		color: rgb(var(--accent));
-	}
+  .stat-item {
+    text-align: center;
+    padding: 1em;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid rgb(var(--gray-lighter));
+  }
 
-	.post-card time {
-		color: rgb(var(--gray));
-		font-size: 0.9rem;
-	}
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(var(--accent));
+  }
 
-	.post-card p {
-		margin-top: 1em;
-		color: rgb(var(--gray-dark));
-		line-height: 1.5;
-	}
+  .stat-label {
+    color: rgb(var(--gray));
+    font-size: 0.9rem;
+  }
 
-	.view-all {
-		color: rgb(var(--accent));
-		text-decoration: none;
-		font-weight: bold;
-	}
+  /* 메인 컨텐츠 */
+  .main-content {
+    min-height: 100vh;
+  }
 
-	.view-all:hover {
-		text-decoration: underline;
-	}
+  /* 기존 히어로, 포스트 스타일 유지 */
+  .hero {
+    text-align: center;
+    padding: 4em 0;
+    margin-bottom: 3em;
+  }
 
-	.about {
-		text-align: center;
-		padding: 3em 0;
-	}
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: rgb(var(--accent));
+  }
 
-	.about h2 {
-		margin-bottom: 1em;
-		font-size: 2rem;
-	}
+  .hero-description {
+    font-size: 1.25rem;
+    color: rgb(var(--gray));
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-	.about p {
-		font-size: 1.1rem;
-		color: rgb(var(--gray-dark));
-		max-width: 600px;
-		margin: 0 auto;
-		line-height: 1.6;
-	}
+  .recent-posts {
+    margin-bottom: 4em;
+  }
 
-	@media (max-width: 768px) {
-		.hero h1 {
-			font-size: 2rem;
-		}
-		
-		.post-grid {
-			grid-template-columns: 1fr;
-		}
-	}
+  .recent-posts h2 {
+    margin-bottom: 2em;
+    font-size: 2rem;
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em;
+    margin-bottom: 2em;
+  }
+
+  .post-card {
+    display: block;
+    background: rgb(var(--gray-light));
+    padding: 1.5em;
+    border-radius: 8px;
+    border: 1px solid rgb(var(--gray-lighter));
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-color: rgb(var(--accent));
+  }
+
+  .post-card h3 {
+    margin: 0 0 0.5em 0;
+    font-size: 1.25rem;
+    color: rgb(var(--black));
+    transition: color 0.2s ease;
+  }
+
+  .post-card:hover h3 {
+    color: rgb(var(--accent));
+  }
+
+  .post-card time {
+    color: rgb(var(--gray));
+    font-size: 0.9rem;
+  }
+
+  .post-card p {
+    margin-top: 1em;
+    color: rgb(var(--gray-dark));
+    line-height: 1.5;
+  }
+
+  .view-all {
+    color: rgb(var(--accent));
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+
+  /* 반응형 */
+  @media (max-width: 1200px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar-left,
+    .sidebar-right {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
