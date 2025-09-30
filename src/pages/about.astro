@@ -1,73 +1,157 @@
 ---
 import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
-import Layout from "../layouts/BlogPost.astro";
+import Layout from "../layouts/AboutLayout.astro";
 ---
 
-<Layout
-  title="About Me"
-  description="Lorem ipsum dolor sit amet"
-  pubDate={new Date("August 08 2021")}
-  heroImage={AboutHeroImage}
->
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo
-    integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis
-    egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In
-    hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat.
-    Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu
-    non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim.
-    Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed
-    vulputate mi. Dictumst quisque sagittis purus sit amet.
-  </p>
+<Layout title="About Me" description="KT 소개" heroImage={AboutHeroImage}>
+  <!-- Intro 섹션 -->
+  <section class="profile-intro">
+    <div class="profile-image">
+      <img src="/images/profile.jpg" alt="프로필 사진" />
+    </div>
 
-  <p>
-    Morbi tristique senectus et netus. Id semper risus in hendrerit gravida
-    rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus
-    sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris
-    rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus
-    dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-    massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius
-    morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras
-    ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est
-    ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa
-    ultricies mi.
-  </p>
+    <div class="profile-text">
+      <h2>안녕하세요, 김경태입니다.</h2>
+      <p>
+        이 블로그는 제가 공부한 내용을 정리하고 공유하기 위한 공간입니다.
+        프론트엔드, 백엔드, 클라우드, AI 영역을 불문하고, IT 기술을 공부하고
+        있습니다.
+      </p>
+      <p>현재는 AI를 집중적으로 공부하고 있습니다.</p>
+      <p>새로운 기술을 배우고 문제를 해결하는 과정을 즐깁니다.</p>
+    </div>
+  </section>
 
-  <p>
-    Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque.
-    Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac
-    felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit
-    amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed
-    elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-    dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra.
-    Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum
-    consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus
-    ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-    facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed
-    risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor
-    vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus
-    non. Amet dictum sit amet justo donec enim.
-  </p>
+  <hr class="section-divider" />
 
-  <p>
-    Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac
-    ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem
-    viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu
-    ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac
-    tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-    pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim
-    sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam.
-    Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
-  </p>
+  <!-- 기술 스택 섹션 -->
+  <section class="tech-section">
+    <div class="tech-column">
+      <h2>⚙️ Frameworks</h2>
+      <ul class="tech-list">
+        <li><span class="icon">⚛️</span> React</li>
+        <li><span class="icon">🚀</span> Astro</li>
+        <li><span class="icon">🟢</span> Node.js</li>
+        <li><span class="icon">⚡</span> Express</li>
+      </ul>
+    </div>
 
-  <p>
-    Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus
-    imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu
-    cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum.
-    Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit
-    libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed
-    pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique
-    magna.
-  </p>
+    <div class="tech-column">
+      <h2>💬 Languages</h2>
+      <ul class="tech-list">
+        <li><span class="icon">💛</span> JavaScript</li>
+        <li><span class="icon">💙</span> TypeScript</li>
+        <li><span class="icon">🐍</span> Python</li>
+        <li><span class="icon">☕</span> Java</li>
+      </ul>
+    </div>
+
+    <div class="tech-column">
+      <h2>🛠 Tools</h2>
+      <ul class="tech-list">
+        <li><span class="icon">🔧</span> Git</li>
+        <li><span class="icon">💻</span> VS Code</li>
+        <li><span class="icon">🐳</span> Docker</li>
+        <li><span class="icon">📦</span> npm</li>
+      </ul>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .profile-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 3em;
+    margin-bottom: 1em;
+    padding: 1em;
+    border-radius: 12px;
+  }
+
+  .profile-image img {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-image .avatar {
+    width: 200px;
+    height: 200px;
+    background: rgb(var(--accent));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-text h2 {
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-size: 1.8rem;
+    color: rgb(var(--black));
+  }
+
+  .profile-text p {
+    line-height: 1.7;
+    color: rgb(var(--gray-dark));
+    margin-bottom: 1em;
+  }
+
+  @media (max-width: 768px) {
+    .profile-intro {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+  .section-divider {
+    margin: 4em 0;
+    border: 0;
+    height: 1px;
+    background: rgb(var(--gray-lighter));
+  }
+
+  .tech-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3em;
+    margin-bottom: 4em;
+  }
+
+  .tech-column h2 {
+    margin-bottom: 1.5em;
+    font-size: 1.5rem;
+    color: rgb(var(--black));
+  }
+
+  .tech-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75em;
+  }
+
+  .tech-badge {
+    background: rgb(var(--accent));
+    color: black;
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+  }
+
+  .tech-badge:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .tech-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
