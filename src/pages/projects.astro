@@ -1,0 +1,122 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE } from "../consts";
+
+// 프로젝트 데이터 (나중에 별도 파일로 분리 가능)
+const projects = [
+  {
+    title: "프로젝트 1",
+    description: "프로젝트 설명",
+    tech: ["React", "TypeScript"],
+    github: "https://github.com/...",
+    demo: "https://...",
+  },
+  // 추가 프로젝트들...
+];
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead title={`Projects | ${SITE_TITLE}`} description="프로젝트 목록" />
+  </head>
+  <body>
+    <Header />
+    <main class="projects-page">
+      <h1>Projects</h1>
+
+      <div class="projects-grid">
+        {
+          projects.map((project) => (
+            <article class="project-card">
+              <h2>{project.title}</h2>
+              <p>{project.description}</p>
+              <div class="tech-stack">
+                {project.tech.map((tech) => (
+                  <span class="tech-tag">{tech}</span>
+                ))}
+              </div>
+              <div class="project-links">
+                {project.github && (
+                  <a href={project.github} target="_blank">
+                    GitHub
+                  </a>
+                )}
+                {project.demo && (
+                  <a href={project.demo} target="_blank">
+                    Demo
+                  </a>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .projects-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3em 2em;
+  }
+
+  .projects-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2em;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2em;
+  }
+
+  .project-card {
+    background: rgb(var(--gray-light));
+    padding: 2em;
+    border-radius: 12px;
+    border: 1px solid rgb(var(--gray-lighter));
+  }
+
+  .project-card h2 {
+    margin-top: 0;
+    color: rgb(var(--accent));
+  }
+
+  .tech-stack {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    margin: 1em 0;
+  }
+
+  .tech-tag {
+    background: rgb(var(--accent));
+    color: white;
+    padding: 0.25em 0.75em;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 1em;
+    margin-top: 1.5em;
+  }
+
+  .project-links a {
+    color: rgb(var(--accent));
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .project-links a:hover {
+    text-decoration: underline;
+  }
+</style>
