@@ -1,6 +1,46 @@
 ---
 import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
 import Layout from "../layouts/AboutLayout.astro";
+import * as simpleIcons from "simple-icons";
+
+const handle = "olly123"; // 본인 백준 아이디
+const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
+const data = await res.json();
+
+// 티어 숫자를 이름으로 변환
+const tierNames = [
+  "Unrated",
+  "Bronze V",
+  "Bronze IV",
+  "Bronze III",
+  "Bronze II",
+  "Bronze I",
+  "Silver V",
+  "Silver IV",
+  "Silver III",
+  "Silver II",
+  "Silver I",
+  "Gold V",
+  "Gold IV",
+  "Gold III",
+  "Gold II",
+  "Gold I",
+  "Platinum V",
+  "Platinum IV",
+  "Platinum III",
+  "Platinum II",
+  "Platinum I",
+  "Diamond V",
+  "Diamond IV",
+  "Diamond III",
+  "Diamond II",
+  "Diamond I",
+  "Ruby V",
+  "Ruby IV",
+  "Ruby III",
+  "Ruby II",
+  "Ruby I",
+];
 ---
 
 <Layout title="About Me" description="KT 소개" heroImage={AboutHeroImage}>
@@ -14,12 +54,98 @@ import Layout from "../layouts/AboutLayout.astro";
       <h2>안녕하세요, 김경태입니다.</h2>
       <p>
         이 블로그는 제가 공부한 내용을 정리하고 공유하기 위한 공간입니다.
-        프론트엔드, 백엔드, 클라우드, AI 영역을 불문하고, IT 기술을 공부하고
-        있습니다.
+        프론트엔드, 백엔드, 클라우드, AI 영역을 불문하고, IT 기술에 관심이
+        많습니다.
       </p>
-      <p>현재는 AI를 집중적으로 공부하고 있습니다.</p>
+      <p>현재는 카카오테크 부트캠프에서 AI를 집중적으로 공부하고 있습니다.</p>
       <p>새로운 기술을 배우고 문제를 해결하는 과정을 즐깁니다.</p>
     </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- 경력사항 섹션 -->
+  <section class="career-section">
+    <h2>💼 경력사항</h2>
+    <ul class="experience-list">
+      <li class="experience-item">
+        <div class="experience-header">
+          <h3>한국전자기술연구원</h3>
+          <span class="period">2021.07 - 2022.08</span>
+        </div>
+        <p class="position">연구원</p>
+        <ul class="description">
+          <li>유니티를 활용한 디지털트윈 환경 구축</li>
+          <li>데이터 시각화</li>
+        </ul>
+      </li>
+      <!-- 추가 경력 -->
+    </ul>
+  </section>
+
+  <!-- 구분선 -->
+  <hr class="section-divider" />
+
+  <!-- 기타활동 섹션 -->
+  <section class="activity-section">
+    <h2>🎯 기타활동</h2>
+    <ul class="experience-list">
+      <li class="experience-item">
+        <div class="experience-header">
+          <h3>컴퓨터응용소프트웨어 제 36대 학생회</h3>
+          <span class="period">2021.11 - 2022.10</span>
+        </div>
+        <p class="position">학생회장</p>
+        <ul class="description">
+          <li>학과 학생회 운영</li>
+        </ul>
+      </li>
+      <li class="experience-item">
+        <div class="experience-header">
+          <h3>웹개발 동아리 "원더독"</h3>
+          <span class="period">2022.03 - 2022.07</span>
+        </div>
+        <p class="position">동아리원</p>
+        <ul class="description">
+          <li>Django 웹 개발</li>
+        </ul>
+      </li>
+      <li class="experience-item">
+        <div class="experience-header">
+          <h3>자기주도적설계프로그램</h3>
+          <span class="period">2018.03 - 2018.07</span>
+        </div>
+        <p class="position">팀장</p>
+        <ul class="description">
+          <li>"스마트 미러" 개발</li>
+          <li>장려상 수상</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 구분선 -->
+  <hr class="section-divider" />
+
+  <!-- 자격증 섹션 -->
+  <section class="certification-section">
+    <h2>📜 Certifications</h2>
+    <ul class="cert-list">
+      <li class="cert-item">
+        <div class="cert-info">
+          <h3>정보처리기사</h3>
+          <p class="cert-issuer">한국산업인력공단</p>
+        </div>
+        <span class="cert-date">2022.11</span>
+      </li>
+      <li class="cert-item">
+        <div class="cert-info">
+          <h3>SQLD</h3>
+          <p class="cert-issuer">한국데이터산업진흥원</p>
+        </div>
+        <span class="cert-date">2024.06</span>
+      </li>
+    </ul>
   </section>
 
   <hr class="section-divider" />
@@ -29,31 +155,132 @@ import Layout from "../layouts/AboutLayout.astro";
     <div class="tech-column">
       <h2>⚙️ Frameworks</h2>
       <ul class="tech-list">
-        <li><span class="icon">⚛️</span> React</li>
-        <li><span class="icon">🚀</span> Astro</li>
-        <li><span class="icon">🟢</span> Node.js</li>
-        <li><span class="icon">⚡</span> Express</li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/react"
+            class="tech-icon"
+            alt="React"
+          />
+          React
+        </li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/nodedotjs"
+            class="tech-icon"
+            alt="Node.js"
+          />
+          Node.js
+        </li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/spring"
+            class="tech-icon"
+            alt="Spring"
+          />
+          Spring
+        </li>
       </ul>
     </div>
 
     <div class="tech-column">
       <h2>💬 Languages</h2>
       <ul class="tech-list">
-        <li><span class="icon">💛</span> JavaScript</li>
-        <li><span class="icon">💙</span> TypeScript</li>
-        <li><span class="icon">🐍</span> Python</li>
-        <li><span class="icon">☕</span> Java</li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/javascript"
+            class="tech-icon"
+            alt="JavaScript"
+          />
+          JavaScript
+        </li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/typescript"
+            class="tech-icon"
+            alt="TypeScript"
+          />
+          TypeScript
+        </li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/openjdk"
+            class="tech-icon"
+            alt="Java"
+          />
+          Java
+        </li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/python"
+            class="tech-icon"
+            alt="Python"
+          />
+          Python
+        </li>
+        <li>
+          <img src="https://cdn.simpleicons.org/c" class="tech-icon" alt="C" />
+          C
+        </li>
+        <li>
+          <img src="https://cdn.simpleicons.org/r" class="tech-icon" alt="R" />
+          R
+        </li>
       </ul>
     </div>
 
     <div class="tech-column">
       <h2>🛠 Tools</h2>
       <ul class="tech-list">
-        <li><span class="icon">🔧</span> Git</li>
-        <li><span class="icon">💻</span> VS Code</li>
-        <li><span class="icon">🐳</span> Docker</li>
-        <li><span class="icon">📦</span> npm</li>
+        <li>
+          <img
+            src="https://cdn.simpleicons.org/git"
+            class="tech-icon"
+            alt="Git"
+          />
+          Git
+        </li>
+        <li>
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"
+            class="tech-icon"
+            alt="VS Code"
+          />
+          VS Code
+        </li>
       </ul>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- 백준 티어 섹션 -->
+  <section class="baekjoon-section">
+    <h2>🏆 Algorithm</h2>
+    <div class="baekjoon-content">
+      <div class="baekjoon-stats">
+        <div class="stat-item">
+          <span class="stat-label">티어</span>
+          <span class="stat-value">{tierNames[data.tier]}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">해결한 문제</span>
+          <span class="stat-value">{data.solvedCount}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">레이팅</span>
+          <span class="stat-value">{data.rating}</span>
+        </div>
+      </div>
+      <div class="baekjoon-info">
+        <p>알고리즘 문제 해결 능력을 꾸준히 향상시키고 있습니다.</p>
+        <a
+          href={`https://solved.ac/profile/${handle}`}
+          target="_blank"
+          class="baekjoon-link"
+        >
+          Solved.ac 프로필 보기 →
+        </a>
+      </div>
     </div>
   </section>
 </Layout>
@@ -109,11 +336,134 @@ import Layout from "../layouts/AboutLayout.astro";
       text-align: center;
     }
   }
-  .section-divider {
-    margin: 4em 0;
-    border: 0;
-    height: 1px;
-    background: rgb(var(--gray-lighter));
+
+  .experience-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  .experience-item {
+    padding: 1.5em;
+    background: rgb(var(--gray-light));
+    border-radius: 8px;
+    border-left: 4px solid rgb(var(--accent));
+  }
+
+  .experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5em;
+    gap: 1em;
+  }
+
+  .experience-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: rgb(var(--black));
+  }
+
+  .period {
+    color: rgb(var(--gray));
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .position {
+    margin: 0 0 1em 0;
+    color: rgb(var(--accent));
+    font-weight: 500;
+  }
+
+  .description {
+    margin: 0;
+    padding-left: 1.5em;
+    color: rgb(var(--gray-dark));
+  }
+
+  .description li {
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+  }
+
+  .career-section,
+  .activity-section {
+    margin-bottom: 1em;
+  }
+
+  .career-section h2,
+  .activity-section h2 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.8rem;
+    color: rgb(var(--black));
+  }
+
+  @media (max-width: 1024px) {
+    .experience-section {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .certification-section {
+    margin-bottom: 4em;
+  }
+
+  .certification-section h2 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.8rem;
+    color: rgb(var(--black));
+  }
+
+  .cert-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  .cert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5em;
+    background: rgb(var(--gray-light));
+    border-radius: 8px;
+    border-left: 4px solid rgb(var(--accent));
+  }
+
+  .cert-info h3 {
+    margin: 0 0 0.5em 0;
+    font-size: 1.1rem;
+    color: rgb(var(--black));
+  }
+
+  .cert-issuer {
+    margin: 0;
+    color: rgb(var(--gray));
+    font-size: 0.9rem;
+  }
+
+  .cert-date {
+    color: rgb(var(--gray-dark));
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-left: 1em;
+  }
+
+  @media (max-width: 768px) {
+    .cert-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5em;
+    }
   }
 
   .tech-section {
@@ -121,6 +471,7 @@ import Layout from "../layouts/AboutLayout.astro";
     grid-template-columns: 1fr 1fr 1fr;
     gap: 3em;
     margin-bottom: 4em;
+    padding-top: 2em; /* 상단 간격 추가 */
   }
 
   .tech-column h2 {
@@ -129,29 +480,59 @@ import Layout from "../layouts/AboutLayout.astro";
     color: rgb(var(--black));
   }
 
-  .tech-items {
+  .tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.75em;
+    flex-direction: column;
+    gap: 0.75em; /* 항목 간 간격 */
   }
 
-  .tech-badge {
-    background: rgb(var(--accent));
-    color: black;
-    padding: 0.5em 1em;
-    border-radius: 20px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: transform 0.2s ease;
+  .tech-list li {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: rgb(var(--gray-dark));
   }
 
-  .tech-badge:hover {
-    transform: translateY(-2px);
+  .tech-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75em;
+    flex-shrink: 0; /* 아이콘 크기 고정 */
   }
-
   @media (max-width: 1024px) {
     .tech-section {
       grid-template-columns: 1fr;
     }
+  }
+
+  .baekjoon-stats {
+    display: flex;
+    gap: 2em;
+    margin-bottom: 2em;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    background: white;
+    border-radius: 8px;
+    min-width: 120px;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: rgb(var(--gray));
+    margin-bottom: 0.5em;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(var(--accent));
   }
 </style>
