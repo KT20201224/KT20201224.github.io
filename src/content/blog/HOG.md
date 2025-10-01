@@ -52,11 +52,20 @@ Gradient는 두가지 성분으로 표현됩니다. 방향과 크기죠.
 우리는 Sobel을 활용해서 다음을 계산합니다. Sobel을 활용하면 주변픽셀에 가중치를 두어 노이즈를 줄이고, 더 부드러운 Gradient를 찾을 수 있습니다.
 
 ```python
+# difference
+gx_simple = np.zeros_like(gray)
+gy_simple = np.zeros_like(gray)
 
+gx_simple[:, 1:-1] = gray[:, 2:] - gray[:, :-2]
+gy_simple[1:-1, :] = gray[2:, :] - gray[:-2, :]
+
+# Sobel
+gx_sobel = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
+gy_sobel = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
 ```
 
-
-
+![HOG-20251001-2.png](/images/blog/HOG-20251001-2.png)
+실제로 Sobel 방식이 윤곽이 더 선명해지는 모습을 보입니다.
 
 
 
