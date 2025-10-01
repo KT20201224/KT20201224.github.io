@@ -5,6 +5,7 @@ description: HOG에 대한 공부
 author: Kyoungtea Kim
 tags:
   - HOG
+  - AI
 ---
 Histogram of Oriented Gradients 직역하면 "기울기 지향 히스토그램" 이다. 히스토그램은 도수분포표를 시각화 한 그래프를 말하는데, 그러면 기울기의 분포를 구간별로 나타낸 그래프라고 해석이 된다.
 
@@ -141,7 +142,15 @@ B = [0.267, 0.535, 0.802]
 
 HOG의 정규화도 똑같이 진행하면 되죠. 다만 차이점은 8x8이 아닌 16x16으로 8픽셀씩 움직이면서 계산합니다. 여기서 의문점이 생깁니다. 16x16인데 8픽셀씩 움직이면 같은 셀이 중복되어서 나타나는 것이 아닌가? 네 맞습니다. 실제로 중복해서 정규화를 진행합니다. 블록들을 서로 8픽셀씩 중복시키면 데이터가 복제되는 것이아니라 주변 Gradient들이 더 부드럽게 연결됩니다.
 
-
+#### 5. 최종 형태 HOG Feature Vector
+이렇게 힘들게 만든 HOG 데이터는 어떻게 생겼을까? 우선 Flow를 다시 한 번 살펴보자
+1. 이미지 자르기 (64x128 픽셀)
+2. 그레이스케일
+3. 픽셀 별 Gradient 계산
+4. Cell Histogram 8x8 -> 9-bin histogram 생성
+5. Block Normalization 16x16 -> total 7x15 = 105 blocks, 4cells x 9-bin = 36 values
+6. Concatenation 105(blocks)x36(values) = 3780 values
+7. HOG Feature Vector = 3780 Vector
 
 이 글은 아래 링크를 읽고 얻은 내용을 바탕으로 작성하였습니다.
 출처 : https://learnopencv.com/histogram-of-oriented-gradients/
