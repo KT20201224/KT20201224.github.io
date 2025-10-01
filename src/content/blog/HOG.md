@@ -34,11 +34,17 @@ HOG Feature Descriptor에서도 Gradient(기울기) 방향의 분포가 특징�
 
 위 논문에서는 64x128 크기를 기준으로 계산됩니다. 
 
-아래 720x475 크기의 이미지에서 우리는 HOG Featrure Descriptor를 계산하기 위해 100x200 크기를 잘라내고, resize를 진행하였습니다.
+아래 720x475 크기의 이미지에서 우리는 HOG Featrure Descriptor를 계산하기 위해 100x200 크기를 잘라내고, resize를 진행하였습니다. 또한 앞서 봣듯이 색상은 물체의 형태를 구분하는 데 필요하지 않기 때문에, 이미지를 그레이스케일링 해줍니다.
 
 [![각 이미지 패치에 대해 고정되고 균일한 종횡비를 유지하기 위한 HOG 전처리.](https://learnopencv.com/wp-content/uploads/2016/11/hog-preprocessing.jpg)](https://learnopencv.com/wp-content/uploads/2016/11/hog-preprocessing.jpg)
+#### 2. 이미지 계산
+물체를 인식하는 핵심은 바로 "형태"입니다. 그래서 우리는 이제 주어진 이미지에서 Gradient를 계산합니다. 물체의 밝기가 급격하게 변화하는 부분은 물체의 윤곽(Edge)이고, 그것이 Gradient(밝기의 변화량)이죠. 다음 데이터에서 가장 큰 변화율을 가지는 부분은 어딜까요?
 
+```text
+[10,11,12,100,101,102]
+```
 
+12 -> 100 에서 가장 Gradient가 크죠. 우리는 이미지 파일에서도 똑같이 이 부분을 찾아낼 것입니다.
 
 
 
