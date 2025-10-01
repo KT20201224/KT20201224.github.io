@@ -45,6 +45,18 @@ HOG Feature Descriptor에서도 Gradient(기울기) 방향의 분포가 특징�
 ```
 
 12 -> 100 에서 가장 Gradient가 크죠. 우리는 이미지 파일에서도 똑같이 이 부분을 찾아낼 것입니다.
+Gradient는 두가지 성분으로 표현됩니다. 방향과 크기죠.
+
+![HOG-20251001-1.png](/images/blog/HOG-20251001-1.png)
+
+우리는 Sobel을 활용해서 다음을 계산합니다. Sobel을 활용하면 주변픽셀에 가중치를 두어 노이즈를 줄이고, 더 부드러운 Gradient를 찾을 수 있습니다.
+
+```python
+
+```
+
+
+
 
 
 
