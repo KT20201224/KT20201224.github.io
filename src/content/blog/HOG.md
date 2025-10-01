@@ -34,7 +34,7 @@ HOG Feature Descriptor에서도 Gradient(기울기) 방향의 분포가 특징�
 
 위 논문에서는 64x128 크기를 기준으로 계산됩니다. 
 
-아래 720x475 크기의 이미지에서 우리는 HOG Featrure Descriptor를 계산하기 위해 100x200 크기를 잘라내고, resize를 진행하였습니다. 또한 앞서 봣듯이 색상은 물체의 형태를 구분하는 데 필요하지 않기 때문에, 이미지를 그레이스케일링 해줍니다.
+아래 720x475 크기의 이미지에서 우리는 HOG Featrure Descriptor를 계산하기 위해 100x200 크기를 잘라내고, resize를 진행하였습니다. 또한 앞서 봣듯이 색상은 물체의 형태를 구분하는 데 필요하지 않기 때문에, 이미지를 그레이스케일링 해줍니다. 
 
 [![각 이미지 패치에 대해 고정되고 균일한 종횡비를 유지하기 위한 HOG 전처리.](https://learnopencv.com/wp-content/uploads/2016/11/hog-preprocessing.jpg)](https://learnopencv.com/wp-content/uploads/2016/11/hog-preprocessing.jpg)
 #### 2. 이미지 계산
@@ -49,25 +49,68 @@ Gradient는 두가지 성분으로 표현됩니다. 방향과 크기죠.
 
 ![HOG-20251001-1.png](/images/blog/HOG-20251001-1.png)
 
-우리는 Sobel을 활용해서 다음을 계산합니다. Sobel을 활용하면 주변픽셀에 가중치를 두어 노이즈를 줄이고, 더 부드러운 Gradient를 찾을 수 있습니다.
+우리는 Sobel을 활용해서 다음을 계산합니다. Sobel을 활용하면 주변픽셀에 가중치를 두어 노이즈를 줄이고, 더 부드러운 Gradient를 찾을 수 있습니다. 실제 단순히 변화량을 계산한 경우와 Sobel을 활용한 결과를 비교해 보았습니다.
 
 ```python
-# difference
-gx_simple = np.zeros_like(gray)
-gy_simple = np.zeros_like(gray)
+from skimage import data, color, feature, transform
+import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+  
+# Sample Image
+image = data.astronaut()
+image = image[0:200, 180:280]
+resized = transform.resize(image, (128, 64))
+  
+# gray cale
+gray = color.rgb2gray(resized)
+gray = np.float32(gray)
+  
+# 방법 1: 단순 차분
+gx_diff = np.zeros_like(gray)
+gy_diff = np.zeros_like(gray)
 
-gx_simple[:, 1:-1] = gray[:, 2:] - gray[:, :-2]
-gy_simple[1:-1, :] = gray[2:, :] - gray[:-2, :]
+gx_diff[:, 1:-1] = gray[:, 2:] - gray[:, :-2]
+gy_diff[1:-1, :] = gray[2:, :] - gray[:-2, :]
 
-# Sobel
+# 방법 2: Sobel
 gx_sobel = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
 gy_sobel = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
+
+# 크기, 방향
+mag_diff, angle_diff = cv2.cartToPolar(gx_diff, gy_diff, angleInDegrees=True)
+mag_sobel, angle_sobel = cv2.cartToPolar(gx_sobel, gy_sobel, angleInDegrees=True)
+angle_diff = angle_diff % 180
+angle_sobel = angle_sobel % 180
+
+# 강한 edge만
+threshold_diff = mag_diff.mean() + mag_diff.std()
+strong_edges_diff = mag_diff > threshold_diff
+threshold_sobel = mag_sobel.mean() + mag_sobel.std()
+strong_edges_sobel = mag_sobel > threshold_sobel
+
+# 방향을 색으로
+angle_colored_diff = np.zeros((*gray.shape, 3))
+angle_colored_diff[strong_edges_diff] = plt.cm.hsv(angle_diff[strong_edges_diff] / 180.0)[:,:3]
+angle_colored_sobel = np.zeros((*gray.shape, 3))
+angle_colored_sobel[strong_edges_sobel] = plt.cm.hsv(angle_sobel[strong_edges_sobel] / 180.0)[:,:3]
+
+# 시각화
+fig, axes = plt.subplots(1,2,figsize=(10, 8))
+
+axes[0].imshow(angle_colored_diff)
+axes[0].set_title('diff')
+axes[0].axis('off')
+axes[1].imshow(angle_colored_sobel)
+axes[1].set_title('sobel')
+axes[1].axis('off')
 ```
 
-![HOG-20251001-2.png](/images/blog/HOG-20251001-2.png)
-실제로 Sobel 방식이 윤곽이 더 선명해지는 모습을 보입니다.
+![HOG-20251001-4.png](/images/blog/HOG-20251001-4.png)
+육안으로 그렇게 큰차이는 보이지 않지만, Sobel 방식이 머리카락 부분에서 불필요한 데이터를 조금 더 제거 한 것 같습니다.
 
-
+#### 8x8 셀 히스토그램
+이제 이미지를 8x8 셀로 나누고 각 8x8 셀에 대하여 Gradient Histogram이 계산됩니다. 왜 128x64데이터를 모두 사용 안하고, 8x8로 다시 구분하는지는, 의문이 듭니다. 하지만 고작 128x64의 픽셀 단위로 계산해도 약 8000개의 픽셀 데이터를 다루게 됩니다. 데이터의 양과 정확도는 슬프게도 비례하지 않습니다. (물론 반비례하지도 않습니다.) 너무 많은 정보는 노이즈에 약하다 정도로 알고 가면 좋을 것 같습니다. 셀단위로 나누면 128개의 셀 데이터가 생기는데 이정도 크기로도 사람의 형태를 구분하는데 충분하죠. 
 
 
 이 글은 아래 링크를 읽고 얻은 내용을 바탕으로 작성하였습니다.
