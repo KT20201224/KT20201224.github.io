@@ -112,6 +112,20 @@ axes[1].axis('off')
 #### 8x8 셀 히스토그램
 이제 이미지를 8x8 셀로 나누고 각 8x8 셀에 대하여 Gradient Histogram이 계산됩니다. 왜 128x64데이터를 모두 사용 안하고, 8x8로 다시 구분하는지는, 의문이 듭니다. 하지만 고작 128x64의 픽셀 단위로 계산해도 약 8000개의 픽셀 데이터를 다루게 됩니다. 데이터의 양과 정확도는 슬프게도 비례하지 않습니다. (물론 반비례하지도 않습니다.) 너무 많은 정보는 노이즈에 약하다 정도로 알고 가면 좋을 것 같습니다. 셀단위로 나누면 128개의 셀 데이터가 생기는데 이정도 크기로도 사람의 형태를 구분하는데 충분하죠. 
 
+[![화살표와 숫자(값)를 사용하여 이미지에 표현된 HOG 셀 그라디언트.](https://learnopencv.com/wp-content/uploads/2016/12/hog-cell-gradients.png)](https://learnopencv.com/wp-content/uploads/2016/12/hog-cell-gradients.png)
+다음은 한 셀을 Gradient로 표현한 자료입니다. 화살표의 방향은 Gradient Direction을 길이는 Gradient Magnitude를 나타냅니다. Direction 값을 자세히 보면 표현은 360도 모두 표현되지만, Gradient Direction에는 |-180~180| 을 사용합니다. 이는 경험적으로 부호 없는 Gradient가 더 잘 작동한다는 것에 근거한다.
+
+[![Histogram computation in HOG - selection of bin and values to be added to each bin based on Gradient and Magnitude.](https://learnopencv.com/wp-content/uploads/2016/12/hog-histogram-1.png)](https://learnopencv.com/wp-content/uploads/2016/12/hog-histogram-1.png)
+
+두 Gradient 값으로 Histogram을 만드는 과정은 다음과 같습니다. Direction이 히스토그램 값과 정확히 일치하는 경우, Magnitude 값을 그대로 사용합니다. Direction값이 일치하지 않는 경우에는 비율에 맞춰 값을 저장합니다. (10-0) : (20-10) 의 비율로 각각 2의 값이 들어갑니다. 160이상의 Direction 값에서는 0 Direction과 가중치를 나누겠네요. Histogram of Gradients는 원형 리스트와 유사하게 생긴 것 같습니다.
+
+[![8x8 셀의 히스토그램 - 계산된 9빈 히스토그램 값을 나타내는 막대 그래프.](https://learnopencv.com/wp-content/uploads/2016/12/histogram-8x8-cell.png)](https://learnopencv.com/wp-content/uploads/2016/12/histogram-8x8-cell.png)
+
+이렇게 모든 픽셀에 대한 가중치를 계산하면, 위 사진의 경우에는 140~20도 사이에 많은 가중치를 가지고 있다는 것을 알고 있습니다. 이는 셀의 Gradient가 위or아래를 가리키고 있다는 뜻입니다.
+
+
+
+
 
 이 글은 아래 링크를 읽고 얻은 내용을 바탕으로 작성하였습니다.
 출처 : https://learnopencv.com/histogram-of-oriented-gradients/
