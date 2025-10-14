@@ -54,3 +54,59 @@ K는 KNN에서 가장 중요한 하이퍼파라미터이다. K값을 어떻게 �
 
 - 단점
 	- 지역적 패턴을 무시하는 경향이 있다.
+
+#### 3. 적절한 K값 구하기
+보통 √n (n=학습데이터 개수)를 시작으로 교차 검증으로 최적값을 찾아 나간다. 이진 분류의 경우에는 동률을 방지하기 위해 홀수로 선택합니다.
+
+---
+## 데이터 전처리
+
+#### 1. 스케일링
+KNN은 거리 기반 알고리즘으로 스케일링이 필수적입니다. x,y축으로 이루어진 2차원상의 거리가 아닌 각 feaure값 거리이기 때문에 서로 다른 단위의 feature를 단순하게 거리로 계산하게 되면 단위가 큰 값이 거리에 지배적이다. 이를 반드시 스케일링 해줘야한다.
+- 정규화 : 0~1 범위로 변환 $$(x - min)/(max - min)$$
+- 표준화 : 평균 0, 표준편차 1로 변환 $$(x - 평균)/표준편차$$
+#### 2. 결측치
+KNN은 결측치가 있으면 거리 계산이 불가하다. 이와 같은 경우는, 평균/중앙값으로 대체하거나, 해당 샘플은 제거한다.
+
+---
+## KNN 장단점
+#### 장점
+1. 직관적이고 이해하기 쉽다.
+2. 복잡한 패턴도 학습할 수 있고, 선형 분리가 불가능한 데이터도 처리할 수 있다.
+3. 분류/회귀 모두 사용이 가능하다.
+4. 학습하는 과정이 따로 필요없다.
+5. 확률적으로 해석이 가능하다.
+
+#### 단점
+1. 계산 비용이 높다. 모든 데이터와 거리 계산이 필수적
+2. 계산양만큼, 모든 데이터를 저장해야하기 때문에 메모리 소모가 크다.
+3. feature가 많은 경우에는 성능이 저하된다.
+4. 불균형 데이터에 취약하다. 데이터가 많은 정답으로 예측이 편향될 수 있다.
+
+---
+
+## 코드
+```
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
+
+# Iris 데이터 load
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 데이터 셋 분할
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 데이터 스케일링
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+```
