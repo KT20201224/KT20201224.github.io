@@ -105,8 +105,25 @@ y = iris.target
 # 데이터 셋 분할
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 데이터 스케일링
+# 데이터 스케일링 Train Data에서 한번만 표준화
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
+
+# PyTorch Tensor 변환
+X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
+y_train_tensor = torch.tensor(y_train, dtype=torch.long)
+X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
+y_test_tensor = torch.tensor(y_test, dtype=torch.long)
+
+# K-NN 모델 생성 (K=5 설정)
+k = 5
+knn_model = KNeighborsClassifier(n_neighbors=k)
+
+# 모델 학습
+knn_model.fit(X_train_tensor.numpy(), y_train_tensor.numpy())
+
+# 모델 평가
+accuracy = knn_model.score(X_test_tensor.numpy(), y_test_tensor.numpy())
+print(f"테스트 데이터 정확도: {accuracy:.4f}")
 ```
