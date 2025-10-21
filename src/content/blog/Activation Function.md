@@ -27,4 +27,8 @@ Step Function은 신경망의 기본 모델인 **퍼셉트론(Perceptron)**에�
 ###### 단점
 임계값에서 불연속하므로, 미분이 불가능합니다. 이는 역전파(Backpropagation) 알고리즘을 사용할 수 없다는 뜻이기도 합니다. 추가로 임계점이 아닌 지점 역시 gradient가 0이므로 학습이 불가능해 현대 딥러닝에선 사용할 수 없습니다.
 
+#### Sigmoid
+![Activation Function-20251021-2.png](/images/blog/Activation%20Function-20251021-2.png)
+Sigmoid는 S자 곡선 형태의 부드러운 활성화 함수로, StepFunction의 미분 불가능 문제를 해결하기 위해 개발된 대표적인 함수입니다. 모든 지점에서 연속이고, 미분가능합니다. 또한, 그래프의 양 끝이 0과 1에 수렴하여 확률적으로 해석이 가능해집니다.
+
 
