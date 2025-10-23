@@ -1,7 +1,7 @@
 ---
-title: Perceptron
+title: 퍼셉트론, Perceptron
 pubDate: 2025-10-20
-description: 퍼셉트론에 대한 기본
+description: 퍼셉트론에 대한 정리
 author: KT
 tags:
   - DeepLearning
