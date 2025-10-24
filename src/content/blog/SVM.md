@@ -1,7 +1,10 @@
 ---
-title: '첫 번째 자동 포스트'
-pubDate: 2024-09-24
-description: '옵시디언에서 자동으로 연동되는 테스트'
-author: 'KT'
-tags: ['test', 'obsidian']
+title: SVM의 구조와 Kernel Trick
+pubDate: 2025-10-24
+description: SVM의 구조를 이해해보자.
+author: KT
+tags:
+  - test
+  - obsidian
 ---
+SVM의 핵심 아이디어는 바로 "마진 최대화"이다. 두 그룹이 운동장 양쪽에 서있고, 그 사이에 줄을 그어서 경계를 만들려고 합니다. 이때 줄을 어디에 그어야 공평하고, 안정적일까요? 모든 사람들의 위치의 중심에서 출발할 수도 있고, 가장 멀리 있는 사람이 기준이 될수도 있습니다. SVM은 양쪽 그룹에서 가장 가까운 사람들로부터 최대한 멀리 선을 그어야 합니다.
