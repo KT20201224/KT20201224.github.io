@@ -25,3 +25,11 @@ tags:
 
 
 ![Understanding neural networks through sparse circuits-20251114-2.png](/images/blog/Understanding neural networks through sparse%20circuits-20251114-2.png)
+일반적으로 AI 모델이 커지고 강력해질수록 내부 작동이 복잡해져 "블랙박스"가 된다고 여겨졌습니다. 성능과 해석 가능성은 trade-off 관계라는 생각이였습니다. 하지만 Sparse 모델에서는 정반대의 결과가 나왔습니다. 위 사진에서 보면 모델의 크기를 키우면서 희소석을 높이면 성능과 해석가능성이 모두 향상되는 것으로 나타났습니다.
+
+![Understanding neural networks through sparse circuits-20251114-3.png](/images/blog/Understanding neural networks through sparse%20circuits-20251114-3.png)
+이 다이어그램은 아직 완벽하게 이해하지는 못했지만, 단 6개의 노드로도 single quote와 double quote를 구분할 수 있다는 것 같습니다...
+
+## 앞으로
+이 연구는 의미 있는 성과지만, 아직 시작에 불과하다고 합니다. 현재 해석 가능한 모델은 GPT-2 수준의 작은 규모이며 최첨단 모델과는 큰 격차가 있습니다. 따옴표 매칭, 괄호 짝 맞추기 같은 간단한 작업은 완전히 이해할 수 있지만, 아직 복잡한 추론이나 창의적 생성 같은 고차원 능력은 이해하지 못합니다.
+
