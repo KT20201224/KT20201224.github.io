@@ -115,8 +115,9 @@ HTTP의 기본 구조는 "클라이언트가 요청(Request)을 보내야 서버
 4. 네트워크 효율 : 쓸데없는 HTTP 헤더 반복이 없고, Polling처럼 무의미한 요청이 필요가 없다.
 
 #### WebScoket Handshake
-브라우저는 직접 TCP 소켓을 만들 수 없고, 방화벽/프록시/로드밸런서가 HTTP만 허용하는 환경이 많다. 따라서 WebScoket은 HTTP 요청으로 시작해서 WebSocket 프로토콜로 업그레이드 시킨다. WebSocket
+브라우저는 직접 TCP 소켓을 만들 수 없고, 방화벽/프록시/로드밸런서가 HTTP만 허용하는 환경이 많다. 따라서 WebScoket은 HTTP 요청으로 시작해서 WebSocket 프로토콜로 업그레이드 시킨다. WebSocket Handshake는 다음과 같은 과정으로 진행된다.
 
+###### 1. 클라이언트 -> 서버 (WebSocket 요청)
 브라우저가 WebSocket을 열면 내부적으로 아래와 같은 HTTP 요청을 보낸다
 ```
 GET /chat HTTP/1.1
@@ -128,5 +129,29 @@ Sec-WebSocket-Version: 13
 ```
 - `Upgrade: websocket` : HTTP에서 WebSocket으로 업그레이드 하고 싶다.
 - `Connectoin: Upgrade` HTTP 연결을 끊지 않고 같은 TCP 연결을 다른 프로토콜로 변경한다.
-- `Sec-WebSocket-Key: XpZ3qYz7qv0bFZ5z1g==` : 클라이언트가 임의로 만드는 문자열로 서버가
+- `Sec-WebSocket-Key: XpZ3qYz7qv0bFZ5z1g==` : 클라이언트가 임의로 만드는 문자열키
 - `Sec-WebSocket-Version: 13` : 웹소켓 표준 버전
+
+###### 2. 서버 -> 클라이언트 (Handshake 응답)
+서버는 위 요청을 보고 "나도 WebSocket 가능해~"라고 응답해야 한다.
+```
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: qGEZtWnQb0lSydNF0x2jDP0+9qM=
+```
+- `101 Switching Protocols` : HTTP에서 WebSocket 프로토콜로 변경 성공
+- `Upgrade: websocket` : 서버 측에서도 업그레이드 동의
+- `Sec-WebSocket-Accept: qGEZtWnQb0lSydNF0x2jDP0+9qM=` : 웹소켓을 이해하고 있음을 인증하는 키
+
+###### 3. HandShake 이후
+이 시간 이후로 같은 TCP 연결을 사용하지만 더 이상 HTTP 규칙이 아닌 웹소켓 프레임 규칙을 따르게 된다.
+- text frame
+- binary frame
+- ping/pong
+- close frame
+과 같은 웹소켓 전용 메시지로 정보를 주고 받는다.
+
+###### 💡 추가 : 웹소켓의 특별한 인증 과정
+HTTP 요청에 `Upgrade: websocket`이라고 적혀있다고 서버가 반드시 WebSocket 서버라는 보장이 없다. 엉뚱한 서버나 프록시가 WebSocket 요청을 받으면 웹소켓 업그레이드를 하지 못하니 그 뒤로 오는 프레임을 전혀이해하지 못하고 이상한 동작을 할 수가 있다. 따라서 위에서 주고 받던 `Sec-WebSocket-Key`가 웹소켓을 이해하고 있는 서버인지 확인하는 키이다. 클라이언트가 서버에게 24바이트 길이의 랜덤 문자열을 전송하면 이 문자열을 특정 알고리즘으로 계산된 응답(`Sec-WebSocket-Accept: qGEZtWnQb0lSydNF0x2jDP0+9qM=`)을 보내 서버가 웹소켓을 이해했는지 보장된다. 이를 Challenge-Response 인증 방식이라고도 부르는데, 쉽게 말해 `Sec-WebSocket-Key`를 통해 서버가 웹소켓 프로토콜을 지원하는지 검증하고 웹소켓을 연결한다.
+
