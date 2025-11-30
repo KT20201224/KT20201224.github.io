@@ -71,7 +71,7 @@ TCP가 뭔지 알았으니 이제 소켓이 뭔지 알아보겠습니다. 소켓
 
 #### TCP 소켓 동작과정
 위에서 필요한 개념들은 모두 정리했으니 이제 TCP 소켓이 어떻게 동작하는지 알아보겠습니다. 
-![All of Network-20251130-3.png](/images/blog/All of%20Network-20251130-3.png)
+![All_of_Network-20251130-3.png](/images/blog/All_of_Network-20251130-3.png)
 
 ###### Server Socket flow
 1. socket() : 통신용 소켓을 생성한다. 현재는 아무 주소와도 연결되지 않은 상태
