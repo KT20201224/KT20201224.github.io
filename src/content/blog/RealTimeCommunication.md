@@ -156,4 +156,4 @@ Sec-WebSocket-Accept: qGEZtWnQb0lSydNF0x2jDP0+9qM=
 HTTP 요청에 `Upgrade: websocket`이라고 적혀있다고 서버가 반드시 WebSocket 서버라는 보장이 없다. 엉뚱한 서버나 프록시가 WebSocket 요청을 받으면 웹소켓 업그레이드를 하지 못하니 그 뒤로 오는 프레임을 전혀이해하지 못하고 이상한 동작을 할 수가 있다. 따라서 위에서 주고 받던 `Sec-WebSocket-Key`가 웹소켓을 이해하고 있는 서버인지 확인하는 키이다. 클라이언트가 서버에게 24바이트 길이의 랜덤 문자열을 전송하면 이 문자열을 특정 알고리즘으로 계산된 응답(`Sec-WebSocket-Accept: qGEZtWnQb0lSydNF0x2jDP0+9qM=`)을 보내 서버가 웹소켓을 이해했는지 보장된다. 이를 Challenge-Response 인증 방식이라고도 부르는데, 쉽게 말해 `Sec-WebSocket-Key`를 통해 서버가 웹소켓 프로토콜을 지원하는지 검증하고 웹소켓을 연결한다.
 
 #### 웹소켓의 프레임 구조
-WebSocket은
+WebSocket은 TCP 스트림 위에서 "메시지" 단위로 통신하기 때문에 데이터가 정확히 메시지 단위로 구분되어 온다. 
