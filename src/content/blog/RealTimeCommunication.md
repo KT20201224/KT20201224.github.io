@@ -114,3 +114,19 @@ HTTP의 기본 구조는 "클라이언트가 요청(Request)을 보내야 서버
 3. 메시지 단위 통신 : 메시지 경계가 없는 바이트 스트림을 특징으로 가지는 TCP와 다르게 웹소켓은 "프레임" 단위로 메시지를 쪼개서 주고 받는다.
 4. 네트워크 효율 : 쓸데없는 HTTP 헤더 반복이 없고, Polling처럼 무의미한 요청이 필요가 없다.
 
+#### WebScoket Handshake
+브라우저는 직접 TCP 소켓을 만들 수 없고, 방화벽/프록시/로드밸런서가 HTTP만 허용하는 환경이 많다. 따라서 WebScoket은 HTTP 요청으로 시작해서 WebSocket 프로토콜로 업그레이드 시킨다. WebSocket
+
+브라우저가 WebSocket을 열면 내부적으로 아래와 같은 HTTP 요청을 보낸다
+```
+GET /chat HTTP/1.1
+Host: example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: XpZ3qYz7qv0bFZ5z1g==
+Sec-WebSocket-Version: 13
+```
+- `Upgrade: websocket` : HTTP에서 WebSocket으로 업그레이드 하고 싶다.
+- `Connectoin: Upgrade` HTTP 연결을 끊지 않고 같은 TCP 연결을 다른 프로토콜로 변경한다.
+- `Sec-WebSocket-Key: XpZ3qYz7qv0bFZ5z1g==` : 클라이언트가 임의로 만드는 문자열로 서버가
+- `Sec-WebSocket-Version: 13` : 웹소켓 표준 버전
