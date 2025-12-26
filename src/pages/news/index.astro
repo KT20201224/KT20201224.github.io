@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SidebarLeft from '../../components/SidebarLeft.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+
+const news = (await getCollection('news')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`News - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			/* 2컬럼 레이아웃 (home과 동일) */
+			.layout {
+				display: grid;
+				grid-template-columns: 280px 1fr;
+				gap: 3rem;
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2rem 1rem;
+			}
+			.main-content {
+				min-height: 100vh;
+			}
+      
+      .page-header {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+      
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .page-header p {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+			ul {
+				display: grid;
+        grid-template-columns: 1fr;
+				gap: 1.5rem;
+				list-style-type: none;
+				padding: 0;
+			}
+      
+			.news-item {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+        padding: 1.5rem;
+			}
+      
+			.news-item:hover {
+				transform: translateY(-3px);
+        box-shadow: var(--glass-shadow);
+        border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
+			}
+      
+			.news-item a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      
+			.title {
+				margin: 0 0 0.5rem 0;
+				color: var(--black);
+				font-size: 1.5rem;
+        font-weight: 700;
+        transition: color 0.2s ease;
+			}
+      
+      .news-item:hover .title {
+				color: var(--accent);
+			}
+      
+			.date {
+				margin: 0;
+				color: var(--gray);
+        font-size: 0.9rem;
+			}
+      
+      .description {
+        margin-top: 1rem;
+        color: var(--gray-dark);
+        line-height: 1.5;
+      }
+      
+      @media (max-width: 1000px) {
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+      }
+		</style>
+	</head>
+	<body>
+		<Header />
+    <div class="layout">
+      <SidebarLeft />
+      <main class="main-content">
+        <section class="page-header animate-fade-in-up">
+          <h1>Tech News</h1>
+          <p>최신 기술 동향과 업데이트를 확인하세요.</p>
+        </section>
+        <section class="animate-fade-in-up" style="animation-delay: 0.1s">
+          <ul>
+            {
+              news.map((post) => (
+                <li class="news-item">
+                  <a href={`/news/${post.id}/`}>
+                    <p class="date">
+                     {post.data.pubDate.toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long', 
+                        day: 'numeric'
+                      })}
+                    </p>
+                    <h4 class="title">{post.data.title}</h4>
+                    <p class="description">{post.data.description}</p>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </main>
+    </div>
+		<Footer />
+	</body>
+</html>

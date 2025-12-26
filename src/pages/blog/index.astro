@@ -5,110 +5,200 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import SidebarLeft from '../../components/SidebarLeft.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// Helper function to extract the first image from markdown body
+function getFirstImage(body: string | undefined) {
+  if (!body) return null;
+  const imageRegex = /!\[.*?\]\((.*?)\)/;
+  const match = body.match(imageRegex);
+  return match ? match[1] : null;
+}
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`Blog - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			/* 2컬럼 레이아웃 (home과 동일) */
+			.layout {
+				display: grid;
+				grid-template-columns: 280px 1fr;
+				gap: 3rem;
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2rem 1rem;
 			}
+			.main-content {
+				min-height: 100vh;
+			}
+      
+      .page-header {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+      
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .page-header p {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
 			ul {
-				display: flex;
-				flex-wrap: wrap;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
-			ul li {
-				width: calc(50% - 1rem);
+      
+			li {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+				transition: all 0.3s ease;
+        overflow: hidden;
 			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
+      
+      li:hover {
+				transform: translateY(-5px);
+        box-shadow: var(--glass-shadow);
+        border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
+      }
+			
+			li a {
 				display: block;
+        text-decoration: none;
+        color: inherit;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
 			}
+      
+      .image-container {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+      }
+      
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+        margin: 0;
+        border-radius: 0;
+      }
+      
+      li:hover img {
+        transform: scale(1.05);
+      }
+      
+      .content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      
 			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+				margin: 0 0 0.5rem;
+				color: var(--black);
+				line-height: 1.2;
+        font-size: 1.25rem;
+        font-weight: 700;
+        transition: color 0.2s ease;
 			}
+      
+      li:hover .title {
+				color: var(--accent);
+			}
+      
 			.date {
 				margin: 0;
-				color: rgb(var(--gray));
+				color: var(--gray);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
+      
+      .description {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        color: var(--gray-dark);
+        line-height: 1.5;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+      
+			@media (max-width: 1000px) {
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
 				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
+					grid-template-columns: 1fr;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
+    <div class="layout">
+      <SidebarLeft />
+      <main class="main-content">
+        <section class="page-header animate-fade-in-up">
+          <h1>Blog</h1>
+          <p>개발 경험과 지식을 공유합니다.</p>
+        </section>
+			  <section class="animate-fade-in-up" style="animation-delay: 0.1s">
+				  <ul>
+					  {
+						  posts.map((post) => {
+                const firstImage = getFirstImage(post.body);
+                const displayImage = post.data.heroImage || firstImage;
+                
+                return (
+							  <li>
+								  <a href={`/blog/${post.id}/`}>
+                    <div class="image-container">
+                      {displayImage ? (
+                        <img src={typeof displayImage === 'string' ? displayImage : displayImage.src} alt="" width="720" height="360" loading="lazy" />
+                      ) : (
+                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 100%); display:flex; align-items:center; justify-content:center; color: var(--accent);">
+                           <span style="font-size: 2rem; font-weight:bold; opacity:0.3;">Jerry</span>
+                        </div>
+                      )}
+                    </div>
+                    <div class="content">
+									    <h4 class="title">{post.data.title}</h4>
+									    <p class="date">
+										    <FormattedDate date={post.data.pubDate} />
+									    </p>
+                      {post.data.description && <p class="description">{post.data.description}</p>}
+                    </div>
+								  </a>
+							  </li>
+						  )})
+					  }
+				  </ul>
+			  </section>
+      </main>
+    </div>
 		<Footer />
 	</body>
 </html>

@@ -10,6 +10,18 @@ import SidebarLeft from "../components/SidebarLeft.astro";
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
+
+// 최신 뉴스 3개 가져오기
+const news = (await getCollection("news"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+// Helper function to extract the first image from markdown body
+function getFirstImage(body: string | undefined) {
+  if (!body) return null;
+  const imageRegex = /!\[.*?\]\((.*?)\)/;
+  const match = body.match(imageRegex);
+  return match ? match[1] : null;
+}
 ---
 
 <!doctype html>
@@ -25,33 +37,80 @@ const posts = (await getCollection("blog"))
       <!-- 메인 컨텐츠 영역 -->
       <main class="main-content">
         <!-- 히어로 섹션 -->
-        <section class="hero">
-          <h1>안녕하세요, Jerry입니다 👋</h1>
+        <section class="hero animate-fade-in-up">
+          <h1>
+            <span class="text-gradient">안녕하세요, Jerry</span>입니다 👋
+          </h1>
           <p class="hero-description">
-            개발과 기술에 대한 생각을 기록하는 공간입니다.
+            기술로 세상을 더 편리하게, <strong>1인 개발의 꿈</strong>을 향해 나아가는 공간입니다.<br />
+            Deep Learning, LLM, 그리고 웹 개발 이야기를 기록합니다.
           </p>
         </section>
 
         <!-- 최신 포스트 섹션 -->
-        <section class="recent-posts">
-          <h2>최신 포스트</h2>
+        <section class="recent-posts animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="section-header">
+            <h2>최신 포스트</h2>
+            <a href="/blog" class="view-all">전체 보기 →</a>
+          </div>
           <div class="post-grid">
             {
-              posts.map((post) => (
-                <a href={`/blog/${post.id}/`} class="post-card">
-                  <h3>{post.data.title}</h3>
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString("ko-KR")}
-                  </time>
-                  <p>{post.data.description}</p>
+              posts.map((post, index) => {
+                const firstImage = getFirstImage(post.body);
+                const displayImage = post.data.heroImage || firstImage;
+                
+                return (
+                <a 
+                  href={`/blog/${post.id}/`} 
+                  class="post-card glass-card"
+                  style={`animation-delay: ${0.3 + index * 0.1}s`}
+                >
+                  {displayImage && (
+                    <div class="thumbnail">
+                      <img src={typeof displayImage === 'string' ? displayImage : displayImage.src} alt="" loading="lazy"/>
+                    </div>
+                  )}
+                  <div class="post-content">
+                    <h3>{post.data.title}</h3>
+                    <p class="description">{post.data.description}</p>
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {post.data.pubDate.toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                  </div>
                 </a>
+              )})
+            }
+          </div>
+        </section>
+        
+        <!-- 테크 뉴스 섹션 -->
+        <section class="tech-news animate-fade-in-up" style="animation-delay: 0.4s;">
+           <div class="section-header">
+            <h2>Tech News</h2>
+            <a href="/news" class="view-all">전체 보기 →</a>
+          </div>
+          <div class="news-list">
+             {
+              news.map((item) => (
+                <div class="news-item">
+                  <div class="news-header">
+                    <span class="news-date">
+                      {item.data.pubDate.toLocaleDateString("ko-KR", {
+                         month: "short", day: "numeric"
+                      })}
+                    </span>
+                    <h3>{item.data.title}</h3>
+                  </div>
+                  <p>{item.data.description}</p>
+                </div>
               ))
             }
           </div>
-          <a href="/blog" class="view-all">모든 포스트 보기 →</a>
         </section>
-        <!-- 테크 뉴스 섹션 -->
-        <section class="tech-news"></section>
       </main>
     </div>
     <Footer />
@@ -62,202 +121,214 @@ const posts = (await getCollection("blog"))
   /* 2컬럼 레이아웃 */
   .layout {
     display: grid;
-    grid-template-columns: 250px 1fr;
-    gap: 2em;
-    max-width: 1400px;
+    grid-template-columns: 280px 1fr; /* Widen sidebar back */
+    gap: 3rem;
+    max-width: 1200px; /* Constrain width for better reading experience on ultra-wide */
     margin: 0 auto;
-    padding: 0 1em;
-  }
-
-  .profile-section {
-    text-align: center;
-    margin-bottom: 2em;
-  }
-
-  .avatar {
-    width: 80px;
-    height: 80px;
-    background: rgb(var(--accent));
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 0 auto 1em;
-  }
-
-  .profile-section h2 {
-    margin: 0 0 0.5em 0;
-    font-size: 1.5rem;
-  }
-
-  .bio {
-    color: rgb(var(--gray-dark));
-    margin: 0;
-  }
-
-  .sidebar-nav h3,
-  .stats-section h3 {
-    font-size: 1.1rem;
-    margin-bottom: 1em;
-    color: rgb(var(--black));
-  }
-
-  .sidebar-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .sidebar-nav li {
-    margin-bottom: 0.75em;
-  }
-
-  .sidebar-nav a {
-    color: rgb(var(--gray-dark));
-    text-decoration: none;
-    padding: 0.5em;
-    display: block;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-  }
-
-  .sidebar-nav a:hover {
-    background: rgb(var(--gray-lighter));
-    color: rgb(var(--accent));
-  }
-
-  .stat-item {
-    text-align: center;
-    padding: 1em;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid rgb(var(--gray-lighter));
-  }
-
-  .stat-number {
-    display: block;
-    font-size: 2rem;
-    font-weight: bold;
-    color: rgb(var(--accent));
-  }
-
-  .stat-label {
-    color: rgb(var(--gray));
-    font-size: 0.9rem;
+    padding: 2rem 1rem;
   }
 
   /* 메인 컨텐츠 */
   .main-content {
     min-height: 100vh;
+    padding-top: 0; /* Remove default padding as layout handles it */
   }
 
-  /* 기존 히어로, 포스트 스타일 유지 */
+  /* 히어로 섹션 */
   .hero {
     text-align: center;
-    padding: 4em 0;
-    margin-bottom: 3em;
+    padding: 4rem 1rem;
+    margin-bottom: 4rem;
   }
 
   .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: rgb(var(--accent));
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(120deg, var(--accent), #b06ab3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
 
   .hero-description {
-    font-size: 1.25rem;
-    color: rgb(var(--gray));
-    max-width: 600px;
+    font-size: 1.35rem;
+    color: var(--gray);
+    max-width: 700px;
     margin: 0 auto;
+    line-height: 1.6;
   }
-
-  .recent-posts {
-    margin-bottom: 4em;
+  
+  /* 섹션 공통 */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
   }
-
-  .recent-posts h2 {
-    margin-bottom: 2em;
+  
+  h2 {
     font-size: 2rem;
+    margin: 0;
   }
 
+  /* 최신 포스트 Grid */
   .post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2em;
-    margin-bottom: 2em;
+    grid-template-columns: 1fr; 
+    gap: 1.5rem;
+    margin-bottom: 4rem;
   }
 
   .post-card {
-    display: block;
-    background: rgb(var(--gray-light));
-    padding: 1.5em;
-    border-radius: 8px;
-    border: 1px solid rgb(var(--gray-lighter));
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden; /* Ensure image stays within border radius */
+    padding: 0; /* Remove padding from card wrapper so image hits edges */
+  }
+  
+  .thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .post-card:hover .thumbnail img {
+    transform: scale(1.05);
+  }
+  
+  .post-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  /* Stagger animation setup */
+  .post-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    border-color: rgb(var(--accent));
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+    border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
   }
 
   .post-card h3 {
-    margin: 0 0 0.5em 0;
-    font-size: 1.25rem;
-    color: rgb(var(--black));
+    margin: 0 0 0.75rem 0;
+    font-size: 1.5rem;
+    color: var(--black);
     transition: color 0.2s ease;
   }
 
   .post-card:hover h3 {
-    color: rgb(var(--accent));
+    color: var(--accent);
+  }
+  
+  .post-card .description {
+    color: var(--gray-dark);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    flex-grow: 1; /* Pushes time to bottom if height fixed, good for grid */
   }
 
   .post-card time {
-    color: rgb(var(--gray));
-    font-size: 0.9rem;
+    color: var(--gray);
+    font-size: 0.95rem;
+    font-weight: 500;
   }
-
-  .post-card p {
-    margin-top: 1em;
-    color: rgb(var(--gray-dark));
+  
+  /* Tech News */
+  .tech-news {
+    margin-bottom: 4rem;
+  }
+  
+  .news-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .news-item {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .news-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .news-date {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(var(--accent-hue), var(--accent-sat), var(--accent-light), 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  
+  .news-item h3 {
+    font-size: 1.1rem;
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  .news-item p {
+    font-size: 0.95rem;
+    color: var(--gray-dark);
+    margin: 0;
     line-height: 1.5;
   }
 
   .view-all {
-    color: rgb(var(--accent));
+    color: var(--accent);
     text-decoration: none;
     font-weight: bold;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
   }
 
   .view-all:hover {
+    transform: translateX(5px);
     text-decoration: underline;
   }
 
   /* 반응형 */
-  @media (max-width: 1200px) {
+  @media (max-width: 1000px) {
     .layout {
       grid-template-columns: 1fr;
+      gap: 2rem;
     }
 
-    .sidebar-left {
-      display: none;
-    }
-  }
-
-  @media (max-width: 768px) {
     .hero h1 {
-      font-size: 2rem;
-    }
-
-    .post-grid {
-      grid-template-columns: 1fr;
+      font-size: 2.5rem;
     }
   }
 </style>

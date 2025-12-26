@@ -5,17 +5,30 @@
  */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
+	/* HSL Color Palette for richer customization */
+	--accent-hue: 236;
+	--accent-sat: 100%;
+	--accent-light: 57%;
+
+	--accent: hsl(var(--accent-hue), var(--accent-sat), var(--accent-light));
+	--accent-dark: hsl(var(--accent-hue), var(--accent-sat), 30%);
+	--accent-light-translucent: hsla(var(--accent-hue), var(--accent-sat), var(--accent-light), 0.1);
+
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
+	--gray-light: 240, 244, 252;
+	/* Slightly cooler light gray */
 	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px
-		rgba(var(--gray), 33%);
+
+	/* Glassmorphism Variables */
+	--glass-bg: rgba(255, 255, 255, 0.7);
+	--glass-border: rgba(255, 255, 255, 0.5);
+	--glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+	--gray-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	--box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
 @font-face {
 	font-family: "Atkinson";
 	src: url("/fonts/atkinson-regular.woff") format("woff");
@@ -23,6 +36,7 @@
 	font-style: normal;
 	font-display: swap;
 }
+
 @font-face {
 	font-family: "Atkinson";
 	src: url("/fonts/atkinson-bold.woff") format("woff");
@@ -30,107 +44,197 @@
 	font-style: normal;
 	font-display: swap;
 }
+
 body {
 	font-family: "Atkinson", sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	background: #f8f9fa;
+	/* Fallback */
+	background-image:
+		radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+		radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+		radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+	background-size: 100% 100%;
+	background-attachment: fixed;
+	/* Clean light background for readiability, overridden with gradient mesh above if dark mode */
+	background: linear-gradient(to bottom right, #eff6ff, #fff);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
-	font-size: 20px;
+	font-size: 18px;
+	/* Slightly smaller for modern look */
 	line-height: 1.7;
+	min-height: 100vh;
 }
+
 main {
-	width: 720px;
+	width: 800px;
+	/* Slightly wider */
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
+	margin: 0 0 0.75rem 0;
 	color: rgb(var(--black));
-	line-height: 1.2;
+	line-height: 1.25;
+	letter-spacing: -0.02em;
+	/* Tighter tracking for headings */
 }
+
 h1 {
-	font-size: 3.052em;
+	font-size: 2.8em;
+	font-weight: 800;
 }
+
 h2 {
-	font-size: 2.441em;
+	font-size: 2.2em;
+	font-weight: 700;
 }
+
 h3 {
-	font-size: 1.953em;
+	font-size: 1.75em;
+	font-weight: 700;
 }
+
 h4 {
-	font-size: 1.563em;
+	font-size: 1.5em;
+	font-weight: 700;
 }
+
 h5 {
 	font-size: 1.25em;
+	font-weight: 700;
 }
+
+h6 {
+	font-size: 1.1em;
+	font-weight: 700;
+}
+
 strong,
 b {
 	font-weight: 700;
 }
+
 a {
 	color: var(--accent);
+	text-decoration: none;
+	transition: color 0.2s ease;
 }
+
 a:hover {
-	color: var(--accent);
+	color: var(--accent-dark);
 }
+
 p {
-	margin-bottom: 1em;
+	margin-bottom: 1.5em;
 }
+
 .prose p {
-	margin-bottom: 2em;
+	margin-bottom: 1.5em;
 }
-textarea {
+
+textarea,
+input {
 	width: 100%;
 	font-size: 16px;
+	padding: 0.5em;
+	border-radius: 6px;
+	border: 1px solid rgb(var(--gray-light));
 }
-input {
-	font-size: 16px;
-}
+
 table {
 	width: 100%;
 }
+
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
+	border-radius: 12px;
+	box-shadow: var(--box-shadow);
 }
+
 code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	padding: 0.2em 0.4em;
+	background-color: rgba(var(--gray-light), 0.5);
+	color: var(--accent);
+	border-radius: 4px;
+	font-size: 0.9em;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
+
 pre {
 	padding: 1.5em;
-	border-radius: 8px;
+	border-radius: 12px;
+	background: #1e1e1e;
+	/* Dark theme for code blocks generally looks better */
+	color: #fff;
+	overflow-x: auto;
+	box-shadow: var(--box-shadow);
 }
-pre > code {
+
+pre>code {
 	all: unset;
+	color: inherit;
 }
+
 blockquote {
 	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+	padding: 0.5em 0 0.5em 1.5em;
+	margin: 1.5em 0;
+	background: var(--accent-light-translucent);
+	border-radius: 0 8px 8px 0;
+	font-size: 1.1em;
+	font-style: italic;
 }
+
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid rgba(var(--gray), 0.2);
+	margin: 2em 0;
 }
+
+/* Utilities */
+.glass-card {
+	background: var(--glass-bg);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	box-shadow: var(--glass-shadow);
+	border-radius: 16px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fade-in-up {
+	animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 16px;
 	}
+
 	main {
 		padding: 1em;
 	}
@@ -144,12 +248,8 @@ hr {
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }

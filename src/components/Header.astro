@@ -13,47 +13,80 @@ import HeaderLink from "./HeaderLink.astro";
       <HeaderLink href="/projects">Projects</HeaderLink>
       <HeaderLink href="/about">About</HeaderLink>
     </div>
-    <div></div>
   </nav>
 </header>
 <style>
   header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     margin: 0;
-    padding: 0 1em;
-    background: white;
-    box-shadow: 0 2px 8px rgba(var(--black), 5%);
+    padding: 0.5em 1em;
+    background: rgba(255, 255, 255, 0.85); /* Slightly more opaque for header */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
   }
+  
   h2 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.25em;
+    font-weight: 800;
+    background: linear-gradient(120deg, var(--accent), #b06ab3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   h2 a,
   h2 a.active {
     text-decoration: none;
+    display: block; /* Ensure gradient applies nicely */
   }
+  
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 1200px; /* Match layout width */
+    margin: 0 auto;
   }
+  
+  .internal-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
   nav a {
-    padding: 1em 0.5em;
+    padding: 0.5em 1em;
     color: var(--black);
-    border-bottom: 4px solid transparent;
+    border-bottom: none; /* Removed underline style */
     text-decoration: none;
+    font-weight: 500;
+    border-radius: 99px; /* Pill shape */
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
   }
+  
   nav a.active {
     text-decoration: none;
-    border-bottom-color: var(--accent);
+    background-color: var(--accent);
+    color: white;
   }
-  .social-links,
-  .social-links a {
-    display: flex;
+  
+  nav a:not(.active):hover {
+    background-color: var(--gray-light);
+    color: var(--accent);
   }
+  
   @media (max-width: 720px) {
-    .social-links {
-      display: none;
+    .internal-links {
+      display: none; /* Mobile menu implementation usually needed here */
+    }
+    
+    /* Simple mobile fix for now */
+    nav {
+      justify-content: center;
     }
   }
 </style>
