@@ -64,18 +64,20 @@ function getFirstImage(body: string | undefined) {
 			}
       
 			li {
-        background: var(--glass-bg);
-        backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-				transition: all 0.3s ease;
+				transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
 			}
       
       li:hover {
 				transform: translateY(-5px);
-        box-shadow: var(--glass-shadow);
-        border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
+        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
+      }
+      
+      /* Active state for touch devices */
+      li:active {
+        transform: scale(0.98);
       }
 			
 			li a {
@@ -173,7 +175,7 @@ function getFirstImage(body: string | undefined) {
                 const displayImage = post.data.heroImage || firstImage;
                 
                 return (
-							  <li>
+							  <li class="glass-card">
 								  <a href={`/blog/${post.id}/`}>
                     <div class="image-container">
                       {displayImage ? (

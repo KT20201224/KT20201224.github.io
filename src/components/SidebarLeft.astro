@@ -66,52 +66,54 @@
 </aside>
 
 <style>
-  /* 왼쪽 사이드바 */
+  /* 왼쪽 사이드바 - iOS Widget Style */
   .sidebar-left {
     position: sticky;
-    top: 6rem; /* Header height + spacing */
+    top: 6rem;
     height: fit-content;
-    padding: 2rem;
+    padding: 24px;
     text-align: center;
     width: 100%;
-    min-width: 250px; /* Ensure it doesn't collapse */
+    min-width: 250px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .profile-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
   }
 
   .profile-image-container {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin-bottom: 1rem;
-    border-radius: 50%;
-    padding: 4px; /* Space for the gradient border */
-    background: linear-gradient(135deg, var(--accent), #b06ab3);
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0.75rem;
+    border-radius: 22px; /* App Icon Shape */
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   .profile-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid white; /* Inner border */
+    border-radius: 22px;
     background: white;
   }
 
   .profile-name {
-    font-size: 1.8rem;
+    font-size: 22px;
     margin: 0.5rem 0 0.25rem;
-    font-weight: 800;
+    font-weight: 700;
+    letter-spacing: -0.5px;
   }
   
   .motto {
-    font-size: 0.95rem;
+    font-size: 15px;
     color: var(--gray);
     line-height: 1.4;
     margin: 0;
@@ -123,12 +125,12 @@
   }
 
   .contact-me h3 {
-    font-size: 0.85rem;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--gray);
-    margin-bottom: 1rem;
-    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
     padding-left: 0.5rem;
   }
 
@@ -139,24 +141,27 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    background: rgba(118, 118, 128, 0.08); /* Grouped List Background */
+    border-radius: 16px;
+    padding: 6px;
   }
 
   .contact-me a {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-radius: 12px;
-    color: var(--gray-dark);
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--black);
     font-weight: 500;
     transition: all 0.2s ease;
     background: transparent;
+    font-size: 15px;
   }
 
   .contact-me a:hover {
-    background: rgba(var(--accent-hue), var(--accent-sat), var(--accent-light), 0.1);
-    color: var(--accent);
-    transform: translateX(3px);
+    background: white; /* iOS Highlight Effect */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
   
   .icon {
