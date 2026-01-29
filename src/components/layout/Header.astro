@@ -1,20 +1,27 @@
 ---
-import { SITE_TITLE } from "../consts";
+import { SITE_TITLE } from "../../lib/constants";
 import HeaderLink from "./HeaderLink.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
+import Search from "../ui/Search.astro";
 ---
 
 <header>
   <nav>
     <h2><a href="/">{SITE_TITLE}</a></h2>
-    <div class="internal-links">
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/blog">Blog</HeaderLink>
-      <HeaderLink href="/news">News</HeaderLink>
-      <HeaderLink href="/projects">Projects</HeaderLink>
-      <HeaderLink href="/about">About</HeaderLink>
+    <div class="nav-right">
+      <div class="internal-links">
+        <HeaderLink href="/">Home</HeaderLink>
+        <HeaderLink href="/blog">Blog</HeaderLink>
+        <HeaderLink href="/news">News</HeaderLink>
+        <HeaderLink href="/projects">Projects</HeaderLink>
+        <HeaderLink href="/about">About</HeaderLink>
+      </div>
+      <Search />
+      <ThemeToggle />
     </div>
   </nav>
 </header>
+
 <style>
   header {
     position: sticky;
@@ -22,13 +29,13 @@ import HeaderLink from "./HeaderLink.astro";
     z-index: 100;
     margin: 0;
     padding: 0.5em 1em;
-    background: rgba(255, 255, 255, 0.85); /* Slightly more opaque for header */
+    background: var(--header-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--color-border);
+    transition: var(--transition-theme);
   }
-  
+
   h2 {
     margin: 0;
     font-size: 1.25em;
@@ -36,57 +43,63 @@ import HeaderLink from "./HeaderLink.astro";
     background: linear-gradient(120deg, var(--accent), #b06ab3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   h2 a,
   h2 a.active {
     text-decoration: none;
-    display: block; /* Ensure gradient applies nicely */
+    display: block;
   }
-  
+
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px; /* Match layout width */
+    max-width: 1200px;
     margin: 0 auto;
   }
-  
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .internal-links {
     display: flex;
     gap: 0.5rem;
   }
-  
+
   nav a {
     padding: 0.5em 1em;
-    color: var(--black);
-    border-bottom: none; /* Removed underline style */
+    color: var(--color-text);
+    border-bottom: none;
     text-decoration: none;
     font-weight: 500;
-    border-radius: 99px; /* Pill shape */
+    border-radius: 99px;
     transition: all 0.2s ease;
     font-size: 0.95rem;
   }
-  
+
   nav a.active {
     text-decoration: none;
     background-color: var(--accent);
     color: white;
   }
-  
+
   nav a:not(.active):hover {
-    background-color: var(--gray-light);
+    background-color: rgb(var(--gray-light));
     color: var(--accent);
   }
-  
+
   @media (max-width: 720px) {
     .internal-links {
-      display: none; /* Mobile menu implementation usually needed here */
+      display: none;
     }
-    
-    /* Simple mobile fix for now */
+
     nav {
-      justify-content: center;
+      justify-content: space-between;
     }
   }
 </style>

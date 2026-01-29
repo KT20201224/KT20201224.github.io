@@ -1,0 +1,331 @@
+---
+// Search component using Pagefind
+---
+
+<button
+  id="search-button"
+  class="search-button"
+  aria-label="Search"
+  title="Search (⌘K)"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="11" cy="11" r="8"></circle>
+    <path d="m21 21-4.3-4.3"></path>
+  </svg>
+  <span class="search-shortcut">⌘K</span>
+</button>
+
+<div id="search-modal" class="search-modal" aria-hidden="true">
+  <div class="search-backdrop"></div>
+  <div class="search-container glass-card">
+    <div class="search-header">
+      <div class="search-input-wrapper">
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search posts..."
+          autocomplete="off"
+        />
+        <kbd class="esc-hint">ESC</kbd>
+      </div>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span>Press <kbd>Enter</kbd> to select, <kbd>ESC</kbd> to close</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .search-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: 99px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .search-button:hover {
+    background: var(--accent-light-translucent);
+    color: var(--accent);
+  }
+
+  .search-shortcut {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    background: rgb(var(--gray-light));
+    border-radius: 4px;
+    color: rgb(var(--gray));
+    font-weight: 500;
+  }
+
+  @media (max-width: 720px) {
+    .search-shortcut {
+      display: none;
+    }
+  }
+
+  .search-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 10vh 1rem;
+  }
+
+  .search-modal[aria-hidden="false"] {
+    display: flex;
+  }
+
+  .search-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .search-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgb(var(--gray-light));
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+  }
+
+  .search-icon {
+    color: rgb(var(--gray));
+    flex-shrink: 0;
+  }
+
+  #search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--color-text);
+    outline: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  #search-input::placeholder {
+    color: rgb(var(--gray));
+  }
+
+  .esc-hint {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--color-bg-secondary);
+    border-radius: 4px;
+    color: rgb(var(--gray));
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .search-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    min-height: 200px;
+  }
+
+  .search-results:empty::before {
+    content: "Type to search...";
+    color: rgb(var(--gray));
+    display: block;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .search-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8rem;
+    color: rgb(var(--gray));
+    text-align: center;
+  }
+
+  .search-footer kbd {
+    font-size: 0.7rem;
+    padding: 0.125rem 0.375rem;
+    background: rgb(var(--gray-light));
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Result item styles */
+  :global(.search-result) {
+    display: block;
+    padding: 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.2s ease;
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.search-result:hover),
+  :global(.search-result.selected) {
+    background: var(--accent-light-translucent);
+  }
+
+  :global(.search-result-title) {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  :global(.search-result-excerpt) {
+    font-size: 0.875rem;
+    color: rgb(var(--gray));
+    line-height: 1.4;
+  }
+
+  :global(.search-result-excerpt mark) {
+    background: var(--accent-light-translucent);
+    color: var(--accent);
+    padding: 0 0.125rem;
+    border-radius: 2px;
+  }
+</style>
+
+<script is:inline>
+  let pagefind = null;
+
+  async function initSearch() {
+    const button = document.getElementById('search-button');
+    const modal = document.getElementById('search-modal');
+    const backdrop = modal?.querySelector('.search-backdrop');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    if (!button || !modal || !input || !results) return;
+
+    // Open modal
+    function openModal() {
+      modal.setAttribute('aria-hidden', 'false');
+      input.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.setAttribute('aria-hidden', 'true');
+      input.value = '';
+      results.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    // Button click
+    button.addEventListener('click', openModal);
+
+    // Backdrop click
+    backdrop?.addEventListener('click', closeModal);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // ⌘K or Ctrl+K to open
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openModal();
+      }
+      // ESC to close
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+        closeModal();
+      }
+    });
+
+    // Search functionality
+    input.addEventListener('input', async () => {
+      const query = input.value.trim();
+
+      if (!query) {
+        results.innerHTML = '';
+        return;
+      }
+
+      // Load Pagefind on first search
+      if (!pagefind) {
+        try {
+          pagefind = await import('/pagefind/pagefind.js');
+          await pagefind.init();
+        } catch (e) {
+          results.innerHTML = '<div style="text-align: center; padding: 2rem; color: rgb(var(--gray));">Search not available. Run build first.</div>';
+          return;
+        }
+      }
+
+      const search = await pagefind.search(query);
+      const searchResults = await Promise.all(
+        search.results.slice(0, 10).map((r) => r.data())
+      );
+
+      if (searchResults.length === 0) {
+        results.innerHTML = '<div style="text-align: center; padding: 2rem; color: rgb(var(--gray));">No results found for "' + query + '"</div>';
+        return;
+      }
+
+      results.innerHTML = searchResults
+        .map(
+          (result) => '<a href="' + result.url + '" class="search-result"><div class="search-result-title">' + (result.meta.title || 'Untitled') + '</div><div class="search-result-excerpt">' + result.excerpt + '</div></a>'
+        )
+        .join('');
+    });
+  }
+
+  // Initialize on load and on navigation
+  initSearch();
+  document.addEventListener('astro:after-swap', initSearch);
+</script>

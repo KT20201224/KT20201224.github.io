@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/common/BaseHead.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../lib/constants';
+import { getTagsWithCount, getPublishedPosts } from '../../lib/utils';
+
+const allPosts = await getCollection('blog');
+const publishedPosts = getPublishedPosts(allPosts);
+const tags = getTagsWithCount(publishedPosts);
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead title={`Tags - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      .layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 3rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      .main-content {
+        min-height: 100vh;
+      }
+
+      .page-header {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        color: rgb(var(--gray));
+        font-size: 1.1rem;
+      }
+
+      .tags-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .tag-card {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .tag-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glass-shadow);
+      }
+
+      .tag-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      .tag-count {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: white;
+        background: var(--accent);
+        padding: 0.125rem 0.5rem;
+        border-radius: 99px;
+        min-width: 1.5rem;
+        text-align: center;
+      }
+
+      @media (max-width: 1000px) {
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <div class="layout">
+      <SidebarLeft />
+      <main class="main-content">
+        <section class="page-header animate-fade-in-up">
+          <h1>Tags</h1>
+          <p>{tags.length}개의 태그가 있습니다.</p>
+        </section>
+        <section class="animate-fade-in-up" style="animation-delay: 0.1s">
+          {tags.length > 0 ? (
+            <div class="tags-grid">
+              {tags.map((tag) => (
+                <a href={`/tags/${tag.name}/`} class="tag-card glass-card">
+                  <span class="tag-name">#{tag.name}</span>
+                  <span class="tag-count">{tag.count}</span>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p style="text-align: center; color: rgb(var(--gray));">
+              아직 태그가 없습니다. 글에 태그를 추가해보세요.
+            </p>
+          )}
+        </section>
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>

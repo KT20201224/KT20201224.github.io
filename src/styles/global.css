@@ -1,19 +1,28 @@
 /*
-  iOS-INSPIRED DESIGN SYSTEM
+  iOS-INSPIRED DESIGN SYSTEM WITH DARK MODE
  */
 
 :root {
-	/* iOS System Colors */
+	/* iOS System Colors - Light Mode */
 	--accent-hue: 211;
-	/* iOS Blue */
 	--accent-sat: 100%;
 	--accent-light: 50%;
-	/* #007AFF */
 
 	--accent: #007AFF;
 	--accent-dark: #0056b3;
 	--accent-light-translucent: rgba(0, 122, 255, 0.12);
 
+	/* Color tokens */
+	--color-bg: #F2F2F7;
+	--color-bg-secondary: #FFFFFF;
+	--color-text: #1c1c1e;
+	--color-text-secondary: rgb(142, 142, 147);
+	--color-text-tertiary: rgb(28, 28, 30);
+	--color-border: rgba(0, 0, 0, 0.05);
+	--color-code: #FF2D55;
+	--color-code-bg: rgba(118, 118, 128, 0.1);
+
+	/* Legacy support */
 	--black: 0, 0, 0;
 	--gray: 142, 142, 147;
 	--gray-light: 242, 242, 247;
@@ -24,9 +33,63 @@
 	--glass-border: rgba(255, 255, 255, 0.6);
 	--glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
 	--ios-radius: 24px;
-	/* The "Squircle" feel */
 
 	--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+	/* Header background */
+	--header-bg: rgba(255, 255, 255, 0.85);
+
+	/* Background gradients */
+	--bg-gradient-1: hsla(210, 100%, 96%, 1);
+	--bg-gradient-2: hsla(280, 100%, 96%, 1);
+	--bg-gradient-3: hsla(240, 100%, 98%, 1);
+
+	/* Pre/code block */
+	--pre-bg: #1c1c1e;
+	--pre-color: #fff;
+
+	/* Transitions */
+	--transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+	--accent: #0A84FF;
+	--accent-dark: #409CFF;
+	--accent-light-translucent: rgba(10, 132, 255, 0.2);
+
+	--color-bg: #000000;
+	--color-bg-secondary: #1c1c1e;
+	--color-text: #FFFFFF;
+	--color-text-secondary: rgb(142, 142, 147);
+	--color-text-tertiary: rgb(229, 229, 234);
+	--color-border: rgba(255, 255, 255, 0.1);
+	--color-code: #FF375F;
+	--color-code-bg: rgba(118, 118, 128, 0.24);
+
+	/* Legacy support for dark mode */
+	--black: 255, 255, 255;
+	--gray: 142, 142, 147;
+	--gray-light: 28, 28, 30;
+	--gray-dark: 229, 229, 234;
+
+	/* Glassmorphism dark */
+	--glass-bg: rgba(28, 28, 30, 0.72);
+	--glass-border: rgba(255, 255, 255, 0.1);
+	--glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+	/* Header background dark */
+	--header-bg: rgba(0, 0, 0, 0.85);
+
+	/* Background gradients dark */
+	--bg-gradient-1: hsla(210, 100%, 10%, 1);
+	--bg-gradient-2: hsla(280, 100%, 8%, 1);
+	--bg-gradient-3: hsla(240, 100%, 5%, 1);
+
+	/* Pre/code block dark */
+	--pre-bg: #2c2c2e;
+	--pre-color: #fff;
 }
 
 @font-face {
@@ -46,27 +109,25 @@
 }
 
 body {
-	/* Main Font: System UI (San Francisco on Mac/iOS) */
 	font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: #F2F2F7;
-	/* iOS Grouped Background Color */
+	background: var(--color-bg);
 	background-image:
-		radial-gradient(at 10% 10%, hsla(210, 100%, 96%, 1) 0px, transparent 50%),
-		radial-gradient(at 90% 0%, hsla(280, 100%, 96%, 1) 0px, transparent 50%),
-		radial-gradient(at 50% 90%, hsla(240, 100%, 98%, 1) 0px, transparent 50%);
+		radial-gradient(at 10% 10%, var(--bg-gradient-1) 0px, transparent 50%),
+		radial-gradient(at 90% 0%, var(--bg-gradient-2) 0px, transparent 50%),
+		radial-gradient(at 50% 90%, var(--bg-gradient-3) 0px, transparent 50%);
 	background-size: 100% 100%;
 	background-attachment: fixed;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: #1c1c1e;
-	/* iOS System Label Color */
+	color: var(--color-text);
 	font-size: 17px;
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
 	min-height: 100vh;
+	transition: var(--transition-theme);
 }
 
 main {
@@ -83,9 +144,10 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: #000;
+	color: var(--color-text);
 	line-height: 1.2;
 	letter-spacing: -0.022rem;
+	transition: var(--transition-theme);
 }
 
 h1 {
@@ -127,7 +189,7 @@ b {
 a {
 	color: var(--accent);
 	text-decoration: none;
-	transition: opacity 0.2s ease;
+	transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
@@ -154,8 +216,9 @@ input {
 	padding: 12px 16px;
 	border-radius: 12px;
 	border: none;
-	background: rgba(118, 118, 128, 0.12);
-	color: #000;
+	background: var(--color-code-bg);
+	color: var(--color-text);
+	transition: var(--transition-theme);
 }
 
 textarea:focus,
@@ -177,9 +240,8 @@ img {
 
 code {
 	padding: 0.2em 0.4em;
-	background-color: rgba(118, 118, 128, 0.1);
-	color: #FF2D55;
-	/* iOS Pink/Red for code */
+	background-color: var(--color-code-bg);
+	color: var(--color-code);
 	border-radius: 6px;
 	font-size: 0.9em;
 	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -188,8 +250,8 @@ code {
 pre {
 	padding: 1.5em;
 	border-radius: 20px;
-	background: #1c1c1e;
-	color: #fff;
+	background: var(--pre-bg);
+	color: var(--pre-color);
 	overflow-x: auto;
 	box-shadow: var(--box-shadow);
 }
@@ -211,18 +273,19 @@ blockquote {
 
 hr {
 	border: none;
-	border-top: 1px solid #c6c6c8;
+	border-top: 1px solid var(--color-border);
 	margin: 2em 0;
 }
 
 /* Utilities */
 .glass-card {
-	background: rgba(255, 255, 255, 0.8);
+	background: var(--glass-bg);
 	backdrop-filter: blur(25px) saturate(180%);
 	-webkit-backdrop-filter: blur(25px) saturate(180%);
-	border: 1px solid rgba(255, 255, 255, 0.4);
-	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+	border: 1px solid var(--glass-border);
+	box-shadow: var(--glass-shadow);
 	border-radius: var(--ios-radius);
+	transition: var(--transition-theme);
 }
 
 /* Clickable Cards Interaction */
@@ -248,6 +311,23 @@ hr {
 	animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.animate-fade-in-up {
+		animation: none;
+		opacity: 1;
+		transform: none;
+	}
+}
+
 @media (max-width: 720px) {
 	body {
 		font-size: 16px;
@@ -270,4 +350,22 @@ hr {
 	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	white-space: nowrap;
+}
+
+/* Theme toggle animation */
+@keyframes themeToggleSpin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.theme-toggle-icon {
+	transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+	transform: rotate(15deg);
 }

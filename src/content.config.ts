@@ -13,6 +13,12 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
+			// New fields for content management
+			tags: z.array(z.string()).default([]),
+			category: z.string().optional(),
+			series: z.string().optional(),
+			seriesOrder: z.number().optional(),
+			draft: z.boolean().default(false),
 		}),
 });
 

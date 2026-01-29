@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import SidebarLeft from '../../components/SidebarLeft.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import BaseHead from '../../components/common/BaseHead.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../lib/constants';
 
 const news = (await getCollection('news')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()

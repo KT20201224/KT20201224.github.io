@@ -1,0 +1,268 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/common/BaseHead.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import FormattedDate from '../../components/common/FormattedDate.astro';
+import TagList from '../../components/blog/TagList.astro';
+import { SITE_TITLE, CATEGORIES } from '../../lib/constants';
+import { getPublishedPosts, getPostsByCategory, getCategoryLabel } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  return CATEGORIES.map((cat) => ({
+    params: { category: cat.slug },
+    props: { category: cat.slug, label: cat.label, description: cat.description },
+  }));
+}
+
+interface Props {
+  category: string;
+  label: string;
+  description: string;
+}
+
+const { category, label, description } = Astro.props;
+const allPosts = await getCollection('blog');
+const publishedPosts = getPublishedPosts(allPosts);
+const posts = getPostsByCategory(publishedPosts, category);
+
+// Helper function to extract the first image from markdown body
+function getFirstImage(body: string | undefined) {
+  if (!body) return null;
+  const imageRegex = /!\[.*?\]\((.*?)\)/;
+  const match = body.match(imageRegex);
+  return match ? match[1] : null;
+}
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead
+      title={`${label} - ${SITE_TITLE}`}
+      description={description}
+    />
+    <style>
+      .layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 3rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      .main-content {
+        min-height: 100vh;
+      }
+
+      .page-header {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        color: rgb(var(--gray));
+        font-size: 1.1rem;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: var(--accent);
+      }
+
+      ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      li:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+      }
+
+      li a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .image-container {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+        margin: 0;
+        border-radius: 0;
+      }
+
+      li:hover img {
+        transform: scale(1.05);
+      }
+
+      .content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .title {
+        margin: 0 0 0.5rem;
+        color: var(--color-text);
+        line-height: 1.2;
+        font-size: 1.25rem;
+        font-weight: 700;
+        transition: color 0.2s ease;
+      }
+
+      li:hover .title {
+        color: var(--accent);
+      }
+
+      .date {
+        margin: 0;
+        color: rgb(var(--gray));
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .description {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        color: rgb(var(--gray-dark));
+        line-height: 1.5;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
+
+      .tags {
+        margin-top: auto;
+        padding-top: 1rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: rgb(var(--gray));
+      }
+
+      @media (max-width: 1000px) {
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        ul {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <div class="layout">
+      <SidebarLeft />
+      <main class="main-content">
+        <section class="page-header animate-fade-in-up">
+          <a href="/blog" class="back-link">← Blog로 돌아가기</a>
+          <h1>{label}</h1>
+          <p>{description}</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+            {posts.length}개의 글이 있습니다.
+          </p>
+        </section>
+        <section class="animate-fade-in-up" style="animation-delay: 0.1s">
+          {posts.length > 0 ? (
+            <ul>
+              {posts.map((post) => {
+                const firstImage = getFirstImage(post.body);
+                const displayImage = post.data.heroImage || firstImage;
+
+                return (
+                  <li class="glass-card">
+                    <a href={`/blog/${post.id}/`}>
+                      <div class="image-container">
+                        {displayImage ? (
+                          <img
+                            src={
+                              typeof displayImage === 'string'
+                                ? displayImage
+                                : displayImage.src
+                            }
+                            alt=""
+                            width="720"
+                            height="360"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div
+                            style="width:100%; height:100%; background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 100%); display:flex; align-items:center; justify-content:center; color: var(--accent);"
+                          >
+                            <span style="font-size: 2rem; font-weight:bold; opacity:0.3;">
+                              Jerry
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div class="content">
+                        <h4 class="title">{post.data.title}</h4>
+                        <p class="date">
+                          <FormattedDate date={post.data.pubDate} />
+                        </p>
+                        {post.data.description && (
+                          <p class="description">{post.data.description}</p>
+                        )}
+                        {post.data.tags && post.data.tags.length > 0 && (
+                          <div class="tags">
+                            <TagList tags={post.data.tags} size="sm" clickable={false} />
+                          </div>
+                        )}
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div class="empty-state">
+              <p>아직 이 카테고리에 글이 없습니다.</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>
