@@ -3,9 +3,31 @@ import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
 import Layout from "../layouts/AboutLayout.astro";
 import * as simpleIcons from "simple-icons";
 
-const handle = "olly123"; // 본인 백준 아이디
+// === Solved.ac (백준) ===
+const handle = "olly123";
 const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
 const data = await res.json();
+
+// === Kaggle ===
+const KAGGLE_USERNAME = import.meta.env.KAGGLE_USERNAME || process.env.KAGGLE_USERNAME;
+const KAGGLE_KEY = import.meta.env.KAGGLE_KEY || process.env.KAGGLE_KEY;
+const kaggleUser = "kyoungteakim";
+
+let kaggleData: any = null;
+if (KAGGLE_USERNAME && KAGGLE_KEY) {
+  try {
+    const kaggleRes = await fetch(`https://www.kaggle.com/api/v1/users/${kaggleUser}`, {
+      headers: {
+        'Authorization': 'Basic ' + btoa(`${KAGGLE_USERNAME}:${KAGGLE_KEY}`)
+      }
+    });
+    if (kaggleRes.ok) {
+      kaggleData = await kaggleRes.json();
+    }
+  } catch (e) {
+    console.error('Kaggle API error:', e);
+  }
+}
 
 // 티어 숫자를 이름으로 변환
 const tierNames = [
@@ -202,6 +224,33 @@ const tierNames = [
       </div>
     </div>
   </section>
+
+  {kaggleData && (
+    <>
+      <hr class="section-divider" />
+      <section class="kaggle-section">
+        <h2>Kaggle</h2>
+        <div class="algorithm-stats">
+          <div class="algorithm-stat">
+            <span class="algorithm-stat-label">Tier</span>
+            <span class="algorithm-stat-value">{kaggleData.userTier || 'Novice'}</span>
+          </div>
+          <div class="algorithm-stat">
+            <span class="algorithm-stat-label">Competitions</span>
+            <span class="algorithm-stat-value">{kaggleData.totalCompetitions || 0}</span>
+          </div>
+          <div class="algorithm-stat">
+            <span class="algorithm-stat-label">Datasets</span>
+            <span class="algorithm-stat-value">{kaggleData.totalDatasets || 0}</span>
+          </div>
+          <div class="algorithm-stat">
+            <span class="algorithm-stat-label">Notebooks</span>
+            <span class="algorithm-stat-value">{kaggleData.totalNotebooks || 0}</span>
+          </div>
+        </div>
+      </section>
+    </>
+  )}
 </Layout>
 
 <style>
@@ -430,12 +479,14 @@ const tierNames = [
     height: 16px;
   }
 
-  /* Algorithm Card */
-  .baekjoon-section {
+  /* Algorithm & Kaggle */
+  .baekjoon-section,
+  .kaggle-section {
     margin-bottom: 2em;
   }
 
-  .baekjoon-section h2 {
+  .baekjoon-section h2,
+  .kaggle-section h2 {
     font-size: 1.8rem;
     margin-bottom: 1.5em;
     color: var(--color-text);
