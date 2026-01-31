@@ -68,7 +68,7 @@ const hasTOC = headings.length > 0;
     <style>
       .post-layout {
         display: grid;
-        grid-template-columns: 1fr minmax(auto, 840px) 250px;
+        grid-template-columns: 1fr minmax(auto, 840px) 1fr;
         gap: 2rem;
         max-width: 1400px;
         margin: 0 auto;
@@ -76,7 +76,7 @@ const hasTOC = headings.length > 0;
       }
 
       .post-sidebar-left {
-        display: none;
+        display: block;
       }
 
       .post-main {
@@ -85,6 +85,7 @@ const hasTOC = headings.length > 0;
 
       .post-sidebar-right {
         position: relative;
+        max-width: 250px;
       }
 
       @media (max-width: 1200px) {
@@ -92,6 +93,7 @@ const hasTOC = headings.length > 0;
           grid-template-columns: 1fr;
           max-width: 900px;
         }
+        .post-sidebar-left,
         .post-sidebar-right {
           display: none;
         }

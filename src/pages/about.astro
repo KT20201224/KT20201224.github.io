@@ -66,7 +66,7 @@ const tierNames = [
 
   <!-- 경력사항 섹션 -->
   <section class="career-section">
-    <h2>💼 경력사항</h2>
+    <h2>Experience</h2>
     <ul class="experience-list">
       <li class="experience-item">
         <div class="experience-header">
@@ -88,7 +88,7 @@ const tierNames = [
 
   <!-- 기타활동 섹션 -->
   <section class="activity-section">
-    <h2>🎯 기타활동</h2>
+    <h2>Activities</h2>
     <ul class="experience-list">
       <li class="experience-item">
         <div class="experience-header">
@@ -129,7 +129,7 @@ const tierNames = [
 
   <!-- 자격증 섹션 -->
   <section class="certification-section">
-    <h2>📜 Certifications</h2>
+    <h2>Certifications</h2>
     <ul class="cert-list">
       <li class="cert-item">
         <div class="cert-info">
@@ -152,102 +152,33 @@ const tierNames = [
 
   <!-- 기술 스택 섹션 -->
   <section class="tech-section">
-    <div class="tech-column">
-      <h2>⚙️ Frameworks</h2>
-      <ul class="tech-list">
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/react"
-            class="tech-icon"
-            alt="React"
-          />
-          React
-        </li>
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/nodedotjs"
-            class="tech-icon"
-            alt="Node.js"
-          />
-          Node.js
-        </li>
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/spring"
-            class="tech-icon"
-            alt="Spring"
-          />
-          Spring
-        </li>
-      </ul>
+    <h2>Tech Stack</h2>
+    <div class="tech-category">
+      <h3>Languages</h3>
+      <div class="tech-badges">
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" />JavaScript</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" />TypeScript</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" />Python</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/openjdk/000000" alt="Java" />Java</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/c/A8B9CC" alt="C" />C</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/r/276DC3" alt="R" />R</span>
+      </div>
     </div>
-
-    <div class="tech-column">
-      <h2>💬 Languages</h2>
-      <ul class="tech-list">
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/javascript"
-            class="tech-icon"
-            alt="JavaScript"
-          />
-          JavaScript
-        </li>
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/typescript"
-            class="tech-icon"
-            alt="TypeScript"
-          />
-          TypeScript
-        </li>
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/openjdk"
-            class="tech-icon"
-            alt="Java"
-          />
-          Java
-        </li>
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/python"
-            class="tech-icon"
-            alt="Python"
-          />
-          Python
-        </li>
-        <li>
-          <img src="https://cdn.simpleicons.org/c" class="tech-icon" alt="C" />
-          C
-        </li>
-        <li>
-          <img src="https://cdn.simpleicons.org/r" class="tech-icon" alt="R" />
-          R
-        </li>
-      </ul>
+    <div class="tech-category">
+      <h3>Frameworks</h3>
+      <div class="tech-badges">
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" />React</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" />Node.js</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/spring/6DB33F" alt="Spring" />Spring</span>
+      </div>
     </div>
-
-    <div class="tech-column">
-      <h2>🛠 Tools</h2>
-      <ul class="tech-list">
-        <li>
-          <img
-            src="https://cdn.simpleicons.org/git"
-            class="tech-icon"
-            alt="Git"
-          />
-          Git
-        </li>
-        <li>
-          <img
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"
-            class="tech-icon"
-            alt="VS Code"
-          />
-          VS Code
-        </li>
-      </ul>
+    <div class="tech-category">
+      <h3>Tools</h3>
+      <div class="tech-badges">
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" />Git</span>
+        <span class="tech-badge"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" />VS Code</span>
+        <span class="tech-badge"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="Docker" />Docker</span>
+      </div>
     </div>
   </section>
 
@@ -255,32 +186,28 @@ const tierNames = [
 
   <!-- 백준 티어 섹션 -->
   <section class="baekjoon-section">
-    <h2>🏆 Algorithm</h2>
-    <div class="baekjoon-content">
-      <div class="baekjoon-stats">
-        <div class="stat-item">
-          <span class="stat-label">티어</span>
-          <span class="stat-value">{tierNames[data.tier]}</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">해결한 문제</span>
-          <span class="stat-value">{data.solvedCount}</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">레이팅</span>
-          <span class="stat-value">{data.rating}</span>
+    <h2>Algorithm</h2>
+    <div class="algorithm-card">
+      <div class="algorithm-header">
+        <img src="https://cdn.simpleicons.org/baekjoon/0076C0" alt="Baekjoon" class="algorithm-icon" />
+        <div class="algorithm-title">
+          <span class="tier-name">{tierNames[data.tier]}</span>
+          <span class="algorithm-subtitle">solved.ac</span>
         </div>
       </div>
-      <div class="baekjoon-info">
-        <p>알고리즘 문제 해결 능력을 꾸준히 향상시키고 있습니다.</p>
-        <a
-          href={`https://solved.ac/profile/${handle}`}
-          target="_blank"
-          class="baekjoon-link"
-        >
-          Solved.ac 프로필 보기 →
-        </a>
+      <div class="algorithm-stats">
+        <div class="algorithm-stat">
+          <span class="algorithm-stat-value">{data.solvedCount}</span>
+          <span class="algorithm-stat-label">Solved</span>
+        </div>
+        <div class="algorithm-stat">
+          <span class="algorithm-stat-value">{data.rating}</span>
+          <span class="algorithm-stat-label">Rating</span>
+        </div>
       </div>
+      <a href={`https://solved.ac/profile/${handle}`} target="_blank" class="algorithm-link">
+        프로필 보기
+      </a>
     </div>
   </section>
 </Layout>
@@ -320,12 +247,12 @@ const tierNames = [
     margin-top: 0;
     margin-bottom: 1em;
     font-size: 1.8rem;
-    color: rgb(var(--black));
+    color: var(--color-text);
   }
 
   .profile-text p {
     line-height: 1.7;
-    color: rgb(var(--gray-dark));
+    color: var(--color-text-secondary);
     margin-bottom: 1em;
   }
 
@@ -348,9 +275,9 @@ const tierNames = [
 
   .experience-item {
     padding: 1.5em;
-    background: rgb(var(--gray-light));
-    border-radius: 8px;
-    border-left: 4px solid rgb(var(--accent));
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
   }
 
   .experience-header {
@@ -364,25 +291,25 @@ const tierNames = [
   .experience-header h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: rgb(var(--black));
+    color: var(--color-text);
   }
 
   .period {
-    color: rgb(var(--gray));
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
     flex-shrink: 0;
   }
 
   .position {
     margin: 0 0 1em 0;
-    color: rgb(var(--accent));
+    color: var(--color-text);
     font-weight: 500;
   }
 
   .description {
     margin: 0;
     padding-left: 1.5em;
-    color: rgb(var(--gray-dark));
+    color: var(--color-text-secondary);
   }
 
   .description li {
@@ -400,7 +327,7 @@ const tierNames = [
     margin-top: 1em;
     margin-bottom: 1em;
     font-size: 1.8rem;
-    color: rgb(var(--black));
+    color: var(--color-text);
   }
 
   @media (max-width: 1024px) {
@@ -417,7 +344,7 @@ const tierNames = [
     margin-top: 1em;
     margin-bottom: 1em;
     font-size: 1.8rem;
-    color: rgb(var(--black));
+    color: var(--color-text);
   }
 
   .cert-list {
@@ -434,25 +361,25 @@ const tierNames = [
     justify-content: space-between;
     align-items: center;
     padding: 1.5em;
-    background: rgb(var(--gray-light));
-    border-radius: 8px;
-    border-left: 4px solid rgb(var(--accent));
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
   }
 
   .cert-info h3 {
     margin: 0 0 0.5em 0;
     font-size: 1.1rem;
-    color: rgb(var(--black));
+    color: var(--color-text);
   }
 
   .cert-issuer {
     margin: 0;
-    color: rgb(var(--gray));
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
   }
 
   .cert-date {
-    color: rgb(var(--gray-dark));
+    color: var(--color-text);
     font-weight: 500;
     flex-shrink: 0;
     margin-left: 1em;
@@ -466,73 +393,137 @@ const tierNames = [
     }
   }
 
+  /* Tech Stack - Badge Style */
   .tech-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3em;
-    margin-bottom: 4em;
-    padding-top: 2em; /* 상단 간격 추가 */
-  }
-
-  .tech-column h2 {
-    margin-bottom: 1.5em;
-    font-size: 1.5rem;
-    color: rgb(var(--black));
-  }
-
-  .tech-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em; /* 항목 간 간격 */
-  }
-
-  .tech-list li {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    color: rgb(var(--gray-dark));
-  }
-
-  .tech-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 0.75em;
-    flex-shrink: 0; /* 아이콘 크기 고정 */
-  }
-  @media (max-width: 1024px) {
-    .tech-section {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .baekjoon-stats {
-    display: flex;
-    gap: 2em;
     margin-bottom: 2em;
   }
 
-  .stat-item {
+  .tech-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5em;
+    color: var(--color-text);
+  }
+
+  .tech-category {
+    margin-bottom: 1.5em;
+  }
+
+  .tech-category h3 {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75em;
+    font-weight: 500;
+  }
+
+  .tech-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 1em;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .tech-badge img {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Algorithm Card */
+  .baekjoon-section {
+    margin-bottom: 2em;
+  }
+
+  .baekjoon-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5em;
+    color: var(--color-text);
+  }
+
+  .algorithm-card {
     display: flex;
     flex-direction: column;
+    gap: 1.5em;
+    padding: 2em;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    max-width: 320px;
+  }
+
+  .algorithm-header {
+    display: flex;
     align-items: center;
-    padding: 1em;
-    background: white;
-    border-radius: 8px;
-    min-width: 120px;
+    gap: 1em;
   }
 
-  .stat-label {
-    font-size: 0.9rem;
-    color: rgb(var(--gray));
-    margin-bottom: 0.5em;
+  .algorithm-icon {
+    width: 48px;
+    height: 48px;
   }
 
-  .stat-value {
+  .algorithm-title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tier-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .algorithm-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .algorithm-stats {
+    display: flex;
+    gap: 2em;
+  }
+
+  .algorithm-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .algorithm-stat-value {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: rgb(var(--accent));
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .algorithm-stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .algorithm-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75em 1.5em;
+    background: var(--accent);
+    color: white;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .algorithm-link:hover {
+    opacity: 0.9;
+    color: white;
   }
 </style>

@@ -44,12 +44,18 @@ import Search from "../ui/Search.astro";
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    transition: transform 0.2s ease;
   }
 
   h2 a,
-  h2 a.active {
-    text-decoration: none;
+  h2 a.active,
+  h2 a:hover {
+    text-decoration: none !important;
     display: block;
+    background: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    opacity: 1 !important;
   }
 
   nav {
@@ -88,9 +94,14 @@ import Search from "../ui/Search.astro";
     color: white;
   }
 
-  nav a:not(.active):hover {
+  .internal-links a:not(.active):hover {
     background-color: rgb(var(--gray-light));
     color: var(--accent);
+  }
+
+  h2:hover {
+    cursor: pointer;
+    transform: scale(1.02);
   }
 
   @media (max-width: 720px) {

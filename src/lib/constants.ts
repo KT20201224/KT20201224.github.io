@@ -35,14 +35,14 @@ export const SOCIAL_LINKS = {
 // Giscus Configuration (for comments)
 export const GISCUS_CONFIG = {
   repo: 'KT20201224/KT20201224.github.io' as const,
-  repoId: '', // Fill in after enabling Giscus
-  category: 'Comments',
-  categoryId: '', // Fill in after enabling Giscus
+  repoId: 'R_kgDOP2CdUg',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOP2CdUs4C1rzo',
   mapping: 'pathname' as const,
   strict: '0' as const,
   reactionsEnabled: '1' as const,
   emitMetadata: '0' as const,
-  inputPosition: 'top' as const,
+  inputPosition: 'bottom' as const,
   lang: 'ko' as const,
 } as const;
 
