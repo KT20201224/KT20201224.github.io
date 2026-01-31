@@ -24,8 +24,6 @@ jobs:
           node-version: 20
         env:
           KAGGLE_TOKEN: ${{ secrets.KAGGLE_TOKEN }}
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
   deploy:
     needs: build
