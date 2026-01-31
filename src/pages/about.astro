@@ -187,7 +187,7 @@ const tierNames = [
   <!-- 백준 티어 섹션 -->
   <section class="baekjoon-section">
     <h2>Algorithm</h2>
-    <div class="algorithm-card">
+    <div class="algorithm-stats">
       <div class="algorithm-stat">
         <span class="algorithm-stat-label">Tier</span>
         <span class="algorithm-stat-value">{tierNames[data.tier]}</span>
@@ -441,13 +441,9 @@ const tierNames = [
     color: var(--color-text);
   }
 
-  .algorithm-card {
+  .algorithm-stats {
     display: flex;
-    gap: 2em;
-    padding: 1.5em 2em;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
+    gap: 3em;
   }
 
   .algorithm-stat {
@@ -468,7 +464,7 @@ const tierNames = [
   }
 
   @media (max-width: 480px) {
-    .algorithm-card {
+    .algorithm-stats {
       flex-direction: column;
       gap: 1em;
     }
