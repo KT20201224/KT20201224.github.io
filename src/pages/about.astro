@@ -188,26 +188,18 @@ const tierNames = [
   <section class="baekjoon-section">
     <h2>Algorithm</h2>
     <div class="algorithm-card">
-      <div class="algorithm-header">
-        <img src="https://cdn.simpleicons.org/baekjoon/0076C0" alt="Baekjoon" class="algorithm-icon" />
-        <div class="algorithm-title">
-          <span class="tier-name">{tierNames[data.tier]}</span>
-          <span class="algorithm-subtitle">solved.ac</span>
-        </div>
+      <div class="algorithm-stat">
+        <span class="algorithm-stat-label">Tier</span>
+        <span class="algorithm-stat-value">{tierNames[data.tier]}</span>
       </div>
-      <div class="algorithm-stats">
-        <div class="algorithm-stat">
-          <span class="algorithm-stat-value">{data.solvedCount}</span>
-          <span class="algorithm-stat-label">Solved</span>
-        </div>
-        <div class="algorithm-stat">
-          <span class="algorithm-stat-value">{data.rating}</span>
-          <span class="algorithm-stat-label">Rating</span>
-        </div>
+      <div class="algorithm-stat">
+        <span class="algorithm-stat-label">Solved</span>
+        <span class="algorithm-stat-value">{data.solvedCount}</span>
       </div>
-      <a href={`https://solved.ac/profile/${handle}`} target="_blank" class="algorithm-link">
-        프로필 보기
-      </a>
+      <div class="algorithm-stat">
+        <span class="algorithm-stat-label">Rating</span>
+        <span class="algorithm-stat-value">{data.rating}</span>
+      </div>
     </div>
   </section>
 </Layout>
@@ -451,56 +443,17 @@ const tierNames = [
 
   .algorithm-card {
     display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-    padding: 2em;
+    gap: 2em;
+    padding: 1.5em 2em;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
-    border-radius: 16px;
-    max-width: 320px;
-  }
-
-  .algorithm-header {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-  }
-
-  .algorithm-icon {
-    width: 48px;
-    height: 48px;
-  }
-
-  .algorithm-title {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .tier-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-text);
-  }
-
-  .algorithm-subtitle {
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-  }
-
-  .algorithm-stats {
-    display: flex;
-    gap: 2em;
+    border-radius: 12px;
   }
 
   .algorithm-stat {
     display: flex;
     flex-direction: column;
-  }
-
-  .algorithm-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--accent);
+    gap: 0.25em;
   }
 
   .algorithm-stat-label {
@@ -508,22 +461,16 @@ const tierNames = [
     color: var(--color-text-secondary);
   }
 
-  .algorithm-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75em 1.5em;
-    background: var(--accent);
-    color: white;
-    border-radius: 99px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s ease;
+  .algorithm-stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
   }
 
-  .algorithm-link:hover {
-    opacity: 0.9;
-    color: white;
+  @media (max-width: 480px) {
+    .algorithm-card {
+      flex-direction: column;
+      gap: 1em;
+    }
   }
 </style>
