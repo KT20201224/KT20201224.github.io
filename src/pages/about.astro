@@ -9,25 +9,21 @@ const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
 const data = await res.json();
 
 // === Kaggle ===
-const KAGGLE_TOKEN = import.meta.env.KAGGLE_TOKEN || process.env.KAGGLE_TOKEN;
+const KAGGLE_USERNAME = import.meta.env.KAGGLE_USERNAME || process.env.KAGGLE_USERNAME;
+const KAGGLE_KEY = import.meta.env.KAGGLE_KEY || process.env.KAGGLE_KEY;
 const kaggleUser = "kyoungteakim";
 
 let kaggleData: any = null;
-const kaggleApiUrl = `https://www.kaggle.com/api/v1/users/${kaggleUser}`;
 
-if (KAGGLE_TOKEN) {
-  // KGAT 토큰을 username:token 형식으로 Basic Auth 시도
+if (KAGGLE_USERNAME && KAGGLE_KEY) {
   try {
-    const kaggleRes = await fetch(kaggleApiUrl, {
+    const kaggleRes = await fetch(`https://www.kaggle.com/api/v1/users/${kaggleUser}`, {
       headers: {
-        'Authorization': 'Basic ' + Buffer.from(`${kaggleUser}:${KAGGLE_TOKEN}`).toString('base64')
+        'Authorization': 'Basic ' + Buffer.from(`${KAGGLE_USERNAME}:${KAGGLE_KEY}`).toString('base64')
       }
     });
     if (kaggleRes.ok) {
       kaggleData = await kaggleRes.json();
-      console.log('Kaggle API success');
-    } else {
-      console.error('Kaggle API failed:', kaggleRes.status);
     }
   } catch (e) {
     console.error('Kaggle API error:', e);
