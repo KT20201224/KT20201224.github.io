@@ -22,9 +22,6 @@ jobs:
         with:
           path: .
           node-version: 20
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
   deploy:
     needs: build

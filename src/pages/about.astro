@@ -8,27 +8,11 @@ const handle = "olly123";
 const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
 const data = await res.json();
 
-// === Kaggle ===
-const KAGGLE_USERNAME = import.meta.env.KAGGLE_USERNAME || process.env.KAGGLE_USERNAME;
-const KAGGLE_KEY = import.meta.env.KAGGLE_KEY || process.env.KAGGLE_KEY;
-const kaggleUser = "kyoungteakim";
-
-let kaggleData: any = null;
-
-if (KAGGLE_USERNAME && KAGGLE_KEY) {
-  try {
-    const kaggleRes = await fetch(`https://www.kaggle.com/api/v1/users/${kaggleUser}`, {
-      headers: {
-        'Authorization': 'Basic ' + Buffer.from(`${KAGGLE_USERNAME}:${KAGGLE_KEY}`).toString('base64')
-      }
-    });
-    if (kaggleRes.ok) {
-      kaggleData = await kaggleRes.json();
-    }
-  } catch (e) {
-    console.error('Kaggle API error:', e);
-  }
-}
+// === Kaggle (수동 입력) ===
+const kaggleData = {
+  tier: "Expert",
+  username: "kyoungteakim"
+};
 
 // 티어 숫자를 이름으로 변환
 const tierNames = [
@@ -226,32 +210,17 @@ const tierNames = [
     </div>
   </section>
 
-  {kaggleData && (
-    <>
-      <hr class="section-divider" />
-      <section class="kaggle-section">
-        <h2>Kaggle</h2>
-        <div class="algorithm-stats">
-          <div class="algorithm-stat">
-            <span class="algorithm-stat-label">Tier</span>
-            <span class="algorithm-stat-value">{kaggleData.userTier || 'Novice'}</span>
-          </div>
-          <div class="algorithm-stat">
-            <span class="algorithm-stat-label">Competitions</span>
-            <span class="algorithm-stat-value">{kaggleData.totalCompetitions || 0}</span>
-          </div>
-          <div class="algorithm-stat">
-            <span class="algorithm-stat-label">Datasets</span>
-            <span class="algorithm-stat-value">{kaggleData.totalDatasets || 0}</span>
-          </div>
-          <div class="algorithm-stat">
-            <span class="algorithm-stat-label">Notebooks</span>
-            <span class="algorithm-stat-value">{kaggleData.totalNotebooks || 0}</span>
-          </div>
-        </div>
-      </section>
-    </>
-  )}
+  <hr class="section-divider" />
+
+  <section class="kaggle-section">
+    <h2>Kaggle</h2>
+    <div class="algorithm-stats">
+      <div class="algorithm-stat">
+        <span class="algorithm-stat-label">Tier</span>
+        <span class="algorithm-stat-value">{kaggleData.tier}</span>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style>
