@@ -58,7 +58,8 @@ function getFirstImage(body: string | undefined) {
             const image = post.data.heroImage || getFirstImage(post.body);
             const imageUrl = image ? (typeof image === 'string' ? image : (image as any).src) : null;
             return (
-              <article class="group relative grid md:grid-cols-12 gap-8 items-start py-8 transition-all hover:bg-[#181c22]/50 rounded-2xl px-4 -mx-4">
+              <article class="group relative grid md:grid-cols-12 gap-8 items-start py-8 transition-all hover:bg-[#181c22]/50 rounded-2xl px-4 -mx-4 cursor-pointer">
+                <a href={`/blog/${post.id}/`} class="absolute inset-0 z-0 rounded-2xl" aria-label={post.data.title}></a>
                 {/* Thumbnail */}
                 <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-[#262a31]">
                   {imageUrl ? (
@@ -91,11 +92,9 @@ function getFirstImage(body: string | undefined) {
                         </>
                       )}
                     </div>
-                    <a href={`/blog/${post.id}/`} class="no-underline">
-                      <h2 class="text-2xl font-bold font-headline mb-3 text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors">
-                        {post.data.title}
-                      </h2>
-                    </a>
+                    <h2 class="text-2xl font-bold font-headline mb-3 text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors">
+                      {post.data.title}
+                    </h2>
                     {post.data.description && (
                       <p class="text-[#849396] font-body leading-relaxed mb-6 text-lg line-clamp-2">
                         {post.data.description}
@@ -107,7 +106,7 @@ function getFirstImage(body: string | undefined) {
                       {post.data.tags.slice(0, 3).map((tag: string) => (
                         <a
                           href={`/tags/${tag}`}
-                          class="px-3 py-1 rounded-full bg-[#00e5ff]/10 text-[#00e5ff] font-label text-[10px] uppercase tracking-wider border border-[#00e5ff]/20 hover:bg-[#00e5ff]/20 transition-colors no-underline"
+                          class="relative z-10 px-3 py-1 rounded-full bg-[#00e5ff]/10 text-[#00e5ff] font-label text-[10px] uppercase tracking-wider border border-[#00e5ff]/20 hover:bg-[#00e5ff]/20 transition-colors no-underline"
                         >
                           {tag}
                         </a>
