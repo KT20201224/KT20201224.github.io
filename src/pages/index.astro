@@ -3,332 +3,160 @@ import { getCollection } from "astro:content";
 import BaseHead from "../components/common/BaseHead.astro";
 import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
 import SidebarLeft from "../components/layout/SidebarLeft.astro";
+import FormattedDate from "../components/common/FormattedDate.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
 
-// 최신 포스트 3개 가져오기
 const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 4);
 
-// 최신 뉴스 3개 가져오기
 const news = (await getCollection("news"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
-// Helper function to extract the first image from markdown body
+
 function getFirstImage(body: string | undefined) {
   if (!body) return null;
-  const imageRegex = /!\[.*?\]\((.*?)\)/;
-  const match = body.match(imageRegex);
+  const match = body.match(/!\[.*?\]\((.*?)\)/);
   return match ? match[1] : null;
 }
 ---
 
 <!doctype html>
-<html lang="ko">
+<html class="dark" lang="ko">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-  <body>
+  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
     <Header />
-    <div class="layout">
+    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
       <SidebarLeft />
 
-      <!-- 메인 컨텐츠 영역 -->
-      <main class="main-content">
-        <!-- 히어로 섹션 -->
-        <section class="hero animate-fade-in-up">
-          <h1>
-            <span class="text-gradient">안녕하세요, Jerry</span>입니다 👋
-          </h1>
-          <p class="hero-description">
-            기술로 세상을 더 편리하게, <strong>1인 개발의 꿈</strong>을 향해 나아가는 공간입니다.<br />
-            Deep Learning, LLM, 그리고 웹 개발 이야기를 기록합니다.
-          </p>
+      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
+
+        <!-- Hero Section -->
+        <section class="relative w-full min-h-[480px] flex items-center overflow-hidden rounded-2xl mb-16 bg-[#181c22]">
+          <div class="absolute inset-0" style="background: radial-gradient(ellipse at 70% 50%, rgba(0,229,255,0.12) 0%, transparent 60%)"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#181c22] via-[#181c22]/80 to-transparent"></div>
+          <div class="relative z-10 max-w-3xl space-y-6 p-10 md:p-16">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-[#00daf3] font-label text-xs uppercase tracking-widest">
+              <span class="w-2 h-2 rounded-full bg-[#00e5ff] animate-pulse"></span>
+              새 글 업로드 중
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black font-headline tracking-tighter text-[#dfe2eb] leading-[0.95]">
+              안녕하세요,<br/>
+              <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
+                Jerry
+              </span>입니다.
+            </h1>
+            <p class="text-xl font-body italic text-[#bac9cc] leading-relaxed max-w-xl">
+              {SITE_DESCRIPTION}
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a href="/blog"
+                class="px-8 py-3 rounded-lg font-label font-bold text-sm tracking-wide text-[#00363d] hover:brightness-110 transition-all active:scale-95 no-underline"
+                style="background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%); box-shadow: 0 8px 24px rgba(0,229,255,0.2)">
+                최신 글 읽기
+              </a>
+              <a href="/about"
+                class="px-8 py-3 rounded-lg border border-[#3b494c]/30 bg-[#1c2026] text-[#dfe2eb] font-label font-bold text-sm hover:bg-[#262a31] transition-all no-underline">
+                소개 보기
+              </a>
+            </div>
+          </div>
         </section>
 
-        <!-- 최신 포스트 섹션 -->
-        <section class="recent-posts animate-fade-in-up" style="animation-delay: 0.2s;">
-          <div class="section-header">
-            <h2>최신 포스트</h2>
-            <a href="/blog" class="view-all">전체 보기 →</a>
+        <!-- Recent Posts -->
+        <section class="mb-16">
+          <div class="flex justify-between items-end mb-10">
+            <div>
+              <h2 class="text-4xl font-headline font-bold text-[#dfe2eb]">최신 포스트</h2>
+              <p class="text-[#849396] font-label text-sm mt-2 uppercase tracking-widest">Recent Posts</p>
+            </div>
+            <a href="/blog"
+              class="text-[#00e5ff] font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
+              전체 보기
+              <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
           </div>
-          <div class="post-grid">
-            {
-              posts.map((post, index) => {
-                const firstImage = getFirstImage(post.body);
-                const displayImage = post.data.heroImage || firstImage;
-                
-                return (
-                <a 
-                  href={`/blog/${post.id}/`} 
-                  class="post-card glass-card"
-                  style={`animation-delay: ${0.3 + index * 0.1}s`}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {posts.map((post, i) => {
+              const image = post.data.heroImage || getFirstImage(post.body);
+              const isFeatured = i === 0;
+              return (
+                <a
+                  href={`/blog/${post.id}/`}
+                  class={`group space-y-4 cursor-pointer no-underline ${isFeatured ? 'md:col-span-2' : ''}`}
                 >
-                  {displayImage && (
-                    <div class="thumbnail">
-                      <img src={typeof displayImage === 'string' ? displayImage : displayImage.src} alt="" loading="lazy"/>
+                  {image && (
+                    <div class="overflow-hidden rounded-xl bg-[#1c2026] aspect-video">
+                      <img
+                        src={typeof image === 'string' ? image : (image as any).src}
+                        alt={post.data.title}
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
                   )}
-                  <div class="post-content">
-                    <h3>{post.data.title}</h3>
-                    <p class="description">{post.data.description}</p>
-                    <time datetime={post.data.pubDate.toISOString()}>
-                      {post.data.pubDate.toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-4 text-xs font-label font-bold text-[#00daf3] uppercase tracking-wider">
+                      {post.data.category && <span>{post.data.category.toUpperCase()}</span>}
+                      <span class="w-1 h-1 rounded-full bg-[#3b494c]"></span>
+                      <span class="text-[#849396] font-body lowercase tracking-normal font-normal italic">
+                        <FormattedDate date={post.data.pubDate} />
+                      </span>
+                    </div>
+                    <h3 class={`font-headline font-bold text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors ${isFeatured ? 'text-3xl' : 'text-xl'}`}>
+                      {post.data.title}
+                    </h3>
+                    {post.data.description && (
+                      <p class="text-[#bac9cc] font-body leading-relaxed line-clamp-2">
+                        {post.data.description}
+                      </p>
+                    )}
                   </div>
                 </a>
-              )})
-            }
+              );
+            })}
           </div>
         </section>
-        
-        <!-- 테크 뉴스 섹션 -->
-        <section class="tech-news animate-fade-in-up" style="animation-delay: 0.4s;">
-           <div class="section-header">
-            <h2>Tech News</h2>
-            <a href="/news" class="view-all">전체 보기 →</a>
-          </div>
-          <div class="news-list">
-             {
-              news.map((item) => (
-                <div class="news-item">
-                  <div class="news-header">
-                    <span class="news-date">
-                      {item.data.pubDate.toLocaleDateString("ko-KR", {
-                         month: "short", day: "numeric"
-                      })}
+
+        <!-- Tech News Section -->
+        {news.length > 0 && (
+          <section class="mb-16">
+            <div class="flex justify-between items-end mb-10">
+              <div>
+                <h2 class="text-4xl font-headline font-bold text-[#dfe2eb]">Tech News</h2>
+                <p class="text-[#849396] font-label text-sm mt-2 uppercase tracking-widest">Latest Updates</p>
+              </div>
+              <a href="/news"
+                class="text-[#00e5ff] font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
+                전체 보기
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+              </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {news.map((item) => (
+                <div class="p-6 rounded-xl bg-[#1c2026] border border-[#3b494c]/20 hover:border-[#00e5ff]/20 transition-colors">
+                  <div class="mb-3">
+                    <span class="text-[10px] font-label font-bold text-[#00e5ff] bg-[#00e5ff]/10 px-2 py-1 rounded uppercase tracking-wider">
+                      <FormattedDate date={item.data.pubDate} />
                     </span>
-                    <h3>{item.data.title}</h3>
                   </div>
-                  <p>{item.data.description}</p>
+                  <h3 class="font-headline font-bold text-[#dfe2eb] text-base mb-2 leading-snug">{item.data.title}</h3>
+                  {item.data.description && (
+                    <p class="text-sm text-[#849396] font-body line-clamp-2">{item.data.description}</p>
+                  )}
                 </div>
-              ))
-            }
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
+
       </main>
     </div>
     <Footer />
   </body>
 </html>
-
-<style>
-  /* 2컬럼 레이아웃 */
-  .layout {
-    display: grid;
-    grid-template-columns: 280px 1fr; /* Widen sidebar back */
-    gap: 3rem;
-    max-width: 1200px; /* Constrain width for better reading experience on ultra-wide */
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  /* 메인 컨텐츠 */
-  .main-content {
-    min-height: 100vh;
-    padding-top: 0; /* Remove default padding as layout handles it */
-  }
-
-  /* 히어로 섹션 */
-  .hero {
-    text-align: center;
-    padding: 4rem 1rem;
-    margin-bottom: 4rem;
-  }
-
-  .hero h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-  }
-  
-  .text-gradient {
-    background: linear-gradient(120deg, var(--accent), #b06ab3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .hero-description {
-    font-size: 1.35rem;
-    color: var(--gray);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-  
-  /* 섹션 공통 */
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 2rem;
-    padding: 0 0.5rem;
-  }
-  
-  h2 {
-    font-size: 2rem;
-    margin: 0;
-  }
-
-  /* 최신 포스트 Grid */
-  .post-grid {
-    display: grid;
-    grid-template-columns: 1fr; 
-    gap: 1.5rem;
-    margin-bottom: 4rem;
-  }
-
-  .post-card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    overflow: hidden; /* Ensure image stays within border radius */
-    padding: 0; /* Remove padding from card wrapper so image hits edges */
-  }
-  
-  .thumbnail {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-  }
-  
-  .thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .post-card:hover .thumbnail img {
-    transform: scale(1.05);
-  }
-  
-  .post-content {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-  
-  /* Stagger animation setup */
-  .post-card {
-    opacity: 0;
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .post-card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
-    border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
-  }
-
-  .post-card h3 {
-    margin: 0 0 0.75rem 0;
-    font-size: 1.5rem;
-    color: var(--black);
-    transition: color 0.2s ease;
-  }
-
-  .post-card:hover h3 {
-    color: var(--accent);
-  }
-  
-  .post-card .description {
-    color: var(--gray-dark);
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
-    flex-grow: 1; /* Pushes time to bottom if height fixed, good for grid */
-  }
-
-  .post-card time {
-    color: var(--gray);
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-  
-  /* Tech News */
-  .tech-news {
-    margin-bottom: 4rem;
-  }
-  
-  .news-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .news-item {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-  
-  .news-header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .news-date {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--accent);
-    background: rgba(var(--accent-hue), var(--accent-sat), var(--accent-light), 0.1);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
-  
-  .news-item h3 {
-    font-size: 1.1rem;
-    margin: 0;
-    line-height: 1.4;
-  }
-  
-  .news-item p {
-    font-size: 0.95rem;
-    color: var(--gray-dark);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .view-all {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: transform 0.2s ease;
-  }
-
-  .view-all:hover {
-    transform: translateX(5px);
-    text-decoration: underline;
-  }
-
-  /* 반응형 */
-  @media (max-width: 1000px) {
-    .layout {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-    }
-  }
-</style>

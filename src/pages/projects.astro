@@ -2,121 +2,87 @@
 import BaseHead from "../components/common/BaseHead.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
+import SidebarLeft from "../components/layout/SidebarLeft.astro";
 import { SITE_TITLE } from "../lib/constants";
 
-// 프로젝트 데이터 (나중에 별도 파일로 분리 가능)
 const projects = [
   {
     title: "프로젝트 1",
     description: "프로젝트 설명",
     tech: ["React", "TypeScript"],
-    github: "https://github.com/...",
-    demo: "https://...",
+    github: "https://github.com/KT20201224",
+    demo: "",
   },
-  // 추가 프로젝트들...
 ];
 ---
 
 <!doctype html>
-<html lang="ko">
+<html class="dark" lang="ko">
   <head>
-    <BaseHead title={`Projects | ${SITE_TITLE}`} description="프로젝트 목록" />
+    <BaseHead title={`Projects | ${SITE_TITLE}`} description="프로젝트 포트폴리오" />
   </head>
-  <body>
+  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
     <Header />
-    <main class="projects-page">
-      <h1>Projects</h1>
+    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
+      <SidebarLeft />
+      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
 
-      <div class="projects-grid">
-        {
-          projects.map((project) => (
-            <article class="project-card">
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
-              <div class="tech-stack">
-                {project.tech.map((tech) => (
-                  <span class="tech-tag">{tech}</span>
-                ))}
-              </div>
-              <div class="project-links">
-                {project.github && (
-                  <a href={project.github} target="_blank">
-                    GitHub
-                  </a>
-                )}
-                {project.demo && (
-                  <a href={project.demo} target="_blank">
-                    Demo
-                  </a>
-                )}
-              </div>
-            </article>
-          ))
-        }
-      </div>
-    </main>
+        <header class="mb-16">
+          <span class="font-label text-xs uppercase tracking-[0.3em] text-[#00e5ff] mb-4 block">Portfolio</span>
+          <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-[#dfe2eb] leading-tight">
+            Selected <br/>
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
+              Projects.
+            </span>
+          </h1>
+          <p class="text-xl text-[#849396] font-body italic leading-relaxed mt-4 max-w-2xl">
+            개발한 프로젝트들을 소개합니다.
+          </p>
+        </header>
+
+        <!-- Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {projects.map((project, i) => {
+            const isFeatured = i === 0;
+            return (
+              <article class={`${isFeatured ? 'md:col-span-8' : 'md:col-span-4'} group bg-[#1c2026] rounded-xl overflow-hidden flex flex-col hover:shadow-[0px_24px_48px_rgba(0,218,243,0.06)] transition-all duration-500`}>
+                <div class="aspect-video w-full bg-[#262a31] flex items-center justify-center">
+                  <span class="material-symbols-outlined text-6xl text-[#3b494c]">code</span>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    {project.tech.map((t) => (
+                      <span class="px-2 py-0.5 rounded bg-[#262a31] text-[10px] font-mono text-slate-400 uppercase">{t}</span>
+                    ))}
+                  </div>
+                  <h3 class={`font-bold font-headline text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors mb-3 ${isFeatured ? 'text-2xl' : 'text-xl'}`}>
+                    {project.title}
+                  </h3>
+                  <p class="text-[#849396] font-body mb-6 flex-1">{project.description}</p>
+                  <div class="flex gap-3 mt-auto">
+                    {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2 bg-[#262a31] text-[#dfe2eb] rounded-lg font-label text-xs hover:bg-[#00e5ff] hover:text-[#00363d] transition-all no-underline">
+                        <span class="material-symbols-outlined text-sm">code</span>
+                        GitHub
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-2 px-4 py-2 bg-[#00e5ff] text-[#00363d] rounded-lg font-label text-xs font-bold hover:brightness-110 transition-all no-underline">
+                        <span class="material-symbols-outlined text-sm">play_circle</span>
+                        Demo
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+      </main>
+    </div>
     <Footer />
   </body>
 </html>
-
-<style>
-  .projects-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3em 2em;
-  }
-
-  .projects-page h1 {
-    font-size: 2.5rem;
-    margin-bottom: 2em;
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2em;
-  }
-
-  .project-card {
-    background: rgb(var(--gray-light));
-    padding: 2em;
-    border-radius: 12px;
-    border: 1px solid rgb(var(--gray-lighter));
-  }
-
-  .project-card h2 {
-    margin-top: 0;
-    color: rgb(var(--accent));
-  }
-
-  .tech-stack {
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
-    margin: 1em 0;
-  }
-
-  .tech-tag {
-    background: rgb(var(--accent));
-    color: white;
-    padding: 0.25em 0.75em;
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-
-  .project-links {
-    display: flex;
-    gap: 1em;
-    margin-top: 1.5em;
-  }
-
-  .project-links a {
-    color: rgb(var(--accent));
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .project-links a:hover {
-    text-decoration: underline;
-  }
-</style>

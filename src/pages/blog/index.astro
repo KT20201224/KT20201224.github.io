@@ -1,206 +1,134 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/common/BaseHead.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FormattedDate from '../../components/common/FormattedDate.astro';
 import Header from '../../components/layout/Header.astro';
 import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import TagList from '../../components/blog/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../lib/constants';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Helper function to extract the first image from markdown body
 function getFirstImage(body: string | undefined) {
   if (!body) return null;
-  const imageRegex = /!\[.*?\]\((.*?)\)/;
-  const match = body.match(imageRegex);
+  const match = body.match(/!\[.*?\]\((.*?)\)/);
   return match ? match[1] : null;
 }
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={`Blog - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			/* 2컬럼 레이아웃 (home과 동일) */
-			.layout {
-				display: grid;
-				grid-template-columns: 280px 1fr;
-				gap: 3rem;
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 2rem 1rem;
-			}
-			.main-content {
-				min-height: 100vh;
-			}
-      
-      .page-header {
-        margin-bottom: 3rem;
-        text-align: center;
-      }
-      
-      .page-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-      }
-      
-      .page-header p {
-        color: var(--gray);
-        font-size: 1.1rem;
-      }
-
-			ul {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-      
-			li {
-				transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-			}
-      
-      li:hover {
-				transform: translateY(-5px);
-        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
-      }
-      
-      /* Active state for touch devices */
-      li:active {
-        transform: scale(0.98);
-      }
-			
-			li a {
-				display: block;
-        text-decoration: none;
-        color: inherit;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-			}
-      
-      .image-container {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-      }
-      
-      .image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-        margin: 0;
-        border-radius: 0;
-      }
-      
-      li:hover img {
-        transform: scale(1.05);
-      }
-      
-      .content {
-        padding: 1.5rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-      }
-      
-			.title {
-				margin: 0 0 0.5rem;
-				color: var(--black);
-				line-height: 1.2;
-        font-size: 1.25rem;
-        font-weight: 700;
-        transition: color 0.2s ease;
-			}
-      
-      li:hover .title {
-				color: var(--accent);
-			}
-      
-			.date {
-				margin: 0;
-				color: var(--gray);
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-			}
-      
-      .description {
-        margin-top: 0.5rem;
-        font-size: 1rem;
-        color: var(--gray-dark);
-        line-height: 1.5;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-      }
-      
-			@media (max-width: 1000px) {
-        .layout {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-				ul {
-					grid-template-columns: 1fr;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-    <div class="layout">
+<html class="dark" lang="ko">
+  <head>
+    <BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
+    <Header />
+    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
       <SidebarLeft />
-      <main class="main-content">
-        <section class="page-header animate-fade-in-up">
-          <h1>Blog</h1>
-          <p>개발 경험과 지식을 공유합니다.</p>
-        </section>
-			  <section class="animate-fade-in-up" style="animation-delay: 0.1s">
-				  <ul>
-					  {
-						  posts.map((post) => {
-                const firstImage = getFirstImage(post.body);
-                const displayImage = post.data.heroImage || firstImage;
-                
-                return (
-							  <li class="glass-card">
-								  <a href={`/blog/${post.id}/`}>
-                    <div class="image-container">
-                      {displayImage ? (
-                        <img src={typeof displayImage === 'string' ? displayImage : displayImage.src} alt="" width="720" height="360" loading="lazy" />
-                      ) : (
-                        <div style="width:100%; height:100%; background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 100%); display:flex; align-items:center; justify-content:center; color: var(--accent);">
-                           <span style="font-size: 2rem; font-weight:bold; opacity:0.3;">Jerry</span>
-                        </div>
+
+      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
+
+        <!-- Page Header -->
+        <header class="mb-16">
+          <span class="font-label text-xs uppercase tracking-[0.3em] text-[#00e5ff] mb-4 block">Index of Knowledge</span>
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-[#dfe2eb] leading-tight">
+                Latest <br/>
+                <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
+                  Articles.
+                </span>
+              </h1>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex items-center gap-2 px-4 py-2 bg-[#1c2026] rounded-lg font-label text-xs text-[#849396]">
+                <span class="material-symbols-outlined text-sm">article</span>
+                총 {posts.length}개의 글
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Post Listing (Stitch style) -->
+        <section class="space-y-12">
+          {posts.map((post) => {
+            const image = post.data.heroImage || getFirstImage(post.body);
+            const imageUrl = image ? (typeof image === 'string' ? image : (image as any).src) : null;
+            return (
+              <article class="group relative grid md:grid-cols-12 gap-8 items-start py-8 transition-all hover:bg-[#181c22]/50 rounded-2xl px-4 -mx-4">
+                {/* Thumbnail */}
+                <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-[#262a31]">
+                  {imageUrl ? (
+                    <img
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={imageUrl}
+                      alt={post.data.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center">
+                      <span class="material-symbols-outlined text-4xl text-[#3b494c]">article</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div class="md:col-span-8 flex flex-col justify-between h-full">
+                  <div>
+                    <div class="flex items-center gap-4 mb-4">
+                      <span class="font-label text-[10px] uppercase tracking-widest text-[#849396]">
+                        <FormattedDate date={post.data.pubDate} />
+                      </span>
+                      {post.data.category && (
+                        <>
+                          <span class="w-1 h-1 rounded-full bg-[#3b494c]"></span>
+                          <span class="font-label text-[10px] uppercase tracking-widest text-[#849396]">
+                            {post.data.category}
+                          </span>
+                        </>
                       )}
                     </div>
-                    <div class="content">
-									    <h4 class="title">{post.data.title}</h4>
-									    <p class="date">
-										    <FormattedDate date={post.data.pubDate} />
-									    </p>
-                      {post.data.description && <p class="description">{post.data.description}</p>}
+                    <a href={`/blog/${post.id}/`} class="no-underline">
+                      <h2 class="text-2xl font-bold font-headline mb-3 text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors">
+                        {post.data.title}
+                      </h2>
+                    </a>
+                    {post.data.description && (
+                      <p class="text-[#849396] font-body leading-relaxed mb-6 text-lg line-clamp-2">
+                        {post.data.description}
+                      </p>
+                    )}
+                  </div>
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                      {post.data.tags.slice(0, 3).map((tag: string) => (
+                        <a
+                          href={`/tags/${tag}`}
+                          class="px-3 py-1 rounded-full bg-[#00e5ff]/10 text-[#00e5ff] font-label text-[10px] uppercase tracking-wider border border-[#00e5ff]/20 hover:bg-[#00e5ff]/20 transition-colors no-underline"
+                        >
+                          {tag}
+                        </a>
+                      ))}
                     </div>
-								  </a>
-							  </li>
-						  )})
-					  }
-				  </ul>
-			  </section>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </section>
+
+        {posts.length === 0 && (
+          <div class="text-center py-20">
+            <span class="material-symbols-outlined text-6xl text-[#3b494c] mb-4 block">article</span>
+            <p class="text-[#849396] font-label uppercase tracking-widest text-sm">아직 게시글이 없습니다</p>
+          </div>
+        )}
+
       </main>
     </div>
-		<Footer />
-	</body>
+    <Footer />
+  </body>
 </html>

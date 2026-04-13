@@ -1,170 +1,83 @@
-<!-- 왼쪽 사이드바 -->
-<aside class="sidebar-left glass-card">
-  <div class="profile-section">
-    <div class="profile-image-container">
-      <img
-        class="profile-photo"
-        src="/images/jerry_profile.jpg"
-        alt="프로필"
-        width="120"
-        height="120"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <h2 class="profile-name">Jerry</h2>
-    <p class="motto">1인 개발의 꿈을 꾸는<br />열정적인 개발자</p>
+---
+import { CATEGORIES, SOCIAL_LINKS } from "../../lib/constants";
+const pathname = Astro.url.pathname;
+
+const categoryIcons: Record<string, string> = {
+  ml: "hub",
+  llm: "psychology",
+  web: "code",
+  devops: "memory",
+  etc: "more_horiz",
+};
+---
+
+<aside class="fixed left-0 top-0 h-screen pt-20 w-64 hidden lg:flex flex-col bg-[#181c22] z-40">
+  <div class="px-8 py-8">
+    <div class="text-lg font-black text-[#00e5ff] font-headline">Jerry's Archive</div>
+    <div class="text-[10px] font-mono tracking-widest text-[#849396] uppercase opacity-60 mt-1">ML · Web · DevOps</div>
   </div>
 
-  <div class="contact-me">
-    <h3>Connect</h3>
-    <ul>
-      <li>
-        <a href="mailto:rudxo0525@gmail.com" aria-label="Email">
-          <span class="icon">📧</span>
-          <span class="text">Email</span>
-        </a>
-      </li>
-      <li>
-        <a href="tel:+821033671828" aria-label="Phone">
-          <span class="icon">📱</span>
-          <span class="text">+82 10-3367-1828</span>
-        </a>
-      </li>
-      <li>
+  <!-- Category Nav -->
+  <nav class="flex-1 px-4 space-y-1">
+    <a
+      href="/blog"
+      class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all ${
+        pathname === '/blog'
+          ? 'bg-[#262a31] text-[#00e5ff] border-l-4 border-[#00e5ff]'
+          : 'text-slate-500 hover:bg-[#262a31]/50 hover:text-slate-300'
+      }`}
+    >
+      <span class="material-symbols-outlined text-xl">article</span>
+      <span class="text-xs font-mono font-label uppercase tracking-wider">All Posts</span>
+    </a>
+
+    {CATEGORIES.map((cat) => {
+      const href = `/categories/${cat.slug}`;
+      const isActive = pathname.startsWith(href);
+      return (
         <a
-          href="https://github.com/KT20201224"
-          target="_blank"
-          rel="noopener noreferrer"
+          href={href}
+          class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all ${
+            isActive
+              ? 'bg-[#262a31] text-[#00e5ff] border-l-4 border-[#00e5ff]'
+              : 'text-slate-500 hover:bg-[#262a31]/50 hover:text-slate-300'
+          }`}
         >
-          <span class="icon">🐈‍⬛</span>
-          <span class="text">GitHub</span>
+          <span class="material-symbols-outlined text-xl">{categoryIcons[cat.slug] || 'folder'}</span>
+          <span class="text-xs font-mono font-label uppercase tracking-wider">{cat.label}</span>
         </a>
-      </li>
-      <li>
-        <a
-          href="https://lets-post-it.tistory.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span class="icon">📝</span>
-          <span class="text">Tistory</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://velog.io/@rude/posts"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span class="icon">🟩</span>
-          <span class="text">Velog</span>
-        </a>
-      </li>
-    </ul>
+      );
+    })}
+  </nav>
+
+  <!-- Profile card at bottom -->
+  <div class="p-6 mt-auto">
+    <div class="p-4 rounded-xl bg-[#262a31] relative overflow-hidden group">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#00e5ff]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div class="flex items-center gap-3 relative z-10">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-[#00e5ff]/20 bg-[#1c2026] flex-shrink-0">
+          <img
+            src="/images/jerry_profile.jpg"
+            alt="Jerry"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p class="text-[10px] font-label uppercase tracking-tighter text-[#849396]">Authored by</p>
+          <p class="text-xs font-bold font-headline text-[#dfe2eb]">Kyoungtae Kim</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3 mt-4 justify-center">
+      <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer"
+        class="text-slate-600 hover:text-[#00e5ff] transition-colors text-[10px] font-mono uppercase tracking-widest">
+        GitHub
+      </a>
+      <span class="text-slate-700">·</span>
+      <a href={`mailto:${SOCIAL_LINKS.email}`}
+        class="text-slate-600 hover:text-[#00e5ff] transition-colors text-[10px] font-mono uppercase tracking-widest">
+        Email
+      </a>
+    </div>
   </div>
 </aside>
-
-<style>
-  /* 왼쪽 사이드바 - iOS Widget Style */
-  .sidebar-left {
-    position: sticky;
-    top: 6rem;
-    height: fit-content;
-    padding: 24px;
-    text-align: center;
-    width: 100%;
-    min-width: 250px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .profile-image-container {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 0.75rem;
-    border-radius: 22px; /* App Icon Shape */
-    padding: 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-
-  .profile-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 22px;
-    background: var(--color-bg-secondary);
-  }
-
-  .profile-name {
-    font-size: 22px;
-    margin: 0.5rem 0 0.25rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  
-  .motto {
-    font-size: 15px;
-    color: rgb(var(--gray));
-    line-height: 1.4;
-    margin: 0;
-  }
-
-  .contact-me {
-    width: 100%;
-    text-align: left;
-  }
-
-  .contact-me h3 {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgb(var(--gray));
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    padding-left: 0.5rem;
-  }
-
-  .contact-me ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    background: rgba(118, 118, 128, 0.08); /* Grouped List Background */
-    border-radius: 16px;
-    padding: 6px;
-  }
-
-  .contact-me a {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 10px 12px;
-    border-radius: 10px;
-    color: var(--color-text);
-    font-weight: 500;
-    transition: all 0.2s ease;
-    background: transparent;
-    font-size: 15px;
-  }
-
-  .contact-me a:hover {
-    background: var(--color-bg-secondary);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-  
-  .icon {
-    font-size: 1.2rem;
-  }
-</style>
