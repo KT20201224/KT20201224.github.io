@@ -59,7 +59,7 @@ const tierNames = [
   <!-- Intro 섹션 -->
   <section class="profile-intro">
     <div class="profile-image">
-      <img src="/images/profile.jpg" alt="프로필 사진" />
+      <img src="/images/etc/profile.jpg" alt="프로필 사진" />
     </div>
 
     <div class="profile-text">
@@ -451,16 +451,18 @@ const tierNames = [
   .tech-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5em;
-    padding: 0.45em 1em;
+    gap: 0.35em;
+    padding: 0.2em 0.6em;
     background: #262a31;
     border: 1px solid rgba(59, 73, 76, 0.3);
-    border-radius: 99px;
+    border-radius: 4px;
     font-size: 0.8rem;
     font-weight: 500;
     color: #bac9cc;
     transition: border-color 0.2s, color 0.2s;
-    line-height: 1;
+    line-height: 1.4;
+    white-space: nowrap;
+    height: 1.8em;
   }
 
   .tech-badge:hover {
@@ -469,8 +471,8 @@ const tierNames = [
   }
 
   .tech-badge img {
-    width: 18px;
-    height: 18px;
+    width: 13px;
+    height: 13px;
     object-fit: contain;
     flex-shrink: 0;
   }
