@@ -7,62 +7,28 @@ interface Props {
 
 const { tags, size = 'md', clickable = true } = Astro.props;
 
-const sizeClasses = {
-  sm: 'text-xs px-2 py-0.5',
-  md: 'text-sm px-3 py-1',
-  lg: 'text-base px-4 py-1.5',
-};
+const sizeClass = {
+  sm: 'text-[10px] px-2 py-0.5',
+  md: 'text-xs px-3 py-1',
+  lg: 'text-sm px-4 py-1.5',
+}[size];
 ---
 
 {tags.length > 0 && (
-  <div class="tag-list">
+  <div class="flex flex-wrap gap-2">
     {tags.map((tag) =>
       clickable ? (
-        <a href={`/tags/${tag}/`} class={`tag ${size}`}>
+        <a
+          href={`/tags/${tag}/`}
+          class={`${sizeClass} rounded-full bg-[#00e5ff]/10 text-[#00e5ff] font-label uppercase tracking-wider border border-[#00e5ff]/20 hover:bg-[#00e5ff]/20 transition-colors no-underline`}
+        >
           #{tag}
         </a>
       ) : (
-        <span class={`tag ${size}`}>#{tag}</span>
+        <span class={`${sizeClass} rounded-full bg-[#1c2026] text-[#849396] font-label uppercase tracking-wider border border-[#3b494c]/30`}>
+          #{tag}
+        </span>
       )
     )}
   </div>
 )}
-
-<style>
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    background: var(--accent-light-translucent);
-    color: var(--accent);
-    border-radius: 99px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    text-decoration: none;
-  }
-
-  a.tag:hover {
-    background: var(--accent);
-    color: white;
-  }
-
-  .tag.sm {
-    font-size: 0.75rem;
-    padding: 0.125rem 0.5rem;
-  }
-
-  .tag.md {
-    font-size: 0.875rem;
-    padding: 0.25rem 0.75rem;
-  }
-
-  .tag.lg {
-    font-size: 1rem;
-    padding: 0.375rem 1rem;
-  }
-</style>

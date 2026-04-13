@@ -1,12 +1,17 @@
 ---
 import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
 import Layout from "../layouts/AboutLayout.astro";
-import * as simpleIcons from "simple-icons";
-
 // === Solved.ac (백준) ===
 const handle = "olly123";
-const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
-const data = await res.json();
+let data: { tier?: number; solvedCount?: number; rating?: number } | null = null;
+try {
+  const res = await fetch(`https://solved.ac/api/v3/user/show?handle=${handle}`);
+  if (res.ok) {
+    data = await res.json();
+  }
+} catch (e) {
+  // API unavailable at build time, show fallback
+}
 
 // === Kaggle (수동 입력) ===
 const kaggleData = {
@@ -197,15 +202,15 @@ const tierNames = [
     <div class="algorithm-stats">
       <div class="algorithm-stat">
         <span class="algorithm-stat-label">Tier</span>
-        <span class="algorithm-stat-value">{tierNames[data.tier]}</span>
+        <span class="algorithm-stat-value">{data ? tierNames[data.tier ?? 0] : '-'}</span>
       </div>
       <div class="algorithm-stat">
         <span class="algorithm-stat-label">Solved</span>
-        <span class="algorithm-stat-value">{data.solvedCount}</span>
+        <span class="algorithm-stat-value">{data?.solvedCount ?? '-'}</span>
       </div>
       <div class="algorithm-stat">
         <span class="algorithm-stat-label">Rating</span>
-        <span class="algorithm-stat-value">{data.rating}</span>
+        <span class="algorithm-stat-value">{data?.rating ?? '-'}</span>
       </div>
     </div>
   </section>
@@ -224,47 +229,49 @@ const tierNames = [
 </Layout>
 
 <style>
+  /* 전체 폰트 기본: Inter (body 상속) */
+  * {
+    font-family: "Inter", sans-serif;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid rgba(59, 73, 76, 0.3);
+    margin: 2.5em 0;
+  }
+
   .profile-intro {
     display: flex;
     align-items: flex-start;
     gap: 3em;
     margin-bottom: 1em;
-    padding: 1em;
+    padding: 1.5em;
     border-radius: 12px;
+    background: #1c2026;
+    border: 1px solid rgba(59, 73, 76, 0.3);
   }
 
   .profile-image img {
-    max-width: 200px;
+    max-width: 160px;
     width: 100%;
     height: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .profile-image .avatar {
-    width: 200px;
-    height: 200px;
-    background: rgb(var(--accent));
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .profile-text h2 {
     margin-top: 0;
-    margin-bottom: 1em;
+    margin-bottom: 0.75em;
     font-size: 1.8rem;
-    color: var(--color-text);
+    font-weight: 700;
+    color: #dfe2eb;
   }
 
   .profile-text p {
+    font-size: 0.95rem;
     line-height: 1.7;
-    color: var(--color-text-secondary);
-    margin-bottom: 1em;
+    color: #849396;
+    margin-bottom: 0.75em;
   }
 
   @media (max-width: 768px) {
@@ -275,20 +282,44 @@ const tierNames = [
     }
   }
 
+  /* Section headings */
+  .career-section h2,
+  .activity-section h2,
+  .certification-section h2,
+  .tech-section h2,
+  .baekjoon-section h2,
+  .kaggle-section h2 {
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #00e5ff;
+  }
+
+  .career-section, .activity-section {
+    margin-bottom: 1em;
+  }
+
+  /* Experience / Activity items */
   .experience-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 1.5em;
   }
 
   .experience-item {
     padding: 1.5em;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    background: #1c2026;
+    border: 1px solid rgba(59, 73, 76, 0.3);
     border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .experience-item:hover {
+    border-color: rgba(0, 229, 255, 0.2);
   }
 
   .experience-header {
@@ -301,61 +332,41 @@ const tierNames = [
 
   .experience-header h3 {
     margin: 0;
-    font-size: 1.2rem;
-    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #dfe2eb;
   }
 
   .period {
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
+    color: #849396;
+    font-size: 0.8rem;
     flex-shrink: 0;
+    font-family: "Space Grotesk", monospace;
+    letter-spacing: 0.03em;
   }
 
   .position {
-    margin: 0 0 1em 0;
-    color: var(--color-text);
+    margin: 0.25em 0 0.75em 0;
+    color: #00e5ff;
     font-weight: 500;
+    font-size: 0.875rem;
   }
 
   .description {
     margin: 0;
     padding-left: 1.5em;
-    color: var(--color-text-secondary);
+    color: #849396;
+    font-size: 0.875rem;
   }
 
   .description li {
-    margin-bottom: 0.5em;
-    line-height: 1.5;
+    margin-bottom: 0.4em;
+    line-height: 1.6;
   }
 
-  .career-section,
-  .activity-section {
-    margin-bottom: 1em;
-  }
-
-  .career-section h2,
-  .activity-section h2 {
-    margin-top: 1em;
-    margin-bottom: 1em;
-    font-size: 1.8rem;
-    color: var(--color-text);
-  }
-
-  @media (max-width: 1024px) {
-    .experience-section {
-      grid-template-columns: 1fr;
-    }
-  }
-
+  /* Certifications */
   .certification-section {
-    margin-bottom: 4em;
-  }
-
-  .certification-section h2 {
-    margin-top: 1em;
     margin-bottom: 1em;
-    font-size: 1.8rem;
-    color: var(--color-text);
   }
 
   .cert-list {
@@ -364,36 +375,44 @@ const tierNames = [
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
+    gap: 1em;
   }
 
   .cert-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5em;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    padding: 1.25em 1.5em;
+    background: #1c2026;
+    border: 1px solid rgba(59, 73, 76, 0.3);
     border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .cert-item:hover {
+    border-color: rgba(0, 229, 255, 0.2);
   }
 
   .cert-info h3 {
-    margin: 0 0 0.5em 0;
-    font-size: 1.1rem;
-    color: var(--color-text);
+    margin: 0 0 0.3em 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #dfe2eb;
   }
 
   .cert-issuer {
     margin: 0;
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
+    color: #849396;
+    font-size: 0.8rem;
   }
 
   .cert-date {
-    color: var(--color-text);
+    color: #00e5ff;
     font-weight: 500;
     flex-shrink: 0;
     margin-left: 1em;
+    font-family: "Space Grotesk", monospace;
+    font-size: 0.875rem;
   }
 
   @media (max-width: 768px) {
@@ -404,15 +423,9 @@ const tierNames = [
     }
   }
 
-  /* Tech Stack - Badge Style */
+  /* Tech Stack */
   .tech-section {
-    margin-bottom: 2em;
-  }
-
-  .tech-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5em;
-    color: var(--color-text);
+    margin-bottom: 1em;
   }
 
   .tech-category {
@@ -420,10 +433,13 @@ const tierNames = [
   }
 
   .tech-category h3 {
-    font-size: 1rem;
-    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+    color: #849396;
     margin-bottom: 0.75em;
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: "Space Grotesk", monospace;
   }
 
   .tech-badges {
@@ -436,52 +452,64 @@ const tierNames = [
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    padding: 0.5em 1em;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    padding: 0.45em 1em;
+    background: #262a31;
+    border: 1px solid rgba(59, 73, 76, 0.3);
     border-radius: 99px;
-    font-size: 0.9rem;
-    color: var(--color-text);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #bac9cc;
+    transition: border-color 0.2s, color 0.2s;
+    line-height: 1;
+  }
+
+  .tech-badge:hover {
+    border-color: rgba(0, 229, 255, 0.3);
+    color: #00e5ff;
   }
 
   .tech-badge img {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   /* Algorithm & Kaggle */
   .baekjoon-section,
   .kaggle-section {
-    margin-bottom: 2em;
-  }
-
-  .baekjoon-section h2,
-  .kaggle-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5em;
-    color: var(--color-text);
+    margin-bottom: 1em;
   }
 
   .algorithm-stats {
     display: flex;
-    gap: 3em;
+    gap: 1.5em;
+    flex-wrap: wrap;
   }
 
   .algorithm-stat {
     display: flex;
     flex-direction: column;
-    gap: 0.25em;
+    gap: 0.4em;
+    padding: 1.25em 2em;
+    background: #1c2026;
+    border: 1px solid rgba(59, 73, 76, 0.3);
+    border-radius: 12px;
+    min-width: 120px;
   }
 
   .algorithm-stat-label {
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+    color: #849396;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: "Space Grotesk", monospace;
   }
 
   .algorithm-stat-value {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00e5ff;
   }
 
   @media (max-width: 480px) {

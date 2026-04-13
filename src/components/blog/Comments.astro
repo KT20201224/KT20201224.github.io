@@ -8,41 +8,16 @@ interface Props {
 const { slug } = Astro.props;
 ---
 
-<div class="comments-section">
-  <h2 class="comments-title">Comments</h2>
-  <div id="giscus-container" class="giscus-wrapper">
-    <div class="giscus-loading">
-      <p>Loading comments...</p>
+<div class="mt-8">
+  <h2 class="font-headline text-2xl font-bold text-[#dfe2eb] mb-6">Comments</h2>
+  <div id="giscus-container">
+    <div class="flex items-center justify-center min-h-[200px] text-[#849396] font-label text-sm">
+      Loading comments...
     </div>
   </div>
 </div>
 
 <style>
-  .comments-section {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .comments-title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: var(--color-text);
-  }
-
-  .giscus-wrapper {
-    min-height: 200px;
-  }
-
-  .giscus-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    color: rgb(var(--gray));
-  }
-
-  /* Giscus dark mode sync */
   :global(.giscus-frame) {
     width: 100%;
   }
@@ -61,9 +36,7 @@ const { slug } = Astro.props;
     // Clear loading state
     container.innerHTML = '';
 
-    // Detect theme
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const theme = isDark ? 'dark' : 'light';
+    const theme = 'dark';
 
     // Create Giscus script
     const script = document.createElement('script');

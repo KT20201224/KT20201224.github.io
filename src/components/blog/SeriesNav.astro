@@ -12,203 +12,54 @@ const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
 const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 ---
 
-<nav class="series-nav glass-card">
-  <div class="series-header">
-    <span class="series-label">Series</span>
-    <h3 class="series-name">{name}</h3>
-    <span class="series-progress">
-      {currentIndex + 1} / {posts.length}
+<nav class="p-6 mb-10 rounded-xl bg-[#1c2026] border border-[#3b494c]/20">
+  <!-- Series Header -->
+  <div class="flex flex-wrap items-center gap-3 mb-4 pb-4 border-b border-[#3b494c]/20">
+    <span class="text-[10px] font-label font-bold uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2 py-1 rounded">
+      Series
     </span>
+    <h3 class="flex-1 text-base font-bold font-headline text-[#dfe2eb] m-0">{name}</h3>
+    <span class="text-xs font-label text-[#849396]">{currentIndex + 1} / {posts.length}</span>
   </div>
 
-  <div class="series-posts">
+  <!-- Post List -->
+  <div class="flex flex-col gap-1 mb-4">
     {posts.map((post, index) => (
       <a
         href={`/blog/${post.slug}/`}
-        class:list={[
-          'series-post',
-          { active: index === currentIndex },
-          { completed: index < currentIndex },
-        ]}
+        class={`flex items-center gap-3 px-3 py-2.5 rounded-lg no-underline transition-all ${
+          index === currentIndex
+            ? 'bg-[#00e5ff] text-[#00363d]'
+            : index < currentIndex
+            ? 'text-[#849396] hover:bg-[#262a31]'
+            : 'text-[#bac9cc] hover:bg-[#262a31]'
+        }`}
       >
-        <span class="post-number">{index + 1}</span>
-        <span class="post-title">{post.title}</span>
+        <span class={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold font-label flex-shrink-0 ${
+          index === currentIndex
+            ? 'bg-white/20 text-[#00363d]'
+            : index < currentIndex
+            ? 'bg-[#00e5ff] text-[#00363d]'
+            : 'bg-[#262a31] text-[#849396]'
+        }`}>{index + 1}</span>
+        <span class="text-sm font-label truncate">{post.title}</span>
       </a>
     ))}
   </div>
 
-  <div class="series-navigation">
+  <!-- Prev/Next -->
+  <div class="grid grid-cols-2 gap-3 pt-4 border-t border-[#3b494c]/20">
     {prevPost ? (
-      <a href={`/blog/${prevPost.slug}/`} class="nav-link prev">
-        <span class="nav-label">Previous</span>
-        <span class="nav-title">{prevPost.title}</span>
+      <a href={`/blog/${prevPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-[#262a31] transition-colors no-underline text-left">
+        <span class="text-[10px] font-label uppercase tracking-widest text-[#849396]">Previous</span>
+        <span class="text-sm font-label text-[#00e5ff] truncate">{prevPost.title}</span>
       </a>
-    ) : (
-      <div class="nav-placeholder" />
-    )}
+    ) : <div />}
     {nextPost ? (
-      <a href={`/blog/${nextPost.slug}/`} class="nav-link next">
-        <span class="nav-label">Next</span>
-        <span class="nav-title">{nextPost.title}</span>
+      <a href={`/blog/${nextPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-[#262a31] transition-colors no-underline text-right">
+        <span class="text-[10px] font-label uppercase tracking-widest text-[#849396]">Next</span>
+        <span class="text-sm font-label text-[#00e5ff] truncate">{nextPost.title}</span>
       </a>
-    ) : (
-      <div class="nav-placeholder" />
-    )}
+    ) : <div />}
   </div>
 </nav>
-
-<style>
-  .series-nav {
-    padding: 1.5rem;
-    margin: 2rem 0;
-  }
-
-  .series-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .series-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    background: var(--accent-light-translucent);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-
-  .series-name {
-    flex: 1;
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  .series-progress {
-    font-size: 0.875rem;
-    color: rgb(var(--gray));
-    font-weight: 500;
-  }
-
-  .series-posts {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .series-post {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--color-text);
-    transition: all 0.2s ease;
-    background: transparent;
-  }
-
-  .series-post:hover {
-    background: var(--accent-light-translucent);
-  }
-
-  .series-post.active {
-    background: var(--accent);
-    color: white;
-  }
-
-  .series-post.completed .post-number {
-    background: var(--accent);
-    color: white;
-  }
-
-  .post-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    background: rgb(var(--gray-light));
-    font-size: 0.875rem;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-
-  .series-post.active .post-number {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .post-title {
-    font-size: 0.9rem;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .series-navigation {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .nav-link {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .nav-link:hover {
-    background: var(--accent-light-translucent);
-  }
-
-  .nav-link.prev {
-    text-align: left;
-  }
-
-  .nav-link.next {
-    text-align: right;
-  }
-
-  .nav-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgb(var(--gray));
-  }
-
-  .nav-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--accent);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .nav-placeholder {
-    min-height: 1px;
-  }
-
-  @media (max-width: 600px) {
-    .series-navigation {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

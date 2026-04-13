@@ -4,139 +4,68 @@ import BaseHead from '../../components/common/BaseHead.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import FormattedDate from '../../components/common/FormattedDate.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../lib/constants';
 
 const news = (await getCollection('news')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <!doctype html>
-<html lang="ko">
-	<head>
-		<BaseHead title={`News - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			/* 2컬럼 레이아웃 (home과 동일) */
-			.layout {
-				display: grid;
-				grid-template-columns: 280px 1fr;
-				gap: 3rem;
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 2rem 1rem;
-			}
-			.main-content {
-				min-height: 100vh;
-			}
-      
-      .page-header {
-        margin-bottom: 3rem;
-        text-align: center;
-      }
-      
-      .page-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-      }
-      
-      .page-header p {
-        color: var(--gray);
-        font-size: 1.1rem;
-      }
-
-			ul {
-				display: grid;
-        grid-template-columns: 1fr;
-				gap: 1.5rem;
-				list-style-type: none;
-				padding: 0;
-			}
-      
-			.news-item {
-        background: var(--glass-bg);
-        backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-				transition: transform 0.2s ease, box-shadow 0.2s ease;
-        padding: 1.5rem;
-			}
-      
-			.news-item:hover {
-				transform: translateY(-3px);
-        box-shadow: var(--glass-shadow);
-        border-color: rgba(var(--accent-hue), var(--accent-sat), 70%, 0.4);
-			}
-      
-			.news-item a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-      }
-      
-			.title {
-				margin: 0 0 0.5rem 0;
-				color: var(--black);
-				font-size: 1.5rem;
-        font-weight: 700;
-        transition: color 0.2s ease;
-			}
-      
-      .news-item:hover .title {
-				color: var(--accent);
-			}
-      
-			.date {
-				margin: 0;
-				color: var(--gray);
-        font-size: 0.9rem;
-			}
-      
-      .description {
-        margin-top: 1rem;
-        color: var(--gray-dark);
-        line-height: 1.5;
-      }
-      
-      @media (max-width: 1000px) {
-        .layout {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-      }
-		</style>
-	</head>
-	<body>
-		<Header />
-    <div class="layout">
+<html class="dark" lang="ko">
+  <head>
+    <BaseHead title={`News | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
+    <Header />
+    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
       <SidebarLeft />
-      <main class="main-content">
-        <section class="page-header animate-fade-in-up">
-          <h1>Tech News</h1>
-          <p>최신 기술 동향과 업데이트를 확인하세요.</p>
-        </section>
-        <section class="animate-fade-in-up" style="animation-delay: 0.1s">
-          <ul>
-            {
-              news.map((post) => (
-                <li class="news-item">
-                  <a href={`/news/${post.id}/`}>
-                    <p class="date">
-                     {post.data.pubDate.toLocaleDateString('ko-KR', {
-                        year: 'numeric',
-                        month: 'long', 
-                        day: 'numeric'
-                      })}
+      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
+        <header class="mb-12">
+          <span class="font-label text-xs uppercase tracking-[0.3em] text-[#00e5ff] mb-4 block">Updates</span>
+          <h1 class="text-5xl font-extrabold font-headline tracking-tighter text-[#dfe2eb]">Tech News</h1>
+          <p class="text-[#849396] font-body italic mt-2">최신 기술 동향과 업데이트</p>
+        </header>
+
+        <section class="space-y-6">
+          {news.map((post) => (
+            <a
+              href={`/news/${post.id}/`}
+              class="block p-6 rounded-xl bg-[#1c2026] border border-[#3b494c]/20 hover:border-[#00e5ff]/20 hover:bg-[#262a31]/50 transition-all group no-underline"
+            >
+              <div class="flex items-start gap-6">
+                <div class="flex-shrink-0 text-center">
+                  <span class="block text-[10px] font-label uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2 py-1 rounded">
+                    <FormattedDate date={post.data.pubDate} />
+                  </span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h2 class="text-xl font-bold font-headline text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors mb-2">
+                    {post.data.title}
+                  </h2>
+                  {post.data.description && (
+                    <p class="text-[#849396] font-body leading-relaxed line-clamp-2">
+                      {post.data.description}
                     </p>
-                    <h4 class="title">{post.data.title}</h4>
-                    <p class="description">{post.data.description}</p>
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
+                  )}
+                </div>
+                <span class="material-symbols-outlined text-[#3b494c] group-hover:text-[#00e5ff] transition-colors flex-shrink-0">
+                  arrow_forward
+                </span>
+              </div>
+            </a>
+          ))}
+
+          {news.length === 0 && (
+            <div class="text-center py-20">
+              <span class="material-symbols-outlined text-6xl text-[#3b494c] mb-4 block">newspaper</span>
+              <p class="text-[#849396] font-label uppercase tracking-widest text-sm">아직 뉴스가 없습니다</p>
+            </div>
+          )}
         </section>
       </main>
     </div>
-		<Footer />
-	</body>
+    <Footer />
+  </body>
 </html>

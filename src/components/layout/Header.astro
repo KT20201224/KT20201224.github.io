@@ -1,116 +1,71 @@
 ---
-import { SITE_TITLE } from "../../lib/constants";
-import HeaderLink from "./HeaderLink.astro";
-import ThemeToggle from "../ui/ThemeToggle.astro";
-import Search from "../ui/Search.astro";
+import { SITE_TITLE, NAV_LINKS } from "../../lib/constants";
+const pathname = Astro.url.pathname;
+const navIcons: Record<string, string> = {
+  '/': 'home',
+  '/blog': 'article',
+  '/news': 'newspaper',
+  '/projects': 'grid_view',
+  '/about': 'person',
+};
 ---
 
-<header>
-  <nav>
-    <h2><a href="/">{SITE_TITLE}</a></h2>
-    <div class="nav-right">
-      <div class="internal-links">
-        <HeaderLink href="/">Home</HeaderLink>
-        <HeaderLink href="/blog">Blog</HeaderLink>
-        <HeaderLink href="/news">News</HeaderLink>
-        <HeaderLink href="/projects">Projects</HeaderLink>
-        <HeaderLink href="/about">About</HeaderLink>
+<header class="fixed top-0 w-full z-50 bg-[#10141a]/60 backdrop-blur-xl shadow-[0px_24px_48px_rgba(0,218,243,0.04)]">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <!-- Logo -->
+    <a href="/" class="text-xl font-bold tracking-tighter text-[#00e5ff] font-headline no-underline hover:opacity-80 transition-opacity">
+      {SITE_TITLE}
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8 font-label text-xs uppercase tracking-widest">
+      {NAV_LINKS.map((link) => {
+        const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+        return (
+          <a
+            href={link.href}
+            class={isActive
+              ? "text-[#00e5ff] border-b-2 border-[#00e5ff] pb-1"
+              : "text-slate-400 hover:text-slate-100 transition-colors"}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-3">
+      <!-- Search box -->
+      <div class="relative hidden sm:block">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#849396] text-base">search</span>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search..."
+          class="bg-[#0a0e14] border border-[#3b494c]/40 rounded-lg pl-10 pr-4 py-2 text-sm font-label text-[#dfe2eb] placeholder-[#849396] focus:ring-1 focus:ring-[#00e5ff]/40 focus:outline-none w-52 transition-all"
+        />
       </div>
-      <Search />
-      <ThemeToggle />
+      <!-- Mobile search icon -->
+      <button class="sm:hidden text-slate-400 hover:text-[#00e5ff] transition-colors" aria-label="검색">
+        <span class="material-symbols-outlined">search</span>
+      </button>
     </div>
-  </nav>
+  </div>
 </header>
 
-<style>
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    margin: 0;
-    padding: 0.5em 1em;
-    background: var(--header-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--color-border);
-    transition: var(--transition-theme);
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1.25em;
-    font-weight: 800;
-    background: linear-gradient(120deg, var(--accent), #b06ab3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: transform 0.2s ease;
-  }
-
-  h2 a,
-  h2 a.active,
-  h2 a:hover {
-    text-decoration: none !important;
-    display: block;
-    background: transparent !important;
-    -webkit-text-fill-color: transparent !important;
-    color: transparent !important;
-    opacity: 1 !important;
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .internal-links {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  nav a {
-    padding: 0.5em 1em;
-    color: var(--color-text);
-    border-bottom: none;
-    text-decoration: none;
-    font-weight: 500;
-    border-radius: 99px;
-    transition: all 0.2s ease;
-    font-size: 0.95rem;
-  }
-
-  nav a.active {
-    text-decoration: none;
-    background-color: var(--accent);
-    color: white;
-  }
-
-  .internal-links a:not(.active):hover {
-    background-color: rgb(var(--gray-light));
-    color: var(--accent);
-  }
-
-  h2:hover {
-    cursor: pointer;
-    transform: scale(1.02);
-  }
-
-  @media (max-width: 720px) {
-    .internal-links {
-      display: none;
-    }
-
-    nav {
-      justify-content: space-between;
-    }
-  }
-</style>
+<!-- Mobile bottom nav -->
+<nav class="md:hidden fixed bottom-0 w-full bg-[#181c22]/90 backdrop-blur-lg border-t border-[#3b494c]/20 py-3 px-6 z-50 flex justify-around">
+  {NAV_LINKS.slice(0, 4).map((link) => {
+    const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+    return (
+      <a
+        href={link.href}
+        class={`flex flex-col items-center gap-1 no-underline ${isActive ? 'text-[#00e5ff]' : 'text-slate-500'}`}
+      >
+        <span class="material-symbols-outlined">{navIcons[link.href] || 'circle'}</span>
+        <span class="text-[10px] font-label uppercase">{link.label}</span>
+      </a>
+    );
+  })}
+</nav>

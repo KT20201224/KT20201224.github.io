@@ -5,11 +5,9 @@ import BaseHead from "../components/common/BaseHead.astro";
 import Footer from "../components/layout/Footer.astro";
 import FormattedDate from "../components/common/FormattedDate.astro";
 import Header from "../components/layout/Header.astro";
-import TagList from "../components/blog/TagList.astro";
-import TOC from "../components/blog/TOC.astro";
+import SidebarLeft from "../components/layout/SidebarLeft.astro";
 import SeriesNav from "../components/blog/SeriesNav.astro";
-import Comments from "../components/blog/Comments.astro";
-import { getCategoryLabel, getSeriesInfo, getPublishedPosts } from "../lib/utils";
+import { getSeriesInfo, getPublishedPosts } from "../lib/utils";
 
 interface Heading {
   depth: number;
@@ -46,15 +44,14 @@ const {
   currentPost,
 } = Astro.props;
 
-// Get series info if applicable
 const seriesInfo = currentPost && series
   ? getSeriesInfo(getPublishedPosts(allPosts), currentPost)
   : null;
 
-const hasTOC = headings.length > 0;
+const h2Headings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<html lang="ko">
+<html class="dark" lang="ko">
   <head>
     <BaseHead
       title={title}
@@ -65,177 +62,175 @@ const hasTOC = headings.length > 0;
       modifiedTime={updatedDate}
       tags={tags}
     />
-    <style>
-      .post-layout {
-        display: grid;
-        grid-template-columns: 1fr minmax(auto, 840px) 1fr;
-        gap: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-      }
-
-      .post-sidebar-left {
-        display: block;
-      }
-
-      .post-main {
-        min-width: 0;
-      }
-
-      .post-sidebar-right {
-        position: relative;
-        max-width: 250px;
-      }
-
-      @media (max-width: 1200px) {
-        .post-layout {
-          grid-template-columns: 1fr;
-          max-width: 900px;
-        }
-        .post-sidebar-left,
-        .post-sidebar-right {
-          display: none;
-        }
-      }
-
-      .hero-image {
-        width: 100%;
-        margin-bottom: 2rem;
-      }
-
-      .hero-image img {
-        display: block;
-        margin: 0 auto;
-        border-radius: 12px;
-        box-shadow: var(--box-shadow);
-      }
-
-      .content-wrapper {
-        padding: 2.5rem;
-      }
-
-      @media (max-width: 720px) {
-        .content-wrapper {
-          padding: 1.5rem;
-        }
-      }
-
-      .prose {
-        width: 100%;
-        color: rgb(var(--gray-dark));
-      }
-
-      .title {
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-        text-align: center;
-        border-bottom: 1px solid var(--color-border);
-      }
-
-      .title h1 {
-        margin: 0.5rem 0 1rem;
-        font-size: 2.5rem;
-        line-height: 1.1;
-      }
-
-      .date {
-        margin-bottom: 0.5em;
-        color: rgb(var(--gray));
-        font-size: 0.95rem;
-      }
-
-      .last-updated-on {
-        font-style: italic;
-      }
-
-      .post-meta {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1rem;
-      }
-
-      .category-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.25rem 0.75rem;
-        background: rgb(var(--gray-light));
-        color: rgb(var(--gray-dark));
-        border-radius: 99px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        text-decoration: none;
-        transition: all 0.2s ease;
-      }
-
-      .category-badge:hover {
-        background: var(--accent-light-translucent);
-        color: var(--accent);
-      }
-
-      .tags-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-top: 1rem;
-      }
-    </style>
   </head>
 
-  <body>
+  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
     <Header />
-    <div class="post-layout">
-      <aside class="post-sidebar-left"></aside>
 
-      <main class="post-main animate-fade-in-up">
-        <article>
-          {heroImage && (
-            <div class="hero-image">
-              <Image width={1020} height={510} src={heroImage} alt="" />
-            </div>
-          )}
+    <div class="pt-24 max-w-7xl mx-auto">
+      <div class="flex">
+        <SidebarLeft />
 
-          <div class="content-wrapper glass-card">
-            <div class="prose">
-              <div class="title">
-                <div class="date">
-                  <FormattedDate date={pubDate} />
-                  {updatedDate && (
-                    <div class="last-updated-on">
-                      Last updated on <FormattedDate date={updatedDate} />
-                    </div>
-                  )}
-                </div>
-                <h1>{title}</h1>
-                <div class="post-meta">
-                  {category && (
-                    <a href={`/categories/${category}/`} class="category-badge">
-                      {getCategoryLabel(category)}
+        <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
+          <div class={`max-w-7xl mx-auto grid grid-cols-1 gap-12 ${h2Headings.length > 0 ? 'xl:grid-cols-[1fr_240px]' : ''}`}>
+
+            <!-- Main Article -->
+            <article class="max-w-3xl w-full">
+              <!-- Breadcrumb + Title -->
+              <header class="mb-16">
+                {category && (
+                  <nav class="flex gap-2 mb-6 font-label text-[10px] uppercase tracking-widest text-[#00daf3]">
+                    <a href="/blog" class="hover:text-[#00e5ff] transition-colors no-underline">Blog</a>
+                    <span class="text-slate-700">/</span>
+                    <a href={`/categories/${category}`} class="hover:text-[#00e5ff] transition-colors no-underline">
+                      {category}
                     </a>
-                  )}
-                </div>
-                {tags.length > 0 && (
-                  <div class="tags-wrapper">
-                    <TagList tags={tags} size="md" />
-                  </div>
+                  </nav>
                 )}
-              </div>
+
+                <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-[1.1] text-[#dfe2eb]">
+                  {title}
+                </h1>
+
+                <div class="flex items-center justify-between py-6 border-y border-[#3b494c]/20">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-[#00e5ff]/20 bg-[#1c2026] flex-shrink-0">
+                      <img src="/images/jerry_profile.jpg" alt="Jerry" class="w-full h-full object-cover" />
+                    </div>
+                    <div>
+                      <p class="font-label text-sm font-bold text-[#dfe2eb]">Kyoungtae Kim</p>
+                      <p class="font-label text-xs text-[#849396]">Jerry Blog</p>
+                    </div>
+                  </div>
+                  <div class="text-right font-label text-xs text-[#849396]">
+                    <p class="uppercase tracking-widest"><FormattedDate date={pubDate} /></p>
+                    {updatedDate && (
+                      <p class="text-[10px] italic font-body lowercase tracking-normal text-[#3b494c] mt-1">
+                        updated <FormattedDate date={updatedDate} />
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </header>
+
+              <!-- Hero Image -->
+              {heroImage && (
+                <div class="mb-12 rounded-xl overflow-hidden">
+                  <Image
+                    width={1020}
+                    height={510}
+                    src={heroImage}
+                    alt={title}
+                    class="w-full object-cover"
+                    style="border-radius: 0.75rem; margin: 0;"
+                  />
+                </div>
+              )}
 
               {seriesInfo && <SeriesNav series={seriesInfo} />}
 
-              <slot />
+              <!-- Article Body -->
+              <div class="prose max-w-none">
+                <slot />
+              </div>
 
-              <Comments />
-            </div>
+              <!-- Tags (mobile) -->
+              {tags.length > 0 && (
+                <div class="mt-12 xl:hidden flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <a
+                      href={`/tags/${tag}`}
+                      class="px-3 py-1.5 rounded-full bg-[#1c2026] text-[#849396] font-label text-xs uppercase tracking-wider border border-[#3b494c]/30 hover:text-[#00e5ff] hover:border-[#00e5ff]/30 transition-colors no-underline"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+            </article>
+
+            <!-- TOC Sidebar (right) -->
+            {h2Headings.length > 0 && (
+              <aside class="hidden xl:block sticky top-32 h-fit">
+                <div class="space-y-6">
+                  <div>
+                    <h4 class="font-label text-xs font-bold uppercase tracking-[0.2em] text-[#849396] mb-6">
+                      Table of Contents
+                    </h4>
+                    <ul class="space-y-3 font-label text-sm">
+                      {h2Headings.map((h) => (
+                        <li>
+                          <a
+                            href={`#${h.slug}`}
+                            class={`toc-link text-slate-500 hover:text-[#c3f5ff] transition-colors block no-underline ${h.depth === 3 ? 'pl-4 text-xs' : ''}`}
+                            data-slug={h.slug}
+                          >
+                            {h.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {tags.length > 0 && (
+                    <div class="p-4 bg-[#1c2026] rounded-xl border border-[#3b494c]/20">
+                      <p class="font-label text-[10px] uppercase tracking-widest text-[#00daf3] mb-3">Tags</p>
+                      <div class="flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                          <a
+                            href={`/tags/${tag}`}
+                            class="px-2 py-1 rounded-full bg-[#262a31] text-[#849396] font-label text-[10px] uppercase tracking-wider hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-colors no-underline"
+                          >
+                            #{tag}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </aside>
+            )}
+
           </div>
-        </article>
-      </main>
-
-      <aside class="post-sidebar-right">
-        {hasTOC && <TOC headings={headings} />}
-      </aside>
+        </main>
+      </div>
     </div>
+
     <Footer />
+
+    {h2Headings.length > 0 && (
+      <script is:inline>
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const headings = Array.from(document.querySelectorAll('h2[id], h3[id]'));
+
+        function setActive(slug) {
+          tocLinks.forEach((link) => {
+            if (link.dataset.slug === slug) {
+              link.style.color = '#00e5ff';
+              link.style.borderLeft = '2px solid #00e5ff';
+              link.style.paddingLeft = '0.75rem';
+              link.style.marginLeft = '-0.75rem';
+            } else {
+              link.style.color = '';
+              link.style.borderLeft = '';
+              link.style.paddingLeft = '';
+              link.style.marginLeft = '';
+            }
+          });
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) setActive(entry.target.id);
+            });
+          },
+          { rootMargin: '-20% 0px -70% 0px' }
+        );
+
+        headings.forEach((h) => observer.observe(h));
+      </script>
+    )}
   </body>
 </html>

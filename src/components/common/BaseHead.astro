@@ -33,16 +33,6 @@ const {
 } = Astro.props;
 ---
 
-<!-- Theme initialization (prevent flash) -->
-<script is:inline>
-	(function() {
-		const stored = localStorage.getItem('theme');
-		if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-			document.documentElement.setAttribute('data-theme', 'dark');
-		}
-	})();
-</script>
-
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -56,9 +46,79 @@ const {
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<!-- Google Fonts: Stitch Design System -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CSS with Stitch Design System Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" is:inline></script>
+<script is:inline>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-lowest": "#0a0e14",
+          "surface-bright": "#353940",
+          "secondary-container": "#3e4960",
+          "outline-variant": "#3b494c",
+          "primary-container": "#00e5ff",
+          "inverse-primary": "#006875",
+          "surface-container-low": "#181c22",
+          "surface-container-highest": "#31353c",
+          "secondary": "#bbc6e2",
+          "surface-dim": "#10141a",
+          "on-background": "#dfe2eb",
+          "primary-fixed-dim": "#00daf3",
+          "tertiary-container": "#b9d3f5",
+          "surface": "#10141a",
+          "on-primary-container": "#00626e",
+          "on-secondary": "#263046",
+          "on-secondary-container": "#adb8d3",
+          "surface-container-high": "#262a31",
+          "surface-container": "#1c2026",
+          "on-surface": "#dfe2eb",
+          "primary-fixed": "#9cf0ff",
+          "inverse-surface": "#dfe2eb",
+          "surface-tint": "#00daf3",
+          "error": "#ffb4ab",
+          "tertiary": "#e3eeff",
+          "inverse-on-surface": "#2d3137",
+          "surface-variant": "#31353c",
+          "primary": "#c3f5ff",
+          "outline": "#849396",
+          "on-primary": "#00363d",
+          "on-surface-variant": "#bac9cc",
+          "background": "#10141a"
+        },
+        fontFamily: {
+          "headline": ["Inter", "sans-serif"],
+          "body": ["Inter", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+          "mono": ["Space Grotesk", "ui-monospace", "monospace"],
+          "prose": ["Newsreader", "serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+      },
+    },
+  };
+</script>
+
+<!-- Material Symbols style -->
+<style is:inline>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+</style>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
