@@ -2,7 +2,7 @@
 title: CrewAI Observability 선정부터 트러블 슈팅까지
 pubDate: 2026-02-11
 description: Langfuse를 선택하게 된 이유부터 Tracing 과정 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - LangFuse
   - CrewAI

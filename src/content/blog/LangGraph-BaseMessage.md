@@ -2,7 +2,7 @@
 title: LangGraph에서 대화 기록 상태 관리
 pubDate: 2026-12-29
 description:
-author: KT
+author: Kyoungtea Kim
 tags:
   - LangGraph
   - BaseMessage

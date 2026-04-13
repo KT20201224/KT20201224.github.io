@@ -2,7 +2,7 @@
 title: DevOps와 AWS 기초
 pubDate: 2025-12-03
 description: Devops와 AWS의 기초 배우기
-author: KT
+author: Kyoungtea Kim
 tags:
   - DevOps
   - NeuralNetworks

@@ -2,7 +2,7 @@
 title: 실시간 통신과 웹소켓
 pubDate: 2025-11-29
 description: 실시간 통신을 학습하고 네트워크에 대한 이해를 키워본다.
-author: KT
+author: Kyoungtea Kim
 tags:
   - WebScoket
   - Netwrok

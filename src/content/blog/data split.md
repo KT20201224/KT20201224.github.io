@@ -2,7 +2,7 @@
 title: 데이터 분할
 pubDate: 2025-10-22
 description: 데이터 분할의 필요성
-author: KT
+author: Kyoungtea Kim
 tags:
   - Data
   - DataSplit

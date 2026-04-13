@@ -2,7 +2,7 @@
 title: LLM 양자화
 pubDate: 2025-11-06
 description: 데이터를 작게 만드는 방법, 양자화
-author: KT
+author: Kyoungtea Kim
 tags:
   - test
   - obsidian

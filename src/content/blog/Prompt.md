@@ -2,7 +2,7 @@
 title: 성능이 좋은 프롬프트 작성하기
 pubDate: 2025-11-29
 description: AI를 다루는 마법의 주문 프롬프트
-author: KT
+author: Kyoungtea Kim
 tags:
   - Prompt
   - AI

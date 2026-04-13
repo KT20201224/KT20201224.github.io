@@ -2,7 +2,7 @@
 title: LangFuse
 pubDate: 2025-12-13
 description: Langfuse에 대한 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - LangFuse
 ---

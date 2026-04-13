@@ -2,7 +2,7 @@
 title: 교차 검증, Cross Validation (K-Fold CV)
 pubDate: 2025-10-23
 description: 데이터 교차 검증 학습 내용 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - Data
   - CrossValidation

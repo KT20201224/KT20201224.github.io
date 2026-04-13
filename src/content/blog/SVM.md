@@ -2,7 +2,7 @@
 title: SVM의 구조와 Kernel Trick
 pubDate: 2025-10-24
 description: SVM의 구조를 이해해보자.
-author: KT
+author: Kyoungtea Kim
 tags:
   - test
   - obsidian

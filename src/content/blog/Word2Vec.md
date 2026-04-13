@@ -2,7 +2,7 @@
 title: Word2Vec 논문 내용 정리
 pubDate: 2025-11-05
 description: Word2Vec 논문 내용 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - Word2Vec
 ---

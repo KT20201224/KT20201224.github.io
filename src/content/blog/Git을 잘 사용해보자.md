@@ -2,7 +2,7 @@
 title: Git, 어떻게 해야 잘쓰는 걸까?
 pubDate: 2025-10-15
 description: git을 맛있게 쓰자
-author: KT
+author: Kyoungtea Kim
 tags:
   - git
   - github

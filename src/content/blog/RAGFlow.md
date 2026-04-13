@@ -2,7 +2,7 @@
 title: 랭체인의 전체적인 흐름
 pubDate: 2025-12-09
 description: 랭체인에서 이루어지는 과정들을 간단하게 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - LangChain
   - Prompt

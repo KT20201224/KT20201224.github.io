@@ -2,7 +2,7 @@
 title: K-Nearest Neighbors, KNN
 pubDate: 2025-10-14
 description: KNN 알고리즘 학습, 실습
-author: KT
+author: Kyoungtea Kim
 tags:
   - KNN
   - ML

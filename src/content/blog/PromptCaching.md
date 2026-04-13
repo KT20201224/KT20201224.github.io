@@ -2,7 +2,7 @@
 title: Prompt caching, OpenAI
 pubDate: 2025-12-08
 description: OpenAI 프롬프트 캐싱의 원리
-author: KT
+author: Kyoungtea Kim
 tags:
   - OpenAI
   - PromptCahcing

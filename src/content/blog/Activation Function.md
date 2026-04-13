@@ -2,7 +2,7 @@
 title: 활성화 함수
 pubDate: 2025-10-21
 description: 활성화 함수에 대한 공부
-author: KT
+author: Kyoungtea Kim
 tags:
   - ActivationFunction
   - StepFunction

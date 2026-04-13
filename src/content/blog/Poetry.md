@@ -2,7 +2,7 @@
 title: Poetry
 pubDate: 2025-12-13
 description: Poetry로 환경을 구성할 때 장단점과 그 특징
-author: KT
+author: Kyoungtea Kim
 tags:
   - pip
   - venv

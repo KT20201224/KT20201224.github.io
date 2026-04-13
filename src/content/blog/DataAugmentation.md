@@ -2,7 +2,7 @@
 title: 데이터 증강, Data Augmentation
 pubDate: 2025-10-23
 description: 데이터 증강에 대한 개념 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - DataAugmentation
 ---

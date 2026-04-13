@@ -2,7 +2,7 @@
 title: CS 공부 - OS 편
 pubDate: 2025-12-13
 description: 운영체제에 대한 기본 내용 정리
-author: KT
+author: Kyoungtea Kim
 tags:
   - OS
 ---
