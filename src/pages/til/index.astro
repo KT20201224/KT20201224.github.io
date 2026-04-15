@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/common/FormattedDate.astro';
+import { SITE_TITLE } from '../../lib/constants';
+
+const allEntries = await getCollection('til');
+const entries = allEntries
+  .filter((e) => !e.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 카테고리별 그룹핑
+const grouped = entries.reduce((acc, entry) => {
+  const cat = entry.data.category || 'etc';
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(entry);
+  return acc;
+}, {} as Record<string, typeof entries>);
+
+const categoryOrder = ['algorithm', 'cs', 'os', 'network', 'database', 'etc'];
+const sortedCategories = [
+  ...categoryOrder.filter((c) => grouped[c]),
+  ...Object.keys(grouped).filter((c) => !categoryOrder.includes(c)),
+];
+
+const categoryLabels: Record<string, string> = {
+  algorithm: 'Algorithm',
+  cs: 'Computer Science',
+  os: 'Operating System',
+  network: 'Network',
+  database: 'Database',
+  etc: 'Etc',
+};
+---
+
+<BaseLayout title={`TIL | ${SITE_TITLE}`} description="알고리즘, CS, OS 등 공부한 내용을 정리합니다.">
+  <header class="mb-12">
+    <span class="font-label text-xs uppercase tracking-[0.3em] text-primary-container mb-4 block">Today I Learned</span>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-on-surface leading-tight">TIL</h1>
+      <div class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg font-label text-xs text-outline">
+        <span class="material-symbols-outlined text-sm">school</span>
+        총 {entries.length}개의 노트
+      </div>
+    </div>
+    <p class="text-outline font-body mt-3">알고리즘 · CS · OS · 네트워크 등 학습 내용을 정리한 공간입니다.</p>
+  </header>
+
+  {entries.length > 0 ? (
+    <div class="space-y-12">
+      {sortedCategories.map((cat) => (
+        <section>
+          <h2 class="font-label text-xs uppercase tracking-[0.3em] text-primary-container mb-5 flex items-center gap-2">
+            <span class="w-4 h-px bg-primary-container/40 inline-block"></span>
+            {categoryLabels[cat] || cat}
+            <span class="text-outline-variant ml-1">({grouped[cat].length})</span>
+          </h2>
+          <div class="space-y-3">
+            {grouped[cat].map((entry) => (
+              <a
+                href={`/til/${entry.id}/`}
+                class="group flex items-start gap-4 p-4 rounded-xl bg-surface-container border border-outline-variant/20 hover:border-primary-container/30 hover:bg-surface-container-high transition-all no-underline"
+              >
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-headline font-semibold text-on-surface group-hover:text-primary-container transition-colors text-base mb-1">
+                    {entry.data.title}
+                  </h3>
+                  {entry.data.description && (
+                    <p class="text-outline font-body text-sm line-clamp-1">{entry.data.description}</p>
+                  )}
+                </div>
+                <span class="font-label text-[10px] uppercase tracking-widest text-outline-variant flex-shrink-0 mt-1">
+                  <FormattedDate date={entry.data.pubDate} />
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-6xl text-outline-variant mb-4 block">school</span>
+      <p class="text-outline font-label uppercase tracking-widest text-sm">아직 작성된 노트가 없습니다</p>
+    </div>
+  )}
+</BaseLayout>

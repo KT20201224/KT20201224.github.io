@@ -1,12 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/common/BaseHead.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
-import SidebarLeft from '../../components/layout/SidebarLeft.astro';
-import FormattedDate from '../../components/common/FormattedDate.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
 import { SITE_TITLE, CATEGORIES } from '../../lib/constants';
-import { getPublishedPosts, getPostsByCategory } from '../../lib/utils';
+import { getPublishedPosts, getPostsByCategory, getFirstImage, getImageUrl } from '../../lib/utils';
 
 export async function getStaticPaths() {
   return CATEGORIES.map((cat) => ({
@@ -20,75 +17,35 @@ const { category, label, description } = Astro.props;
 const allPosts = await getCollection('blog');
 const publishedPosts = getPublishedPosts(allPosts);
 const posts = getPostsByCategory(publishedPosts, category);
-
-function getFirstImage(body: string | undefined) {
-  if (!body) return null;
-  const match = body.match(/!\[.*?\]\((.*?)\)/);
-  return match ? match[1] : null;
-}
 ---
 
-<!doctype html>
-<html class="dark" lang="ko">
-  <head>
-    <BaseHead title={`${label} | ${SITE_TITLE}`} description={description} />
-  </head>
-  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
-    <Header />
-    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
-      <SidebarLeft />
-      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
-        <header class="mb-12">
-          <a href="/blog" class="inline-flex items-center gap-1 text-[#849396] hover:text-[#00e5ff] transition-colors font-label text-xs uppercase tracking-widest mb-4 no-underline">
-            <span class="material-symbols-outlined text-base">arrow_back</span>
-            Blog
-          </a>
-          <h1 class="text-5xl font-extrabold font-headline tracking-tighter text-[#dfe2eb]">{label}</h1>
-          <p class="text-[#849396] font-body italic mt-2">{description}</p>
-          <p class="text-[#849396] font-label text-xs uppercase tracking-widest mt-1">{posts.length}개의 글</p>
-        </header>
+<BaseLayout title={`${label} | ${SITE_TITLE}`} description={description}>
+  <header class="mb-12">
+    <a href="/blog" class="inline-flex items-center gap-1 text-outline hover:text-primary-container transition-colors font-label text-xs uppercase tracking-widest mb-4 no-underline">
+      <span class="material-symbols-outlined text-base">arrow_back</span>
+      Blog
+    </a>
+    <h1 class="text-5xl font-extrabold font-headline tracking-tighter text-on-surface">{label}</h1>
+    <p class="text-outline font-body italic mt-2">{description}</p>
+    <p class="text-outline font-label text-xs uppercase tracking-widest mt-1">{posts.length}개의 글</p>
+  </header>
 
-        {posts.length > 0 ? (
-          <section class="space-y-10">
-            {posts.map((post) => {
-              const image = post.data.heroImage || getFirstImage(post.body);
-              const imageUrl = image ? (typeof image === 'string' ? image : (image as any).src) : null;
-              return (
-                <article class="group grid md:grid-cols-12 gap-6 items-start py-6 hover:bg-[#181c22]/50 rounded-2xl px-4 -mx-4 transition-all">
-                  <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-[#262a31]">
-                    {imageUrl ? (
-                      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={imageUrl} alt={post.data.title} loading="lazy" />
-                    ) : (
-                      <div class="w-full h-full flex items-center justify-center">
-                        <span class="material-symbols-outlined text-4xl text-[#3b494c]">article</span>
-                      </div>
-                    )}
-                  </div>
-                  <div class="md:col-span-8">
-                    <div class="flex items-center gap-3 mb-3">
-                      <span class="font-label text-[10px] uppercase tracking-widest text-[#849396]">
-                        <FormattedDate date={post.data.pubDate} />
-                      </span>
-                    </div>
-                    <a href={`/blog/${post.id}/`} class="no-underline">
-                      <h2 class="text-xl font-bold font-headline text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors mb-2">{post.data.title}</h2>
-                    </a>
-                    {post.data.description && (
-                      <p class="text-[#849396] font-body leading-relaxed line-clamp-2">{post.data.description}</p>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </section>
-        ) : (
-          <div class="text-center py-20">
-            <span class="material-symbols-outlined text-6xl text-[#3b494c] mb-4 block">folder_open</span>
-            <p class="text-[#849396] font-label uppercase tracking-widest text-sm">아직 이 카테고리에 글이 없습니다</p>
-          </div>
-        )}
-      </main>
+  {posts.length > 0 ? (
+    <section class="space-y-10">
+      {posts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          href={`/blog/${post.id}/`}
+          date={post.data.pubDate}
+          description={post.data.description}
+          imageUrl={getImageUrl(post.data.heroImage || getFirstImage(post.body))}
+        />
+      ))}
+    </section>
+  ) : (
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-6xl text-outline-variant mb-4 block">folder_open</span>
+      <p class="text-outline font-label uppercase tracking-widest text-sm">아직 이 카테고리에 글이 없습니다</p>
     </div>
-    <Footer />
-  </body>
-</html>
+  )}
+</BaseLayout>

@@ -1,11 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import BaseHead from "../components/common/BaseHead.astro";
-import Footer from "../components/layout/Footer.astro";
-import Header from "../components/layout/Header.astro";
-import SidebarLeft from "../components/layout/SidebarLeft.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import FormattedDate from "../components/common/FormattedDate.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
+import { getFirstImage, getImageUrl } from "../lib/utils";
 
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
@@ -15,153 +13,131 @@ const posts = (await getCollection("blog"))
 const news = (await getCollection("news"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
-
-function getFirstImage(body: string | undefined) {
-  if (!body) return null;
-  const match = body.match(/!\[.*?\]\((.*?)\)/);
-  return match ? match[1] : null;
-}
 ---
 
-<!doctype html>
-<html class="dark" lang="ko">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
-    <Header />
-    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
-      <SidebarLeft />
-
-      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
-
-        <!-- Hero Section -->
-        <section class="relative w-full min-h-[432px] flex items-center overflow-hidden rounded-2xl mb-16">
-          <!-- Full background image -->
-          <img
-            src="/images/etc/wallpaper.JPG"
-            alt="Jerry"
-            class="absolute inset-0 w-full h-full object-cover"
-            style="object-position: 50% top;"
-          />
-          <!-- Dark overlay -->
-          <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(16,20,26,0.85) 0%, rgba(16,20,26,0.6) 50%, rgba(16,20,26,0.4) 100%)"></div>
-          <!-- Accent glow -->
-          <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 60%, rgba(0,229,255,0.08) 0%, transparent 60%)"></div>
-          <div class="relative z-10 max-w-3xl space-y-6 p-8 md:p-12">
-            <h1 class="text-5xl md:text-7xl font-black font-headline tracking-tighter text-[#dfe2eb] leading-[0.95]">
-              안녕하세요,<br/>
-              <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
-                Jerry
-              </span>입니다.
-            </h1>
-            <p class="text-xl font-body italic text-[#bac9cc] leading-relaxed max-w-xl">
-              {SITE_DESCRIPTION}
-            </p>
-            <div class="flex flex-wrap gap-4 pt-2">
-              <a href="/blog"
-                class="px-8 py-3 rounded-lg font-label font-bold text-sm tracking-wide text-[#00363d] hover:brightness-110 transition-all active:scale-95 no-underline"
-                style="background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%); box-shadow: 0 8px 24px rgba(0,229,255,0.2)">
-                최신 글 읽기
-              </a>
-              <a href="/about"
-                class="px-8 py-3 rounded-lg border border-[#3b494c]/30 bg-[#1c2026] text-[#dfe2eb] font-label font-bold text-sm hover:bg-[#262a31] transition-all no-underline">
-                소개 보기
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <!-- Recent Posts -->
-        <section class="mb-16">
-          <div class="flex justify-between items-end mb-10">
-            <div>
-              <h2 class="text-4xl font-headline font-bold text-[#dfe2eb]">최신 포스트</h2>
-              <p class="text-[#849396] font-label text-sm mt-2 uppercase tracking-widest">Recent Posts</p>
-            </div>
-            <a href="/blog"
-              class="text-[#00e5ff] font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
-              전체 보기
-              <span class="material-symbols-outlined text-lg">arrow_forward</span>
-            </a>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {posts.map((post, i) => {
-              const image = post.data.heroImage || getFirstImage(post.body);
-              const isFeatured = i === 0;
-              return (
-                <a
-                  href={`/blog/${post.id}/`}
-                  class={`group space-y-4 cursor-pointer no-underline ${isFeatured ? 'md:col-span-2' : ''}`}
-                >
-                  {image && (
-                    <div class="overflow-hidden rounded-xl bg-[#1c2026] aspect-video">
-                      <img
-                        src={typeof image === 'string' ? image : (image as any).src}
-                        alt={post.data.title}
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div class="space-y-2">
-                    <div class="flex items-center gap-4 text-xs font-label font-bold text-[#00daf3] uppercase tracking-wider">
-                      {post.data.category && <span>{post.data.category.toUpperCase()}</span>}
-                      <span class="w-1 h-1 rounded-full bg-[#3b494c]"></span>
-                      <span class="text-[#849396] font-body lowercase tracking-normal font-normal italic">
-                        <FormattedDate date={post.data.pubDate} />
-                      </span>
-                    </div>
-                    <h3 class={`font-headline font-bold text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors ${isFeatured ? 'text-3xl' : 'text-xl'}`}>
-                      {post.data.title}
-                    </h3>
-                    {post.data.description && (
-                      <p class="text-[#bac9cc] font-body leading-relaxed line-clamp-2">
-                        {post.data.description}
-                      </p>
-                    )}
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </section>
-
-        <!-- Tech News Section -->
-        {news.length > 0 && (
-          <section class="mb-16">
-            <div class="flex justify-between items-end mb-10">
-              <div>
-                <h2 class="text-4xl font-headline font-bold text-[#dfe2eb]">Tech News</h2>
-                <p class="text-[#849396] font-label text-sm mt-2 uppercase tracking-widest">Latest Updates</p>
-              </div>
-              <a href="/news"
-                class="text-[#00e5ff] font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
-                전체 보기
-                <span class="material-symbols-outlined text-lg">arrow_forward</span>
-              </a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {news.map((item) => (
-                <div class="p-6 rounded-xl bg-[#1c2026] border border-[#3b494c]/20 hover:border-[#00e5ff]/20 transition-colors">
-                  <div class="mb-3">
-                    <span class="text-[10px] font-label font-bold text-[#00e5ff] bg-[#00e5ff]/10 px-2 py-1 rounded uppercase tracking-wider">
-                      <FormattedDate date={item.data.pubDate} />
-                    </span>
-                  </div>
-                  <h3 class="font-headline font-bold text-[#dfe2eb] text-base mb-2 leading-snug">{item.data.title}</h3>
-                  {item.data.description && (
-                    <p class="text-sm text-[#849396] font-body line-clamp-2">{item.data.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-      </main>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <!-- Hero Section -->
+  <section class="relative w-full min-h-[432px] flex items-center overflow-hidden rounded-2xl mb-16">
+    <!-- Full background image -->
+    <img
+      src="/images/etc/wallpaper.JPG"
+      alt="Jerry"
+      class="absolute inset-0 w-full h-full object-cover"
+      style="object-position: 50% top;"
+    />
+    <!-- Dark overlay -->
+    <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(16,20,26,0.85) 0%, rgba(16,20,26,0.6) 50%, rgba(16,20,26,0.4) 100%)"></div>
+    <!-- Accent glow -->
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 60%, rgba(0,229,255,0.08) 0%, transparent 60%)"></div>
+    <div class="relative z-10 max-w-3xl space-y-6 p-8 md:p-12">
+      <h1 class="text-5xl md:text-7xl font-black font-headline tracking-tighter text-on-surface leading-[0.95]">
+        안녕하세요,<br/>
+        <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
+          Jerry
+        </span>입니다.
+      </h1>
+      <p class="text-xl font-body italic text-on-surface-variant leading-relaxed max-w-xl">
+        {SITE_DESCRIPTION}
+      </p>
+      <div class="flex flex-wrap gap-4 pt-2">
+        <a href="/blog"
+          class="px-8 py-3 rounded-lg font-label font-bold text-sm tracking-wide text-on-primary hover:brightness-110 transition-all active:scale-95 no-underline"
+          style="background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%); box-shadow: 0 8px 24px rgba(0,229,255,0.2)">
+          최신 글 읽기
+        </a>
+        <a href="/about"
+          class="px-8 py-3 rounded-lg border border-outline-variant/30 bg-surface-container text-on-surface font-label font-bold text-sm hover:bg-surface-container-high transition-all no-underline">
+          소개 보기
+        </a>
+      </div>
     </div>
-    <Footer />
-  </body>
-</html>
+  </section>
+
+  <!-- Recent Posts -->
+  <section class="mb-16">
+    <div class="flex justify-between items-end mb-10">
+      <div>
+        <h2 class="text-4xl font-headline font-bold text-on-surface">최신 포스트</h2>
+        <p class="text-outline font-label text-sm mt-2 uppercase tracking-widest">Recent Posts</p>
+      </div>
+      <a href="/blog"
+        class="text-primary-container font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
+        전체 보기
+        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {posts.map((post, i) => {
+        const image = post.data.heroImage || getFirstImage(post.body);
+        const isFeatured = i === 0;
+        return (
+          <a
+            href={`/blog/${post.id}/`}
+            class={`group space-y-4 cursor-pointer no-underline ${isFeatured ? 'md:col-span-2' : ''}`}
+          >
+            {image && (
+              <div class="overflow-hidden rounded-xl bg-surface-container aspect-video">
+                <img
+                  src={getImageUrl(image)}
+                  alt={post.data.title}
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="space-y-2">
+              <div class="flex items-center gap-4 text-xs font-label font-bold text-primary-fixed-dim uppercase tracking-wider">
+                {post.data.category && <span>{post.data.category.toUpperCase()}</span>}
+                <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                <span class="text-outline font-body lowercase tracking-normal font-normal italic">
+                  <FormattedDate date={post.data.pubDate} />
+                </span>
+              </div>
+              <h3 class={`font-headline font-bold text-on-surface group-hover:text-primary-container transition-colors ${isFeatured ? 'text-3xl' : 'text-xl'}`}>
+                {post.data.title}
+              </h3>
+              {post.data.description && (
+                <p class="text-on-surface-variant font-body leading-relaxed line-clamp-2">
+                  {post.data.description}
+                </p>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Tech News Section -->
+  {news.length > 0 && (
+    <section class="mb-16">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h2 class="text-4xl font-headline font-bold text-on-surface">Tech News</h2>
+          <p class="text-outline font-label text-sm mt-2 uppercase tracking-widest">Latest Updates</p>
+        </div>
+        <a href="/news"
+          class="text-primary-container font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
+          전체 보기
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {news.map((item) => (
+          <a href={`/news/${item.id}/`} class="block p-6 rounded-xl bg-surface-container border border-outline-variant/20 hover:border-primary-container/20 transition-colors no-underline">
+            <div class="mb-3">
+              <span class="text-[10px] font-label font-bold text-primary-container bg-primary-container/10 px-2 py-1 rounded uppercase tracking-wider">
+                <FormattedDate date={item.data.pubDate} />
+              </span>
+            </div>
+            <h3 class="font-headline font-bold text-on-surface text-base mb-2 leading-snug">{item.data.title}</h3>
+            {item.data.description && (
+              <p class="text-sm text-outline font-body line-clamp-2">{item.data.description}</p>
+            )}
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>

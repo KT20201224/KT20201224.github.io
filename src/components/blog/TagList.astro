@@ -20,12 +20,12 @@ const sizeClass = {
       clickable ? (
         <a
           href={`/tags/${tag}/`}
-          class={`${sizeClass} rounded-full bg-[#00e5ff]/10 text-[#00e5ff] font-label uppercase tracking-wider border border-[#00e5ff]/20 hover:bg-[#00e5ff]/20 transition-colors no-underline`}
+          class={`${sizeClass} rounded-full bg-primary-container/10 text-primary-container font-label uppercase tracking-wider border border-primary-container/20 hover:bg-primary-container/20 transition-colors no-underline`}
         >
           #{tag}
         </a>
       ) : (
-        <span class={`${sizeClass} rounded-full bg-[#1c2026] text-[#849396] font-label uppercase tracking-wider border border-[#3b494c]/30`}>
+        <span class={`${sizeClass} rounded-full bg-surface-container text-outline font-label uppercase tracking-wider border border-outline-variant/30`}>
           #{tag}
         </span>
       )

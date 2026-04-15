@@ -1,0 +1,38 @@
+---
+import FormattedDate from "../common/FormattedDate.astro";
+
+interface Props {
+  title: string;
+  href: string;
+  date: Date;
+  description?: string;
+  imageUrl?: string | null;
+}
+
+const { title, href, date, description, imageUrl } = Astro.props;
+---
+
+<article class="group grid md:grid-cols-12 gap-6 items-start py-6 hover:bg-surface-container-low/50 rounded-2xl px-4 -mx-4 transition-all">
+  <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-surface-container-high">
+    {imageUrl ? (
+      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={imageUrl} alt={title} loading="lazy" />
+    ) : (
+      <div class="w-full h-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-4xl text-outline-variant">article</span>
+      </div>
+    )}
+  </div>
+  <div class="md:col-span-8">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="font-label text-[10px] uppercase tracking-widest text-outline">
+        <FormattedDate date={date} />
+      </span>
+    </div>
+    <a href={href} class="no-underline">
+      <h2 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary-container transition-colors mb-2">{title}</h2>
+    </a>
+    {description && (
+      <p class="text-outline font-body leading-relaxed line-clamp-2">{description}</p>
+    )}
+  </div>
+</article>

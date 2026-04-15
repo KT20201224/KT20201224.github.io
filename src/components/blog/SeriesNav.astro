@@ -12,14 +12,14 @@ const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
 const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 ---
 
-<nav class="p-6 mb-10 rounded-xl bg-[#1c2026] border border-[#3b494c]/20">
+<nav class="p-6 mb-10 rounded-xl bg-surface-container border border-outline-variant/20">
   <!-- Series Header -->
-  <div class="flex flex-wrap items-center gap-3 mb-4 pb-4 border-b border-[#3b494c]/20">
-    <span class="text-[10px] font-label font-bold uppercase tracking-widest text-[#00e5ff] bg-[#00e5ff]/10 px-2 py-1 rounded">
+  <div class="flex flex-wrap items-center gap-3 mb-4 pb-4 border-b border-outline-variant/20">
+    <span class="text-[10px] font-label font-bold uppercase tracking-widest text-primary-container bg-primary-container/10 px-2 py-1 rounded">
       Series
     </span>
-    <h3 class="flex-1 text-base font-bold font-headline text-[#dfe2eb] m-0">{name}</h3>
-    <span class="text-xs font-label text-[#849396]">{currentIndex + 1} / {posts.length}</span>
+    <h3 class="flex-1 text-base font-bold font-headline text-on-surface m-0">{name}</h3>
+    <span class="text-xs font-label text-outline">{currentIndex + 1} / {posts.length}</span>
   </div>
 
   <!-- Post List -->
@@ -29,18 +29,18 @@ const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : nul
         href={`/blog/${post.slug}/`}
         class={`flex items-center gap-3 px-3 py-2.5 rounded-lg no-underline transition-all ${
           index === currentIndex
-            ? 'bg-[#00e5ff] text-[#00363d]'
+            ? 'bg-primary-container text-on-primary'
             : index < currentIndex
-            ? 'text-[#849396] hover:bg-[#262a31]'
-            : 'text-[#bac9cc] hover:bg-[#262a31]'
+            ? 'text-outline hover:bg-surface-container-high'
+            : 'text-on-surface-variant hover:bg-surface-container-high'
         }`}
       >
         <span class={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold font-label flex-shrink-0 ${
           index === currentIndex
-            ? 'bg-white/20 text-[#00363d]'
+            ? 'bg-white/20 text-on-primary'
             : index < currentIndex
-            ? 'bg-[#00e5ff] text-[#00363d]'
-            : 'bg-[#262a31] text-[#849396]'
+            ? 'bg-primary-container text-on-primary'
+            : 'bg-surface-container-high text-outline'
         }`}>{index + 1}</span>
         <span class="text-sm font-label truncate">{post.title}</span>
       </a>
@@ -48,17 +48,17 @@ const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : nul
   </div>
 
   <!-- Prev/Next -->
-  <div class="grid grid-cols-2 gap-3 pt-4 border-t border-[#3b494c]/20">
+  <div class="grid grid-cols-2 gap-3 pt-4 border-t border-outline-variant/20">
     {prevPost ? (
-      <a href={`/blog/${prevPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-[#262a31] transition-colors no-underline text-left">
-        <span class="text-[10px] font-label uppercase tracking-widest text-[#849396]">Previous</span>
-        <span class="text-sm font-label text-[#00e5ff] truncate">{prevPost.title}</span>
+      <a href={`/blog/${prevPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-surface-container-high transition-colors no-underline text-left">
+        <span class="text-[10px] font-label uppercase tracking-widest text-outline">Previous</span>
+        <span class="text-sm font-label text-primary-container truncate">{prevPost.title}</span>
       </a>
     ) : <div />}
     {nextPost ? (
-      <a href={`/blog/${nextPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-[#262a31] transition-colors no-underline text-right">
-        <span class="text-[10px] font-label uppercase tracking-widest text-[#849396]">Next</span>
-        <span class="text-sm font-label text-[#00e5ff] truncate">{nextPost.title}</span>
+      <a href={`/blog/${nextPost.slug}/`} class="flex flex-col gap-1 p-3 rounded-lg hover:bg-surface-container-high transition-colors no-underline text-right">
+        <span class="text-[10px] font-label uppercase tracking-widest text-outline">Next</span>
+        <span class="text-sm font-label text-primary-container truncate">{nextPost.title}</span>
       </a>
     ) : <div />}
   </div>

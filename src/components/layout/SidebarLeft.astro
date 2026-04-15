@@ -11,10 +11,10 @@ const categoryIcons: Record<string, string> = {
 };
 ---
 
-<aside class="fixed left-0 top-0 h-screen pt-20 w-64 hidden lg:flex flex-col bg-[#181c22] z-40">
+<aside class="fixed left-0 top-0 h-screen pt-20 w-64 hidden lg:flex flex-col bg-surface-container-low z-40">
   <div class="px-8 py-8">
-    <div class="text-lg font-black text-[#00e5ff] font-headline">Jerry's Archive</div>
-    <div class="text-[10px] font-mono tracking-widest text-[#849396] uppercase opacity-60 mt-1">ML · Web · DevOps</div>
+    <div class="text-lg font-black text-primary-container font-headline">Jerry's Archive</div>
+    <div class="text-[10px] font-mono tracking-widest text-outline uppercase opacity-60 mt-1">ML · Web · DevOps</div>
   </div>
 
   <!-- Category Nav -->
@@ -23,8 +23,8 @@ const categoryIcons: Record<string, string> = {
       href="/blog"
       class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all ${
         pathname === '/blog'
-          ? 'bg-[#262a31] text-[#00e5ff] border-l-4 border-[#00e5ff]'
-          : 'text-slate-500 hover:bg-[#262a31]/50 hover:text-slate-300'
+          ? 'bg-surface-container-high text-primary-container border-l-4 border-primary-container'
+          : 'text-slate-500 hover:bg-surface-container-high/50 hover:text-slate-300'
       }`}
     >
       <span class="material-symbols-outlined text-xl">article</span>
@@ -39,8 +39,8 @@ const categoryIcons: Record<string, string> = {
           href={href}
           class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all ${
             isActive
-              ? 'bg-[#262a31] text-[#00e5ff] border-l-4 border-[#00e5ff]'
-              : 'text-slate-500 hover:bg-[#262a31]/50 hover:text-slate-300'
+              ? 'bg-surface-container-high text-primary-container border-l-4 border-primary-container'
+              : 'text-slate-500 hover:bg-surface-container-high/50 hover:text-slate-300'
           }`}
         >
           <span class="material-symbols-outlined text-xl">{categoryIcons[cat.slug] || 'folder'}</span>
@@ -52,10 +52,10 @@ const categoryIcons: Record<string, string> = {
 
   <!-- Profile card at bottom -->
   <div class="p-6 mt-auto">
-    <div class="p-4 rounded-xl bg-[#262a31] relative overflow-hidden group">
-      <div class="absolute inset-0 bg-gradient-to-br from-[#00e5ff]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="p-4 rounded-xl bg-surface-container-high relative overflow-hidden group">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div class="flex items-center gap-3 relative z-10">
-        <div class="w-10 h-10 rounded-full overflow-hidden border border-[#00e5ff]/20 bg-[#1c2026] flex-shrink-0">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-primary-container/20 bg-surface-container flex-shrink-0">
           <img
             src="/images/etc/jerry_profile.jpg"
             alt="Jerry"
@@ -63,19 +63,19 @@ const categoryIcons: Record<string, string> = {
           />
         </div>
         <div>
-          <p class="text-[10px] font-label uppercase tracking-tighter text-[#849396]">Authored by</p>
-          <p class="text-xs font-bold font-headline text-[#dfe2eb]">Kyoungtae Kim</p>
+          <p class="text-[10px] font-label uppercase tracking-tighter text-outline">Authored by</p>
+          <p class="text-xs font-bold font-headline text-on-surface">Kyoungtae Kim</p>
         </div>
       </div>
     </div>
     <div class="flex gap-3 mt-4 justify-center">
       <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer"
-        class="text-slate-600 hover:text-[#00e5ff] transition-colors text-[10px] font-mono uppercase tracking-widest">
+        class="text-slate-600 hover:text-primary-container transition-colors text-[10px] font-mono uppercase tracking-widest">
         GitHub
       </a>
       <span class="text-slate-700">·</span>
       <a href={`mailto:${SOCIAL_LINKS.email}`}
-        class="text-slate-600 hover:text-[#00e5ff] transition-colors text-[10px] font-mono uppercase tracking-widest">
+        class="text-slate-600 hover:text-primary-container transition-colors text-[10px] font-mono uppercase tracking-widest">
         Email
       </a>
     </div>

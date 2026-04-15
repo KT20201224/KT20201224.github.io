@@ -1,8 +1,5 @@
 ---
-import BaseHead from "../components/common/BaseHead.astro";
-import Header from "../components/layout/Header.astro";
-import Footer from "../components/layout/Footer.astro";
-import SidebarLeft from "../components/layout/SidebarLeft.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE_TITLE } from "../lib/constants";
 
 const projects = [
@@ -16,73 +13,58 @@ const projects = [
 ];
 ---
 
-<!doctype html>
-<html class="dark" lang="ko">
-  <head>
-    <BaseHead title={`Projects | ${SITE_TITLE}`} description="프로젝트 포트폴리오" />
-  </head>
-  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
-    <Header />
-    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
-      <SidebarLeft />
-      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
+<BaseLayout title={`Projects | ${SITE_TITLE}`} description="프로젝트 포트폴리오">
+  <header class="mb-16">
+    <span class="font-label text-xs uppercase tracking-[0.3em] text-primary-container mb-4 block">Portfolio</span>
+    <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-on-surface leading-tight">
+      Selected <br/>
+      <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
+        Projects.
+      </span>
+    </h1>
+    <p class="text-xl text-outline font-body italic leading-relaxed mt-4 max-w-2xl">
+      개발한 프로젝트들을 소개합니다.
+    </p>
+  </header>
 
-        <header class="mb-16">
-          <span class="font-label text-xs uppercase tracking-[0.3em] text-[#00e5ff] mb-4 block">Portfolio</span>
-          <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-[#dfe2eb] leading-tight">
-            Selected <br/>
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
-              Projects.
-            </span>
-          </h1>
-          <p class="text-xl text-[#849396] font-body italic leading-relaxed mt-4 max-w-2xl">
-            개발한 프로젝트들을 소개합니다.
-          </p>
-        </header>
-
-        <!-- Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-          {projects.map((project, i) => {
-            const isFeatured = i === 0;
-            return (
-              <article class={`${isFeatured ? 'md:col-span-8' : 'md:col-span-4'} group bg-[#1c2026] rounded-xl overflow-hidden flex flex-col hover:shadow-[0px_24px_48px_rgba(0,218,243,0.06)] transition-all duration-500`}>
-                <div class="aspect-video w-full bg-[#262a31] flex items-center justify-center">
-                  <span class="material-symbols-outlined text-6xl text-[#3b494c]">code</span>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((t) => (
-                      <span class="px-2 py-0.5 rounded bg-[#262a31] text-[10px] font-mono text-slate-400 uppercase">{t}</span>
-                    ))}
-                  </div>
-                  <h3 class={`font-bold font-headline text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors mb-3 ${isFeatured ? 'text-2xl' : 'text-xl'}`}>
-                    {project.title}
-                  </h3>
-                  <p class="text-[#849396] font-body mb-6 flex-1">{project.description}</p>
-                  <div class="flex gap-3 mt-auto">
-                    {project.github && (
-                      <a href={project.github} target="_blank" rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-4 py-2 bg-[#262a31] text-[#dfe2eb] rounded-lg font-label text-xs hover:bg-[#00e5ff] hover:text-[#00363d] transition-all no-underline">
-                        <span class="material-symbols-outlined text-sm">code</span>
-                        GitHub
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-4 py-2 bg-[#00e5ff] text-[#00363d] rounded-lg font-label text-xs font-bold hover:brightness-110 transition-all no-underline">
-                        <span class="material-symbols-outlined text-sm">play_circle</span>
-                        Demo
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-      </main>
-    </div>
-    <Footer />
-  </body>
-</html>
+  <!-- Bento Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+    {projects.map((project, i) => {
+      const isFeatured = i === 0;
+      return (
+        <article class={`${isFeatured ? 'md:col-span-8' : 'md:col-span-4'} group bg-surface-container rounded-xl overflow-hidden flex flex-col hover:shadow-[0px_24px_48px_rgba(0,218,243,0.06)] transition-all duration-500`}>
+          <div class="aspect-video w-full bg-surface-container-high flex items-center justify-center">
+            <span class="material-symbols-outlined text-6xl text-outline-variant">code</span>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex flex-wrap gap-2 mb-4">
+              {project.tech.map((t) => (
+                <span class="px-2 py-0.5 rounded bg-surface-container-high text-[10px] font-mono text-slate-400 uppercase">{t}</span>
+              ))}
+            </div>
+            <h3 class={`font-bold font-headline text-on-surface group-hover:text-primary-container transition-colors mb-3 ${isFeatured ? 'text-2xl' : 'text-xl'}`}>
+              {project.title}
+            </h3>
+            <p class="text-outline font-body mb-6 flex-1">{project.description}</p>
+            <div class="flex gap-3 mt-auto">
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface rounded-lg font-label text-xs hover:bg-primary-container hover:text-on-primary transition-all no-underline">
+                  <span class="material-symbols-outlined text-sm">code</span>
+                  GitHub
+                </a>
+              )}
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                  class="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary rounded-lg font-label text-xs font-bold hover:brightness-110 transition-all no-underline">
+                  <span class="material-symbols-outlined text-sm">play_circle</span>
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</BaseLayout>

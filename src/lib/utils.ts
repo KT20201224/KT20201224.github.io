@@ -1,3 +1,4 @@
+import type { ImageMetadata } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import type { TagWithCount, CategoryWithCount, SeriesInfo } from './types';
 import { CATEGORIES, DATE_FORMAT_OPTIONS, SITE_LOCALE } from './constants';
@@ -154,6 +155,25 @@ export function getReadingTime(content: string): number {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
+}
+
+/**
+ * Extract first markdown image URL from post body
+ */
+export function getFirstImage(body: string | undefined): string | null {
+  if (!body) return null;
+  const match = body.match(/!\[.*?\]\((.*?)\)/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Normalize image source to a URL string.
+ * Handles both raw URL strings and Astro ImageMetadata objects.
+ */
+export function getImageUrl(image: string | ImageMetadata | undefined | null): string | null {
+  if (!image) return null;
+  if (typeof image === 'string') return image;
+  return image.src;
 }
 
 /**

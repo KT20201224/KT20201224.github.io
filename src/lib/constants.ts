@@ -8,9 +8,10 @@ export const SITE_LOCALE = 'ko-KR';
 // Navigation Links
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog', label: 'Posts' },
   { href: '/news', label: 'News' },
   { href: '/projects', label: 'Projects' },
+  { href: '/til', label: 'TIL' },
   { href: '/about', label: 'About' },
 ] as const;
 

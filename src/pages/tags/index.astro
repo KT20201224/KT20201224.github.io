@@ -1,9 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/common/BaseHead.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
-import SidebarLeft from '../../components/layout/SidebarLeft.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../lib/constants';
 import { getTagsWithCount, getPublishedPosts } from '../../lib/utils';
 
@@ -12,46 +9,33 @@ const publishedPosts = getPublishedPosts(allPosts);
 const tags = getTagsWithCount(publishedPosts);
 ---
 
-<!doctype html>
-<html class="dark" lang="ko">
-  <head>
-    <BaseHead title={`Tags | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-  </head>
-  <body class="font-body selection:bg-[#00e5ff] selection:text-[#00363d]">
-    <Header />
-    <div class="flex max-w-7xl mx-auto pt-24 min-h-screen">
-      <SidebarLeft />
-      <main class="flex-1 lg:ml-64 px-6 md:px-12 py-8 pb-24 md:pb-8">
-        <header class="mb-12">
-          <span class="font-label text-xs uppercase tracking-[0.3em] text-[#00e5ff] mb-4 block">Categories</span>
-          <h1 class="text-5xl font-extrabold font-headline tracking-tighter text-[#dfe2eb]">Tags</h1>
-          <p class="text-[#849396] font-label text-sm mt-2">{tags.length}개의 태그</p>
-        </header>
+<BaseLayout title={`Tags | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+  <header class="mb-12">
+    <span class="font-label text-xs uppercase tracking-[0.3em] text-primary-container mb-4 block">Categories</span>
+    <h1 class="text-5xl font-extrabold font-headline tracking-tighter text-on-surface">Tags</h1>
+    <p class="text-outline font-label text-sm mt-2">{tags.length}개의 태그</p>
+  </header>
 
-        {tags.length > 0 ? (
-          <div class="flex flex-wrap gap-3">
-            {tags.map((tag) => (
-              <a
-                href={`/tags/${tag.name}/`}
-                class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#1c2026] border border-[#3b494c]/20 hover:border-[#00e5ff]/30 hover:bg-[#262a31] transition-all no-underline group"
-              >
-                <span class="text-sm font-label font-medium text-[#dfe2eb] group-hover:text-[#00e5ff] transition-colors">
-                  #{tag.name}
-                </span>
-                <span class="text-xs font-bold font-label text-[#00363d] bg-[#00e5ff] px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center">
-                  {tag.count}
-                </span>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <div class="text-center py-20">
-            <span class="material-symbols-outlined text-6xl text-[#3b494c] mb-4 block">label</span>
-            <p class="text-[#849396] font-label uppercase tracking-widest text-sm">아직 태그가 없습니다</p>
-          </div>
-        )}
-      </main>
+  {tags.length > 0 ? (
+    <div class="flex flex-wrap gap-3">
+      {tags.map((tag) => (
+        <a
+          href={`/tags/${tag.name}/`}
+          class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container border border-outline-variant/20 hover:border-primary-container/30 hover:bg-surface-container-high transition-all no-underline group"
+        >
+          <span class="text-sm font-label font-medium text-on-surface group-hover:text-primary-container transition-colors">
+            #{tag.name}
+          </span>
+          <span class="text-xs font-bold font-label text-on-primary bg-primary-container px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center">
+            {tag.count}
+          </span>
+        </a>
+      ))}
     </div>
-    <Footer />
-  </body>
-</html>
+  ) : (
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-6xl text-outline-variant mb-4 block">label</span>
+      <p class="text-outline font-label uppercase tracking-widest text-sm">아직 태그가 없습니다</p>
+    </div>
+  )}
+</BaseLayout>
