@@ -3,7 +3,6 @@
 // all pages through the use of the <BaseHead /> component.
 import '../../styles/global.css';
 import type { ImageMetadata } from 'astro';
-import { ViewTransitions } from 'astro:transitions';
 import FallbackImage from '../../assets/blog-placeholder-1.jpg';
 import { SITE_TITLE, SITE_AUTHOR } from '../../lib/constants';
 import SEO from './SEO.astro';
@@ -46,12 +45,12 @@ const {
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Google Fonts: Stitch Design System -->
+<!-- Google Fonts: Editorial Intelligence Design System -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
-<!-- Tailwind CSS with Stitch Design System Config -->
+<!-- Tailwind CSS with Editorial Intelligence Design System -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" is:inline></script>
 <script is:inline>
   tailwind.config = {
@@ -59,51 +58,66 @@ const {
     theme: {
       extend: {
         colors: {
-          "surface-container-lowest": "#0a0e14",
-          "surface-bright": "#353940",
-          "secondary-container": "#3e4960",
-          "outline-variant": "#3b494c",
-          "primary-container": "#00e5ff",
-          "inverse-primary": "#006875",
-          "surface-container-low": "#181c22",
-          "surface-container-highest": "#31353c",
-          "secondary": "#bbc6e2",
-          "surface-dim": "#10141a",
-          "on-background": "#dfe2eb",
-          "primary-fixed-dim": "#00daf3",
-          "tertiary-container": "#b9d3f5",
-          "surface": "#10141a",
-          "on-primary-container": "#00626e",
-          "on-secondary": "#263046",
-          "on-secondary-container": "#adb8d3",
-          "surface-container-high": "#262a31",
-          "surface-container": "#1c2026",
-          "on-surface": "#dfe2eb",
-          "primary-fixed": "#9cf0ff",
-          "inverse-surface": "#dfe2eb",
-          "surface-tint": "#00daf3",
+          "surface": "#131313",
+          "surface-dim": "#131313",
+          "surface-bright": "#3a3939",
+          "surface-container-lowest": "#0e0e0e",
+          "surface-container-low": "#1c1b1b",
+          "surface-container": "#201f1f",
+          "surface-container-high": "#2a2a2a",
+          "surface-container-highest": "#353534",
+          "surface-variant": "#353534",
+          "surface-tint": "#ffb866",
+          "background": "#131313",
+          "on-background": "#e5e2e1",
+          "on-surface": "#e5e2e1",
+          "on-surface-variant": "#dac3ad",
+          "inverse-surface": "#e5e2e1",
+          "inverse-on-surface": "#313030",
+          "outline": "#a28d79",
+          "outline-variant": "#544433",
+          "primary": "#ffc687",
+          "primary-container": "#ff9f00",
+          "primary-fixed": "#ffddba",
+          "primary-fixed-dim": "#ffb866",
+          "on-primary": "#482900",
+          "on-primary-container": "#663d00",
+          "on-primary-fixed": "#2b1700",
+          "on-primary-fixed-variant": "#673d00",
+          "inverse-primary": "#875200",
+          "secondary": "#d4bbff",
+          "secondary-container": "#572e99",
+          "secondary-fixed": "#ebdcff",
+          "secondary-fixed-dim": "#d4bbff",
+          "on-secondary": "#3f0f81",
+          "on-secondary-container": "#c6a5ff",
+          "on-secondary-fixed": "#260058",
+          "on-secondary-fixed-variant": "#572e99",
+          "tertiary": "#7be1d6",
+          "tertiary-container": "#5ec5bb",
+          "tertiary-fixed": "#8ef4e9",
+          "tertiary-fixed-dim": "#71d7cd",
+          "on-tertiary": "#003733",
+          "on-tertiary-container": "#004f4a",
+          "on-tertiary-fixed": "#00201d",
+          "on-tertiary-fixed-variant": "#00504a",
           "error": "#ffb4ab",
-          "tertiary": "#e3eeff",
-          "inverse-on-surface": "#2d3137",
-          "surface-variant": "#31353c",
-          "primary": "#c3f5ff",
-          "outline": "#849396",
-          "on-primary": "#00363d",
-          "on-surface-variant": "#bac9cc",
-          "background": "#10141a"
+          "error-container": "#93000a",
+          "on-error": "#690005",
+          "on-error-container": "#ffdad6"
         },
         fontFamily: {
-          "headline": ["Inter", "sans-serif"],
+          "headline": ["Space Grotesk", "sans-serif"],
           "body": ["Inter", "sans-serif"],
           "label": ["Inter", "sans-serif"],
           "mono": ["Space Grotesk", "ui-monospace", "monospace"],
-          "prose": ["Newsreader", "serif"]
+          "prose": ["Inter", "sans-serif"]
         },
         borderRadius: {
-          "DEFAULT": "0.25rem",
-          "lg": "0.5rem",
-          "xl": "0.75rem",
-          "full": "9999px"
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
         },
       },
     },
@@ -138,6 +152,3 @@ const {
 	tags={tags}
 	noindex={noindex}
 />
-
-<!-- View Transitions -->
-<ViewTransitions />

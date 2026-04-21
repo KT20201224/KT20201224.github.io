@@ -4,7 +4,8 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/common/FormattedDate.astro";
 import SeriesNav from "../components/blog/SeriesNav.astro";
-import { getSeriesInfo, getPublishedPosts } from "../lib/utils";
+import Comments from "../components/blog/Comments.astro";
+import { getSeriesInfo, getPublishedPosts, getReadingTime, getCategoryLabel } from "../lib/utils";
 
 interface Heading {
   depth: number;
@@ -46,6 +47,8 @@ const seriesInfo = currentPost && series
   : null;
 
 const h2Headings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const readingTime = currentPost?.body ? getReadingTime(currentPost.body) : null;
+const categoryLabel = category ? getCategoryLabel(category) : null;
 ---
 
 <BaseLayout
@@ -57,59 +60,93 @@ const h2Headings = headings.filter((h) => h.depth === 2 || h.depth === 3);
   modifiedTime={updatedDate}
   tags={tags}
 >
-  <div class={`max-w-7xl mx-auto grid grid-cols-1 gap-12 ${h2Headings.length > 0 ? 'xl:grid-cols-[1fr_240px]' : ''}`}>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-    <!-- Main Article -->
-    <article class="max-w-3xl w-full">
-      <!-- Breadcrumb + Title -->
-      <header class="mb-16">
-        {category && (
-          <nav class="flex gap-2 mb-6 font-label text-[10px] uppercase tracking-widest text-primary-fixed-dim">
-            <a href="/blog" class="hover:text-primary-container transition-colors no-underline">Blog</a>
-            <span class="text-slate-700">/</span>
-            <a href={`/categories/${category}`} class="hover:text-primary-container transition-colors no-underline">
-              {category}
+    <!-- Article Column -->
+    <article class="lg:col-span-8 space-y-10">
+      <!-- Header Block -->
+      <header class="space-y-6">
+        {categoryLabel && (
+          <div class="flex items-center gap-3 text-xs font-label uppercase tracking-widest text-primary">
+            <a href="/blog" class="hover:text-primary-fixed-dim transition-colors no-underline">Archive</a>
+            <span class="text-outline-variant/40">•</span>
+            <a href={`/categories/${category}`} class="hover:text-primary-fixed-dim transition-colors no-underline">
+              {categoryLabel}
             </a>
-          </nav>
+          </div>
         )}
 
-        <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight mb-8 leading-[1.1] text-on-surface">
+        <h1 class="font-headline text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-on-surface">
           {title}
         </h1>
 
-        <div class="flex items-center justify-between py-6 border-y border-outline-variant/20">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full overflow-hidden border border-primary-container/20 bg-surface-container flex-shrink-0">
-              <img src="/images/etc/jerry_profile.jpg" alt="Jerry" class="w-full h-full object-cover" />
-            </div>
+        {description && (
+          <p class="text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-3xl">
+            {description}
+          </p>
+        )}
+
+        <!-- Meta Strip -->
+        <div class="flex flex-wrap items-center gap-6 pt-4 text-sm font-label text-on-surface-variant">
+          <div class="flex items-center gap-3">
+            <img
+              src="/images/etc/jerry_profile.jpg"
+              alt="Jerry"
+              class="w-10 h-10 rounded-full object-cover"
+              style="outline: 1px solid rgba(84, 68, 51, 0.3);"
+            />
             <div>
-              <p class="font-label text-sm font-bold text-on-surface">Kyoungtae Kim</p>
-              <p class="font-label text-xs text-outline">Jerry Blog</p>
+              <div class="font-medium text-on-surface">Kyoungtae Kim</div>
+              <div class="text-xs opacity-70">Jerry Blog</div>
             </div>
           </div>
-          <div class="text-right font-label text-xs text-outline">
-            <p class="uppercase tracking-widest"><FormattedDate date={pubDate} /></p>
-            {updatedDate && (
-              <p class="text-[10px] italic font-body lowercase tracking-normal text-outline-variant mt-1">
-                updated <FormattedDate date={updatedDate} />
-              </p>
-            )}
+          <div class="h-4 w-px bg-outline-variant/30 hidden sm:block"></div>
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">calendar_today</span>
+            <FormattedDate date={pubDate} />
           </div>
+          {readingTime && (
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">timer</span>
+              <span class="font-headline tracking-wider">{readingTime}</span> min read
+            </div>
+          )}
+          {updatedDate && (
+            <div class="flex items-center gap-1.5 text-xs italic opacity-70">
+              <span class="material-symbols-outlined text-sm">update</span>
+              updated <FormattedDate date={updatedDate} />
+            </div>
+          )}
         </div>
+
+        <!-- Tag Chips -->
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 pt-2">
+            {tags.map((tag) => (
+              <a
+                href={`/tags/${tag}`}
+                class="bg-surface-container-highest hover:bg-primary-container/20 hover:text-primary text-on-surface text-xs font-medium px-2.5 py-1 rounded-sm transition-colors no-underline"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
       </header>
 
       <!-- Hero Image -->
       {heroImage && (
-        <div class="mb-12 rounded-xl overflow-hidden">
+        <figure class="w-full aspect-[21/9] bg-surface-container-lowest rounded-lg overflow-hidden relative">
+          <div class="absolute inset-0 bg-gradient-to-tr from-surface-container-lowest to-surface-container/50 z-10 mix-blend-overlay pointer-events-none"></div>
           <Image
-            width={1020}
-            height={510}
+            width={1680}
+            height={720}
             src={heroImage}
             alt={title}
-            class="w-full object-cover"
-            style="border-radius: 0.75rem; margin: 0;"
+            class="w-full h-full object-cover opacity-90"
+            style="margin: 0; border-radius: 0;"
           />
-        </div>
+        </figure>
       )}
 
       {seriesInfo && <SeriesNav series={seriesInfo} />}
@@ -119,63 +156,69 @@ const h2Headings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         <slot />
       </div>
 
-      <!-- Tags (mobile) -->
-      {tags.length > 0 && (
-        <div class="mt-12 xl:hidden flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <a
-              href={`/tags/${tag}`}
-              class="px-3 py-1.5 rounded-full bg-surface-container text-outline font-label text-xs uppercase tracking-wider border border-outline-variant/30 hover:text-primary-container hover:border-primary-container/30 transition-colors no-underline"
-            >
-              #{tag}
-            </a>
-          ))}
+      <!-- Discussion -->
+      <section class="mt-20 pt-10" style="border-top: 1px solid rgba(84, 68, 51, 0.15);">
+        <div class="flex items-center justify-between mb-8">
+          <h3 class="font-headline text-2xl font-bold text-on-surface">Discussion</h3>
+        </div>
+        <Comments />
+      </section>
+    </article>
+
+    <!-- Right Sidebar -->
+    <aside class="hidden lg:block lg:col-span-4 space-y-6 sticky top-28">
+      {h2Headings.length > 0 && (
+        <div
+          class="bg-surface-variant/60 backdrop-blur-xl rounded-xl p-6"
+          style="outline: 1px solid rgba(84, 68, 51, 0.15);"
+        >
+          <h4 class="font-headline text-sm uppercase tracking-widest text-on-surface font-bold mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-lg">format_list_bulleted</span>
+            Contents
+          </h4>
+          <nav class="space-y-3 text-sm font-body">
+            {h2Headings.map((h) => (
+              <a
+                href={`#${h.slug}`}
+                class={`toc-link block text-on-surface-variant hover:text-on-surface transition-colors no-underline ${h.depth === 3 ? 'pl-4 text-xs border-l border-outline-variant/20' : ''}`}
+                data-slug={h.slug}
+              >
+                {h.text}
+              </a>
+            ))}
+          </nav>
         </div>
       )}
 
-    </article>
-
-    <!-- TOC Sidebar (right) -->
-    {h2Headings.length > 0 && (
-      <aside class="hidden xl:block sticky top-32 h-fit">
-        <div class="space-y-6">
-          <div>
-            <h4 class="font-label text-xs font-bold uppercase tracking-[0.2em] text-outline mb-6">
-              Table of Contents
-            </h4>
-            <ul class="space-y-3 font-label text-sm">
-              {h2Headings.map((h) => (
-                <li>
-                  <a
-                    href={`#${h.slug}`}
-                    class={`toc-link text-slate-500 hover:text-primary transition-colors block no-underline ${h.depth === 3 ? 'pl-4 text-xs' : ''}`}
-                    data-slug={h.slug}
-                  >
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {tags.length > 0 && (
-            <div class="p-4 bg-surface-container rounded-xl border border-outline-variant/20">
-              <p class="font-label text-[10px] uppercase tracking-widest text-primary-fixed-dim mb-3">Tags</p>
-              <div class="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <a
-                    href={`/tags/${tag}`}
-                    class="px-2 py-1 rounded-full bg-surface-container-high text-outline font-label text-[10px] uppercase tracking-wider hover:text-primary-container hover:bg-primary-container/10 transition-colors no-underline"
-                  >
-                    #{tag}
-                  </a>
-                ))}
-              </div>
+      <!-- Meta Card -->
+      <div
+        class="bg-surface-container-low rounded-xl p-6"
+        style="border: 1px solid rgba(84, 68, 51, 0.15);"
+      >
+        <h4 class="font-headline text-sm uppercase tracking-widest text-on-surface-variant font-bold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-lg">info</span>
+          Metadata
+        </h4>
+        <dl class="space-y-3 text-sm">
+          {categoryLabel && (
+            <div class="flex justify-between items-center">
+              <dt class="font-label text-on-surface-variant">Category</dt>
+              <dd class="font-headline font-bold text-on-surface">{categoryLabel}</dd>
             </div>
           )}
-        </div>
-      </aside>
-    )}
+          <div class="flex justify-between items-center">
+            <dt class="font-label text-on-surface-variant">Published</dt>
+            <dd class="font-headline font-bold text-on-surface"><FormattedDate date={pubDate} /></dd>
+          </div>
+          {readingTime && (
+            <div class="flex justify-between items-center">
+              <dt class="font-label text-on-surface-variant">Reading</dt>
+              <dd class="font-headline font-bold text-primary">{readingTime} min</dd>
+            </div>
+          )}
+        </dl>
+      </div>
+    </aside>
 
   </div>
 
@@ -187,15 +230,11 @@ const h2Headings = headings.filter((h) => h.depth === 2 || h.depth === 3);
       function setActive(slug) {
         tocLinks.forEach((link) => {
           if (link.dataset.slug === slug) {
-            link.style.color = '#00e5ff';
-            link.style.borderLeft = '2px solid #00e5ff';
-            link.style.paddingLeft = '0.75rem';
-            link.style.marginLeft = '-0.75rem';
+            link.style.color = '#ff9f00';
+            link.style.fontWeight = '600';
           } else {
             link.style.color = '';
-            link.style.borderLeft = '';
-            link.style.paddingLeft = '';
-            link.style.marginLeft = '';
+            link.style.fontWeight = '';
           }
         });
       }

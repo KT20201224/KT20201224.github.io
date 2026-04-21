@@ -1,5 +1,7 @@
 ---
-import Layout from "../layouts/AboutLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SOCIAL_LINKS } from "../lib/constants";
+
 // === Solved.ac (백준) ===
 const handle = "olly123";
 let data: { tier?: number; solvedCount?: number; rating?: number } | null = null;
@@ -12,511 +14,302 @@ try {
   // API unavailable at build time, show fallback
 }
 
-// === Kaggle (수동 입력) ===
+// === Kaggle (수동) ===
 const kaggleData = {
   tier: "Expert",
-  username: "kyoungteakim"
+  username: "kyoungteakim",
 };
 
-// 티어 숫자를 이름으로 변환
 const tierNames = [
   "Unrated",
-  "Bronze V",
-  "Bronze IV",
-  "Bronze III",
-  "Bronze II",
-  "Bronze I",
-  "Silver V",
-  "Silver IV",
-  "Silver III",
-  "Silver II",
-  "Silver I",
-  "Gold V",
-  "Gold IV",
-  "Gold III",
-  "Gold II",
-  "Gold I",
-  "Platinum V",
-  "Platinum IV",
-  "Platinum III",
-  "Platinum II",
-  "Platinum I",
-  "Diamond V",
-  "Diamond IV",
-  "Diamond III",
-  "Diamond II",
-  "Diamond I",
-  "Ruby V",
-  "Ruby IV",
-  "Ruby III",
-  "Ruby II",
-  "Ruby I",
+  "Bronze V", "Bronze IV", "Bronze III", "Bronze II", "Bronze I",
+  "Silver V", "Silver IV", "Silver III", "Silver II", "Silver I",
+  "Gold V", "Gold IV", "Gold III", "Gold II", "Gold I",
+  "Platinum V", "Platinum IV", "Platinum III", "Platinum II", "Platinum I",
+  "Diamond V", "Diamond IV", "Diamond III", "Diamond II", "Diamond I",
+  "Ruby V", "Ruby IV", "Ruby III", "Ruby II", "Ruby I",
 ];
+
+// Professional Trajectory
+const experiences = [
+  {
+    company: "한국전자기술연구원",
+    role: "연구원",
+    period: "2021.07 - 2022.08",
+    details: [
+      "유니티를 활용한 디지털트윈 환경 구축",
+      "데이터 시각화",
+    ],
+    active: true,
+  },
+];
+
+// Activities
+const activities = [
+  {
+    title: "컴퓨터응용소프트웨어 제 36대 학생회",
+    role: "학생회장",
+    period: "2021.11 - 2022.10",
+    details: ["학과 학생회 운영"],
+  },
+  {
+    title: "웹개발 동아리 \"원더독\"",
+    role: "동아리원",
+    period: "2022.03 - 2022.07",
+    details: ["Django 웹 개발"],
+  },
+  {
+    title: "자기주도적설계프로그램",
+    role: "팀장",
+    period: "2018.03 - 2018.07",
+    details: ["\"스마트 미러\" 개발", "장려상 수상"],
+  },
+];
+
+// Certifications
+const certifications = [
+  { name: "정보처리기사", issuer: "한국산업인력공단", date: "2022.11" },
+  { name: "SQLD", issuer: "한국데이터산업진흥원", date: "2024.06" },
+];
+
+// Tech stack
+const techStack = {
+  languages: [
+    { name: "JavaScript", icon: "https://cdn.simpleicons.org/javascript/F7DF1E" },
+    { name: "TypeScript", icon: "https://cdn.simpleicons.org/typescript/3178C6" },
+    { name: "Python", icon: "https://cdn.simpleicons.org/python/3776AB" },
+    { name: "Java", icon: "https://cdn.simpleicons.org/openjdk/000000" },
+    { name: "C", icon: "https://cdn.simpleicons.org/c/A8B9CC" },
+    { name: "R", icon: "https://cdn.simpleicons.org/r/276DC3" },
+  ],
+  frameworks: [
+    { name: "React", icon: "https://cdn.simpleicons.org/react/61DAFB" },
+    { name: "Node.js", icon: "https://cdn.simpleicons.org/nodedotjs/339933" },
+    { name: "Spring", icon: "https://cdn.simpleicons.org/spring/6DB33F" },
+  ],
+  tools: [
+    { name: "Git", icon: "https://cdn.simpleicons.org/git/F05032" },
+    { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
+    { name: "Docker", icon: "https://cdn.simpleicons.org/docker/2496ED" },
+  ],
+};
 ---
 
-<Layout title="About Me" description="KT 소개" heroImage="/images/etc/wall.jpg">
-  <!-- Intro 섹션 -->
-  <section class="profile-intro">
-    <div class="profile-image">
-      <img src="/images/etc/profile.jpg" alt="프로필 사진" />
-    </div>
+<BaseLayout title="About Me" description="KT 소개">
+  <div class="max-w-4xl mx-auto space-y-12">
 
-    <div class="profile-text">
-      <h2>안녕하세요, 김경태입니다.</h2>
-      <p>
-        이 블로그는 제가 공부한 내용을 정리하고 공유하기 위한 공간입니다.
-        프론트엔드, 백엔드, 클라우드, AI 영역을 불문하고, IT 기술에 관심이
-        많습니다.
-      </p>
-      <p>현재는 카카오테크 부트캠프에서 AI를 집중적으로 공부하고 있습니다.</p>
-      <p>새로운 기술을 배우고 문제를 해결하는 과정을 즐깁니다.</p>
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- 경력사항 섹션 -->
-  <section class="career-section">
-    <h2>Experience</h2>
-    <ul class="experience-list">
-      <li class="experience-item">
-        <div class="experience-header">
-          <h3>한국전자기술연구원</h3>
-          <span class="period">2021.07 - 2022.08</span>
+    <!-- Profile Card (Glassmorphism) -->
+    <section
+      class="bg-surface-variant/60 backdrop-blur-xl rounded-xl p-8 relative overflow-hidden group"
+      style="border: 1px solid rgba(84, 68, 51, 0.15);"
+    >
+      <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+        <div class="relative shrink-0">
+          <div class="absolute -inset-1 bg-gradient-to-r from-primary to-primary-container rounded-full blur opacity-20"></div>
+          <img
+            src="/images/etc/profile.jpg"
+            alt="Kyoungtae Kim"
+            class="relative w-40 h-40 rounded-full object-cover"
+            style="border: 1px solid rgba(84, 68, 51, 0.3);"
+          />
         </div>
-        <p class="position">연구원</p>
-        <ul class="description">
-          <li>유니티를 활용한 디지털트윈 환경 구축</li>
-          <li>데이터 시각화</li>
-        </ul>
-      </li>
-      <!-- 추가 경력 -->
-    </ul>
-  </section>
-
-  <!-- 구분선 -->
-  <hr class="section-divider" />
-
-  <!-- 기타활동 섹션 -->
-  <section class="activity-section">
-    <h2>Activities</h2>
-    <ul class="experience-list">
-      <li class="experience-item">
-        <div class="experience-header">
-          <h3>컴퓨터응용소프트웨어 제 36대 학생회</h3>
-          <span class="period">2021.11 - 2022.10</span>
+        <div class="text-center md:text-left flex-1">
+          <h1 class="font-headline text-4xl md:text-5xl font-bold tracking-tight mb-2 text-on-surface">
+            김경태
+          </h1>
+          <p class="font-body text-xl text-on-surface-variant mb-6">
+            Software Engineer · AI Learner
+          </p>
+          <p class="font-body text-base leading-relaxed mb-4 max-w-2xl text-on-surface-variant">
+            이 블로그는 제가 공부한 내용을 정리하고 공유하기 위한 공간입니다.
+            프론트엔드, 백엔드, 클라우드, AI 영역을 불문하고 IT 기술에 관심이 많습니다.
+          </p>
+          <p class="font-body text-base leading-relaxed mb-8 max-w-2xl text-on-surface-variant">
+            현재는 카카오테크 부트캠프에서 AI를 집중적으로 공부하고 있으며,
+            새로운 기술을 배우고 문제를 해결하는 과정을 즐깁니다.
+          </p>
+          <div class="flex flex-wrap justify-center md:justify-start gap-4">
+            <a
+              href={`mailto:${SOCIAL_LINKS.email}`}
+              class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-label no-underline"
+            >
+              <span class="material-symbols-outlined text-[20px]">mail</span>
+              {SOCIAL_LINKS.email}
+            </a>
+            <a
+              href={SOCIAL_LINKS.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-label no-underline"
+            >
+              <span class="material-symbols-outlined text-[20px]">link</span>
+              GitHub
+            </a>
+            <a
+              href={SOCIAL_LINKS.tistory}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-label no-underline"
+            >
+              <span class="material-symbols-outlined text-[20px]">public</span>
+              Tistory
+            </a>
+          </div>
         </div>
-        <p class="position">학생회장</p>
-        <ul class="description">
-          <li>학과 학생회 운영</li>
-        </ul>
-      </li>
-      <li class="experience-item">
-        <div class="experience-header">
-          <h3>웹개발 동아리 "원더독"</h3>
-          <span class="period">2022.03 - 2022.07</span>
+      </div>
+    </section>
+
+    <!-- Technical Skills -->
+    <section class="bg-surface-container-low rounded-xl p-8 relative" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+      <h2 class="font-headline text-2xl font-bold mb-8 flex items-center gap-3 text-on-surface">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">code</span>
+        Technical Skills
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-body text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Languages</h3>
+          <div class="flex flex-wrap gap-2">
+            {techStack.languages.map((item) => (
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-sm text-sm font-label text-on-surface" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+                <img src={item.icon} alt="" class="w-4 h-4 object-contain" />
+                {item.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <p class="position">동아리원</p>
-        <ul class="description">
-          <li>Django 웹 개발</li>
-        </ul>
-      </li>
-      <li class="experience-item">
-        <div class="experience-header">
-          <h3>자기주도적설계프로그램</h3>
-          <span class="period">2018.03 - 2018.07</span>
+        <div>
+          <h3 class="font-body text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Frameworks</h3>
+          <div class="flex flex-wrap gap-2">
+            {techStack.frameworks.map((item) => (
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-secondary-container/20 text-secondary rounded-sm text-sm font-label" style="border: 1px solid rgba(212, 187, 255, 0.2);">
+                <img src={item.icon} alt="" class="w-4 h-4 object-contain" />
+                {item.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <p class="position">팀장</p>
-        <ul class="description">
-          <li>"스마트 미러" 개발</li>
-          <li>장려상 수상</li>
-        </ul>
-      </li>
-    </ul>
-  </section>
-
-  <!-- 구분선 -->
-  <hr class="section-divider" />
-
-  <!-- 자격증 섹션 -->
-  <section class="certification-section">
-    <h2>Certifications</h2>
-    <ul class="cert-list">
-      <li class="cert-item">
-        <div class="cert-info">
-          <h3>정보처리기사</h3>
-          <p class="cert-issuer">한국산업인력공단</p>
+        <div>
+          <h3 class="font-body text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Tools</h3>
+          <div class="flex flex-wrap gap-2">
+            {techStack.tools.map((item) => (
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-tertiary-container/20 text-tertiary rounded-sm text-sm font-label" style="border: 1px solid rgba(123, 225, 214, 0.2);">
+                <img src={item.icon} alt="" class="w-4 h-4 object-contain" />
+                {item.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <span class="cert-date">2022.11</span>
-      </li>
-      <li class="cert-item">
-        <div class="cert-info">
-          <h3>SQLD</h3>
-          <p class="cert-issuer">한국데이터산업진흥원</p>
+      </div>
+    </section>
+
+    <!-- Professional Trajectory -->
+    <section class="bg-surface-container-lowest rounded-xl p-8 relative">
+      <h2 class="font-headline text-2xl font-bold mb-8 flex items-center gap-3 text-on-surface">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">timeline</span>
+        Professional Trajectory
+      </h2>
+      <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-outline-variant/20">
+        {experiences.map((exp, i) => {
+          const isOdd = i % 2 === 0;
+          return (
+            <div class={`relative flex items-start justify-between md:justify-normal ${isOdd ? '' : 'md:flex-row-reverse'} group`}>
+              <div class={`flex items-center justify-center w-10 h-10 rounded-full shrink-0 md:order-1 ${isOdd ? 'md:-translate-x-1/2' : 'md:translate-x-1/2'} z-10 bg-surface-container-low ${exp.active ? 'shadow-[0_0_15px_rgba(255,159,0,0.2)]' : ''}`} style={`border: 1px solid ${exp.active ? '#ffc687' : 'rgba(84, 68, 51, 0.3)'};`}>
+                <span class={`rounded-full ${exp.active ? 'w-3 h-3 bg-primary blur-[1px]' : 'w-2 h-2 bg-outline-variant/50'}`}></span>
+              </div>
+              <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-surface-container p-6 rounded-xl" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                  <h3 class="font-headline font-bold text-lg text-on-surface">{exp.company}</h3>
+                  <span class={`font-label text-xs px-2 py-1 rounded-sm mt-2 md:mt-0 ${exp.active ? 'bg-primary-container/10 text-primary' : 'bg-surface-container-high text-on-surface-variant'}`}>
+                    {exp.period}
+                  </span>
+                </div>
+                <h4 class="font-body text-sm text-on-surface-variant mb-4">{exp.role}</h4>
+                <ul class="space-y-1.5 text-sm text-on-surface-variant leading-relaxed list-disc list-inside">
+                  {exp.details.map((d) => (<li>{d}</li>))}
+                </ul>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Activities -->
+    <section class="bg-surface-container-low rounded-xl p-8" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+      <h2 class="font-headline text-2xl font-bold mb-8 flex items-center gap-3 text-on-surface">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">groups</span>
+        Activities
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {activities.map((a) => (
+          <div class="bg-surface-container p-6 rounded-xl hover:bg-surface-bright/20 transition-colors" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div class="flex items-start justify-between mb-2 gap-3">
+              <h3 class="font-headline font-bold text-base text-on-surface leading-snug">{a.title}</h3>
+              <span class="font-label text-[10px] whitespace-nowrap text-on-surface-variant bg-surface-container-high px-2 py-1 rounded-sm">{a.period}</span>
+            </div>
+            <p class="font-body text-sm text-primary mb-3">{a.role}</p>
+            <ul class="space-y-1 text-sm text-on-surface-variant list-disc list-inside">
+              {a.details.map((d) => (<li>{d}</li>))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="bg-surface-container-low rounded-xl p-8" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+      <h2 class="font-headline text-2xl font-bold mb-8 flex items-center gap-3 text-on-surface">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+        Certifications
+      </h2>
+      <div class="flex flex-col gap-4">
+        {certifications.map((c) => (
+          <div class="flex items-center justify-between p-5 bg-surface-container rounded-xl transition-colors hover:bg-surface-bright/20" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div>
+              <h3 class="font-headline font-bold text-base text-on-surface mb-1">{c.name}</h3>
+              <p class="font-body text-sm text-on-surface-variant">{c.issuer}</p>
+            </div>
+            <span class="font-headline font-bold text-primary text-sm">{c.date}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Stats Grid: Algorithm + Kaggle -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-surface-container-low rounded-xl p-8" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+        <h2 class="font-headline text-xl font-bold mb-6 flex items-center gap-3 text-on-surface">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">integration_instructions</span>
+          Algorithm (백준)
+        </h2>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-surface-container p-4 rounded-lg" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Tier</div>
+            <div class="font-headline text-lg font-bold text-primary">{data ? tierNames[data.tier ?? 0] : '-'}</div>
+          </div>
+          <div class="bg-surface-container p-4 rounded-lg" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Solved</div>
+            <div class="font-headline text-lg font-bold text-primary">{data?.solvedCount ?? '-'}</div>
+          </div>
+          <div class="bg-surface-container p-4 rounded-lg" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Rating</div>
+            <div class="font-headline text-lg font-bold text-primary">{data?.rating ?? '-'}</div>
+          </div>
         </div>
-        <span class="cert-date">2024.06</span>
-      </li>
-    </ul>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- 기술 스택 섹션 -->
-  <section class="tech-section">
-    <h2>Tech Stack</h2>
-    <div class="tech-category">
-      <h3>Languages</h3>
-      <div class="tech-badges">
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" />JavaScript</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" />TypeScript</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" />Python</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/openjdk/000000" alt="Java" />Java</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/c/A8B9CC" alt="C" />C</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/r/276DC3" alt="R" />R</span>
       </div>
-    </div>
-    <div class="tech-category">
-      <h3>Frameworks</h3>
-      <div class="tech-badges">
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" />React</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" />Node.js</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/spring/6DB33F" alt="Spring" />Spring</span>
+
+      <div class="bg-surface-container-low rounded-xl p-8" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+        <h2 class="font-headline text-xl font-bold mb-6 flex items-center gap-3 text-on-surface">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+          Kaggle
+        </h2>
+        <div class="bg-surface-container p-4 rounded-lg" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+          <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Tier</div>
+          <div class="font-headline text-lg font-bold text-primary">{kaggleData.tier}</div>
+        </div>
       </div>
-    </div>
-    <div class="tech-category">
-      <h3>Tools</h3>
-      <div class="tech-badges">
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" />Git</span>
-        <span class="tech-badge"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" />VS Code</span>
-        <span class="tech-badge"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="Docker" />Docker</span>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <hr class="section-divider" />
-
-  <!-- 백준 티어 섹션 -->
-  <section class="baekjoon-section">
-    <h2>Algorithm</h2>
-    <div class="algorithm-stats">
-      <div class="algorithm-stat">
-        <span class="algorithm-stat-label">Tier</span>
-        <span class="algorithm-stat-value">{data ? tierNames[data.tier ?? 0] : '-'}</span>
-      </div>
-      <div class="algorithm-stat">
-        <span class="algorithm-stat-label">Solved</span>
-        <span class="algorithm-stat-value">{data?.solvedCount ?? '-'}</span>
-      </div>
-      <div class="algorithm-stat">
-        <span class="algorithm-stat-label">Rating</span>
-        <span class="algorithm-stat-value">{data?.rating ?? '-'}</span>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <section class="kaggle-section">
-    <h2>Kaggle</h2>
-    <div class="algorithm-stats">
-      <div class="algorithm-stat">
-        <span class="algorithm-stat-label">Tier</span>
-        <span class="algorithm-stat-value">{kaggleData.tier}</span>
-      </div>
-    </div>
-  </section>
-</Layout>
-
-<style>
-  /* 전체 폰트 기본: Inter (body 상속) */
-  * {
-    font-family: "Inter", sans-serif;
-  }
-
-  .section-divider {
-    border: none;
-    border-top: 1px solid rgba(59, 73, 76, 0.3);
-    margin: 2.5em 0;
-  }
-
-  .profile-intro {
-    display: flex;
-    align-items: flex-start;
-    gap: 3em;
-    margin-bottom: 1em;
-    padding: 1.5em;
-    border-radius: 12px;
-    background: #1c2026;
-    border: 1px solid rgba(59, 73, 76, 0.3);
-  }
-
-  .profile-image img {
-    max-width: 160px;
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-
-  .profile-text h2 {
-    margin-top: 0;
-    margin-bottom: 0.75em;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #dfe2eb;
-  }
-
-  .profile-text p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: #849396;
-    margin-bottom: 0.75em;
-  }
-
-  @media (max-width: 768px) {
-    .profile-intro {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  }
-
-  /* Section headings */
-  .career-section h2,
-  .activity-section h2,
-  .certification-section h2,
-  .tech-section h2,
-  .baekjoon-section h2,
-  .kaggle-section h2 {
-    margin-top: 0;
-    margin-bottom: 1em;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #00e5ff;
-  }
-
-  .career-section, .activity-section {
-    margin-bottom: 1em;
-  }
-
-  /* Experience / Activity items */
-  .experience-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-  }
-
-  .experience-item {
-    padding: 1.5em;
-    background: #1c2026;
-    border: 1px solid rgba(59, 73, 76, 0.3);
-    border-radius: 12px;
-    transition: border-color 0.2s;
-  }
-
-  .experience-item:hover {
-    border-color: rgba(0, 229, 255, 0.2);
-  }
-
-  .experience-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.5em;
-    gap: 1em;
-  }
-
-  .experience-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #dfe2eb;
-  }
-
-  .period {
-    color: #849396;
-    font-size: 0.8rem;
-    flex-shrink: 0;
-    font-family: "Space Grotesk", monospace;
-    letter-spacing: 0.03em;
-  }
-
-  .position {
-    margin: 0.25em 0 0.75em 0;
-    color: #00e5ff;
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-
-  .description {
-    margin: 0;
-    padding-left: 1.5em;
-    color: #849396;
-    font-size: 0.875rem;
-  }
-
-  .description li {
-    margin-bottom: 0.4em;
-    line-height: 1.6;
-  }
-
-  /* Certifications */
-  .certification-section {
-    margin-bottom: 1em;
-  }
-
-  .cert-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-  }
-
-  .cert-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25em 1.5em;
-    background: #1c2026;
-    border: 1px solid rgba(59, 73, 76, 0.3);
-    border-radius: 12px;
-    transition: border-color 0.2s;
-  }
-
-  .cert-item:hover {
-    border-color: rgba(0, 229, 255, 0.2);
-  }
-
-  .cert-info h3 {
-    margin: 0 0 0.3em 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #dfe2eb;
-  }
-
-  .cert-issuer {
-    margin: 0;
-    color: #849396;
-    font-size: 0.8rem;
-  }
-
-  .cert-date {
-    color: #00e5ff;
-    font-weight: 500;
-    flex-shrink: 0;
-    margin-left: 1em;
-    font-family: "Space Grotesk", monospace;
-    font-size: 0.875rem;
-  }
-
-  @media (max-width: 768px) {
-    .cert-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5em;
-    }
-  }
-
-  /* Tech Stack */
-  .tech-section {
-    margin-bottom: 1em;
-  }
-
-  .tech-category {
-    margin-bottom: 1.5em;
-  }
-
-  .tech-category h3 {
-    font-size: 0.7rem;
-    color: #849396;
-    margin-bottom: 0.75em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-family: "Space Grotesk", monospace;
-  }
-
-  .tech-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-  }
-
-  .tech-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    padding: 0.2em 0.6em;
-    background: #262a31;
-    border: 1px solid rgba(59, 73, 76, 0.3);
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #bac9cc;
-    transition: border-color 0.2s, color 0.2s;
-    line-height: 1.4;
-    white-space: nowrap;
-    height: 1.8em;
-  }
-
-  .tech-badge:hover {
-    border-color: rgba(0, 229, 255, 0.3);
-    color: #00e5ff;
-  }
-
-  .tech-badge img {
-    width: 13px;
-    height: 13px;
-    object-fit: contain;
-    flex-shrink: 0;
-  }
-
-  /* Algorithm & Kaggle */
-  .baekjoon-section,
-  .kaggle-section {
-    margin-bottom: 1em;
-  }
-
-  .algorithm-stats {
-    display: flex;
-    gap: 1.5em;
-    flex-wrap: wrap;
-  }
-
-  .algorithm-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4em;
-    padding: 1.25em 2em;
-    background: #1c2026;
-    border: 1px solid rgba(59, 73, 76, 0.3);
-    border-radius: 12px;
-    min-width: 120px;
-  }
-
-  .algorithm-stat-label {
-    font-size: 0.7rem;
-    color: #849396;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-family: "Space Grotesk", monospace;
-  }
-
-  .algorithm-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #00e5ff;
-  }
-
-  @media (max-width: 480px) {
-    .algorithm-stats {
-      flex-direction: column;
-      gap: 1em;
-    }
-  }
-</style>
+  </div>
+</BaseLayout>

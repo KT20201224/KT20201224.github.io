@@ -31,7 +31,7 @@ const posts = getPostsByCategory(publishedPosts, category);
   </header>
 
   {posts.length > 0 ? (
-    <section class="space-y-10">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {posts.map((post) => (
         <PostCard
           title={post.data.title}
@@ -39,6 +39,7 @@ const posts = getPostsByCategory(publishedPosts, category);
           date={post.data.pubDate}
           description={post.data.description}
           imageUrl={getImageUrl(post.data.heroImage || getFirstImage(post.body))}
+          category={post.data.category}
         />
       ))}
     </section>

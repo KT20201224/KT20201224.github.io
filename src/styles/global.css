@@ -1,6 +1,10 @@
 /*
-  Stitch Design System - Global Styles
-  색상: tailwind.config (BaseHead.astro) 에서 관리
+  Editorial Intelligence Design System - Global Styles
+  색상/폰트: tailwind.config (BaseHead.astro) 에서 관리
+  원칙:
+    - No-Line Rule: 1px solid border 금지. 경계는 surface 색상 대비로 표현
+    - Tonal Layering: surface-container-lowest → low → container → highest
+    - Ghost Border: outline-variant 를 15% opacity 로만 허용
 */
 
 * {
@@ -9,18 +13,24 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #10141a;
-  color: #dfe2eb;
+  background-color: #131313;
+  color: #e5e2e1;
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+::selection {
+  background-color: #ff9f00;
+  color: #2b1700;
 }
 
 /* ============================
@@ -29,10 +39,10 @@ body {
    ============================ */
 
 .prose {
-  color: #bac9cc;
-  font-family: "Newsreader", serif;
-  font-size: 1.125rem;
-  line-height: 1.8;
+  color: #dac3ad;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
 }
 
 .prose h1,
@@ -41,27 +51,26 @@ body {
 .prose h4,
 .prose h5,
 .prose h6 {
-  font-family: "Inter", sans-serif;
-  color: #dfe2eb;
+  font-family: "Space Grotesk", sans-serif;
+  color: #e5e2e1;
   line-height: 1.2;
+  letter-spacing: -0.02em;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .prose h2 {
-  font-size: 1.875rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #00e5ff;
 }
 
 .prose h3 {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 600;
-  color: #dfe2eb;
 }
 
 .prose h4 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
@@ -70,19 +79,21 @@ body {
 }
 
 .prose a {
-  color: #00e5ff;
+  color: #ffc687;
   text-decoration: underline;
-  text-decoration-color: rgba(0, 229, 255, 0.3);
-  transition: text-decoration-color 0.2s ease;
+  text-decoration-color: rgba(255, 198, 135, 0.3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
 }
 
 .prose a:hover {
-  text-decoration-color: #00e5ff;
+  color: #ff9f00;
+  text-decoration-color: #ff9f00;
 }
 
 .prose strong,
 .prose b {
-  color: #dfe2eb;
+  color: #e5e2e1;
   font-weight: 700;
 }
 
@@ -101,28 +112,26 @@ body {
 }
 
 .prose blockquote {
-  border-left: 4px solid #00e5ff;
+  border-left: 3px solid #ff9f00;
   padding: 0.75rem 1.5rem;
   margin: 2rem 0;
-  background: rgba(0, 229, 255, 0.05);
+  background: rgba(255, 159, 0, 0.05);
   border-radius: 0 0.5rem 0.5rem 0;
   font-style: italic;
-  color: #bac9cc;
+  color: #dac3ad;
 }
 
 .prose code {
   font-family: "Space Grotesk", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  background: #0a0e14;
-  color: #00e5ff;
+  background: #0e0e0e;
+  color: #ffc687;
   padding: 0.2em 0.5em;
   border-radius: 0.25rem;
   font-size: 0.875em;
-  border: 1px solid rgba(59, 73, 76, 0.3);
 }
 
 .prose pre {
-  background: #0a0e14;
-  border: 1px solid rgba(59, 73, 76, 0.2);
+  background: #0e0e0e;
   border-radius: 0.5rem;
   padding: 1.5rem;
   overflow-x: auto;
@@ -131,9 +140,8 @@ body {
 
 .prose pre code {
   background: none;
-  border: none;
   padding: 0;
-  color: #dfe2eb;
+  color: #e5e2e1;
   font-size: 0.9rem;
 }
 
@@ -148,29 +156,29 @@ body {
   font-family: "Space Grotesk", sans-serif;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #bac9cc;
-  border-bottom: 1px solid rgba(59, 73, 76, 0.4);
+  letter-spacing: 0.08em;
+  color: #dac3ad;
+  border-bottom: 1px solid rgba(84, 68, 51, 0.15);
   padding: 0.75rem 1rem;
   text-align: left;
 }
 
 .prose td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(59, 73, 76, 0.2);
-  color: #bac9cc;
+  border-bottom: 1px solid rgba(84, 68, 51, 0.15);
+  color: #dac3ad;
 }
 
 .prose hr {
   border: none;
-  border-top: 1px solid rgba(59, 73, 76, 0.3);
+  border-top: 1px solid rgba(84, 68, 51, 0.15);
   margin: 3rem 0;
 }
 
 .prose img {
   max-width: 100%;
   height: auto;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   margin: 2rem 0;
 }
 
@@ -190,15 +198,26 @@ body {
   border-width: 0;
 }
 
-/* Code block with macOS-style dots (Stitch style) */
+/* Ghost border (15% opacity) - 새 디자인 시스템의 유일한 허용 경계 */
+.ghost-border {
+  border: 1px solid rgba(84, 68, 51, 0.15);
+}
+
+/* Glass pane (floating elements) */
+.glass-pane {
+  background: rgba(53, 53, 52, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Code block with macOS-style dots */
 .code-block-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem;
-  background: #262a31;
+  background: #1c1b1b;
   border-radius: 0.5rem 0.5rem 0 0;
-  border-bottom: 1px solid rgba(59, 73, 76, 0.2);
 }
 
 .code-block-dots {

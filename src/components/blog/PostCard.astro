@@ -5,34 +5,109 @@ interface Props {
   title: string;
   href: string;
   date: Date;
-  description?: string;
+  description?: string | null;
   imageUrl?: string | null;
+  category?: string;
+  featured?: boolean;
 }
 
-const { title, href, date, description, imageUrl } = Astro.props;
+const { title, href, date, description, imageUrl, category, featured = false } = Astro.props;
+
+const categoryStyles: Record<string, { bg: string; text: string; label: string }> = {
+  ml: { bg: "bg-secondary-container", text: "text-on-secondary-container", label: "Deep Learning" },
+  llm: { bg: "bg-secondary-container", text: "text-on-secondary-container", label: "LLM" },
+  devops: { bg: "bg-tertiary-container/30", text: "text-tertiary", label: "DevOps" },
+  web: { bg: "bg-primary-container/20", text: "text-primary", label: "Web" },
+  etc: { bg: "bg-surface-variant/60", text: "text-on-surface", label: "ETC" },
+};
+
+const categoryKey = category?.toLowerCase() ?? "";
+const chip = categoryStyles[categoryKey] ?? {
+  bg: "bg-surface-variant/60",
+  text: "text-on-surface",
+  label: category ?? "Note",
+};
 ---
 
-<article class="group grid md:grid-cols-12 gap-6 items-start py-6 hover:bg-surface-container-low/50 rounded-2xl px-4 -mx-4 transition-all">
-  <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-surface-container-high">
-    {imageUrl ? (
-      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={imageUrl} alt={title} loading="lazy" />
-    ) : (
-      <div class="w-full h-full flex items-center justify-center">
-        <span class="material-symbols-outlined text-4xl text-outline-variant">article</span>
+{featured ? (
+  <article class="group relative overflow-hidden bg-surface-container-low rounded-lg flex flex-col md:flex-row gap-6 p-1 transition-colors">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+    <a href={href} class="w-full md:w-2/5 aspect-video md:aspect-auto rounded-md overflow-hidden bg-surface-container-lowest relative no-underline">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={title}
+          loading="lazy"
+          class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+        />
+      ) : (
+        <div class="w-full h-full flex items-center justify-center">
+          <span class="material-symbols-outlined text-5xl text-outline-variant">hub</span>
+        </div>
+      )}
+      <div class="absolute top-3 left-3 flex gap-2">
+        <span class={`${chip.bg} backdrop-blur ${chip.text} font-label text-xs px-2 py-1 rounded-sm uppercase tracking-wider`}>
+          {chip.label}
+        </span>
+        <span class="bg-surface-variant/90 backdrop-blur text-primary font-label text-xs px-2 py-1 rounded-sm flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> New
+        </span>
       </div>
-    )}
-  </div>
-  <div class="md:col-span-8">
-    <div class="flex items-center gap-3 mb-3">
-      <span class="font-label text-[10px] uppercase tracking-widest text-outline">
+    </a>
+
+    <div class="w-full md:w-3/5 p-6 md:p-8 md:pl-0 flex flex-col justify-center gap-4 relative z-10">
+      <div class="font-label text-xs text-on-surface-variant flex items-center gap-3 uppercase tracking-widest">
+        <FormattedDate date={date} />
+        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+        <span>8 min read</span>
+      </div>
+      <a href={href} class="no-underline">
+        <h2 class="font-headline text-2xl md:text-3xl font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-tight">
+          {title}
+        </h2>
+      </a>
+      {description && (
+        <p class="font-body text-on-surface-variant line-clamp-3">{description}</p>
+      )}
+      <div class="mt-2">
+        <a href={href} class="inline-flex items-center gap-2 font-headline text-sm font-bold text-primary uppercase tracking-wider hover:text-primary-fixed-dim transition-colors no-underline">
+          Access Node
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </article>
+) : (
+  <article class="group bg-surface-container-low rounded-lg p-6 flex flex-col gap-4 relative hover:bg-surface-container transition-colors duration-300">
+    <div class="flex justify-between items-start">
+      <span class={`${chip.bg} ${chip.text} font-label text-[10px] px-2 py-1 rounded-sm uppercase tracking-wider`}>
+        {chip.label}
+      </span>
+      <span class="font-label text-xs text-on-surface-variant">
         <FormattedDate date={date} />
       </span>
     </div>
+
     <a href={href} class="no-underline">
-      <h2 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary-container transition-colors mb-2">{title}</h2>
+      <h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors leading-snug tracking-tight">
+        {title}
+      </h3>
     </a>
+
     {description && (
-      <p class="text-outline font-body leading-relaxed line-clamp-2">{description}</p>
+      <p class="font-body text-on-surface-variant text-sm flex-grow line-clamp-3">{description}</p>
     )}
-  </div>
-</article>
+
+    <div class="pt-4 flex justify-between items-center mt-auto" style="border-top: 1px solid rgba(84, 68, 51, 0.15);">
+      <div class="flex gap-2">
+        <span class="w-8 h-1 bg-outline-variant/30 rounded-full"></span>
+        <span class="w-2 h-1 bg-outline-variant/30 rounded-full"></span>
+      </div>
+      <a href={href} class="inline-flex items-center gap-1 font-headline text-xs font-bold text-on-surface hover:text-primary transition-colors uppercase tracking-widest no-underline">
+        Read
+        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+      </a>
+    </div>
+  </article>
+)}

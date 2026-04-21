@@ -1,0 +1,403 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_TITLE, CATEGORIES } from "../lib/constants";
+import { getPublishedPosts } from "../lib/utils";
+
+const allPosts = await getCollection("blog");
+const posts = getPublishedPosts(allPosts);
+
+const categoryStyle: Record<string, { nodeBg: string; nodeBorder: string; dot: string; legendBg: string; legendBorder: string }> = {
+  ml: { nodeBg: "bg-secondary-container/20", nodeBorder: "border-secondary/30", dot: "bg-secondary", legendBg: "bg-secondary-container", legendBorder: "border-secondary/20" },
+  llm: { nodeBg: "bg-secondary-container/20", nodeBorder: "border-secondary/30", dot: "bg-secondary", legendBg: "bg-secondary-container", legendBorder: "border-secondary/20" },
+  devops: { nodeBg: "bg-tertiary-container/20", nodeBorder: "border-tertiary/30", dot: "bg-tertiary", legendBg: "bg-tertiary-container", legendBorder: "border-tertiary/20" },
+  web: { nodeBg: "bg-primary-container/20", nodeBorder: "border-primary/30", dot: "bg-primary", legendBg: "bg-primary-container", legendBorder: "border-primary/20" },
+  etc: { nodeBg: "bg-surface-container", nodeBorder: "border-outline-variant/30", dot: "bg-on-surface", legendBg: "bg-surface-variant", legendBorder: "border-outline-variant/30" },
+};
+
+// Build graph data
+type TagNode = {
+  name: string;
+  count: number;
+  category: string;
+  posts: { id: string; title: string }[];
+};
+
+const tagMap = new Map<string, TagNode>();
+const categoryCounts = new Map<string, number>();
+
+for (const post of posts) {
+  const cat = post.data.category ?? "etc";
+  categoryCounts.set(cat, (categoryCounts.get(cat) ?? 0) + 1);
+  const postTags: string[] = post.data.tags ?? [];
+  for (const tag of postTags) {
+    const key = `${cat}::${tag}`;
+    const existing = tagMap.get(key);
+    if (existing) {
+      existing.count += 1;
+      existing.posts.push({ id: post.id, title: post.data.title });
+    } else {
+      tagMap.set(key, {
+        name: tag,
+        count: 1,
+        category: cat,
+        posts: [{ id: post.id, title: post.data.title }],
+      });
+    }
+  }
+}
+
+const categoriesInUse = CATEGORIES.filter((c) => (categoryCounts.get(c.slug) ?? 0) > 0);
+
+// Compute polar positions for categories (around center)
+const centerX = 50;
+const centerY = 50;
+const categoryRadius = 20;
+const tagRadiusBase = 14;
+
+const categoryNodes = categoriesInUse.map((cat, i) => {
+  const angle = (2 * Math.PI * i) / Math.max(categoriesInUse.length, 1) - Math.PI / 2;
+  const x = centerX + categoryRadius * Math.cos(angle);
+  const y = centerY + categoryRadius * Math.sin(angle);
+  return {
+    slug: cat.slug,
+    label: cat.label,
+    x,
+    y,
+    angle,
+    count: categoryCounts.get(cat.slug) ?? 0,
+  };
+});
+
+// For each category, lay out its tags in a small arc around it
+type PositionedTag = TagNode & { x: number; y: number; cx: number; cy: number; id: string };
+const tagNodes: PositionedTag[] = [];
+
+for (const catNode of categoryNodes) {
+  const catTags = Array.from(tagMap.values()).filter((t) => t.category === catNode.slug);
+  if (catTags.length === 0) continue;
+  const arcSpan = Math.min(Math.PI, 0.6 + catTags.length * 0.25);
+  const start = catNode.angle - arcSpan / 2;
+  catTags.forEach((tag, i) => {
+    const tAngle = catTags.length === 1 ? catNode.angle : start + (arcSpan * i) / (catTags.length - 1);
+    const distance = tagRadiusBase + (tag.count > 1 ? 2 : 0);
+    const tx = catNode.x + distance * Math.cos(tAngle);
+    const ty = catNode.y + distance * Math.sin(tAngle);
+    tagNodes.push({
+      ...tag,
+      x: Math.max(8, Math.min(92, tx)),
+      y: Math.max(10, Math.min(90, ty)),
+      cx: catNode.x,
+      cy: catNode.y,
+      id: `${catNode.slug}-${tag.name}`,
+    });
+  });
+}
+
+const totalNodes = categoryNodes.length + tagNodes.length;
+const densityScore = totalNodes > 0
+  ? Math.min(0.99, (tagNodes.length / Math.max(totalNodes, 1)) * 1.2).toFixed(2)
+  : "0.00";
+---
+
+<BaseLayout title={`Graph | ${SITE_TITLE}`} description="지식 그래프: 포스트, 카테고리, 태그의 연결 구조">
+  <div class="relative w-full -mt-12">
+    <!-- Graph Viewport -->
+    <div class="relative w-full h-[calc(100vh-10rem)] min-h-[600px] overflow-hidden rounded-xl bg-surface-container-lowest" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+
+      <!-- Canvas: SVG Edges + HTML Nodes -->
+      <div id="graph-canvas" class="absolute inset-0 cursor-crosshair">
+        <!-- SVG Edges -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;" preserveAspectRatio="none" viewBox="0 0 100 100">
+          {/* Category ↔ center edges */}
+          {categoryNodes.map((cat) => (
+            <line
+              x1={centerX}
+              y1={centerY}
+              x2={cat.x}
+              y2={cat.y}
+              stroke="#a28d79"
+              stroke-opacity="0.12"
+              stroke-width="0.15"
+              stroke-dasharray="1 1"
+              vector-effect="non-scaling-stroke"
+            />
+          ))}
+          {/* Tag ↔ Category edges */}
+          {tagNodes.map((tag) => (
+            <line
+              x1={tag.cx}
+              y1={tag.cy}
+              x2={tag.x}
+              y2={tag.y}
+              stroke="#a28d79"
+              stroke-opacity="0.18"
+              stroke-width="0.2"
+              vector-effect="non-scaling-stroke"
+              data-edge-for={tag.id}
+            />
+          ))}
+        </svg>
+
+        <!-- Center Node -->
+        <div
+          class="absolute -translate-x-1/2 -translate-y-1/2 z-10 group"
+          style={`top: ${centerY}%; left: ${centerX}%;`}
+        >
+          <div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center relative backdrop-blur-md" style="border: 2px solid #ffc687; box-shadow: 0 0 20px rgba(255,159,0,0.3);">
+            <span class="material-symbols-outlined text-primary text-xl">hub</span>
+          </div>
+          <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-surface-container-low px-3 py-1 rounded text-xs font-headline text-on-surface" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            Blog Root
+          </div>
+        </div>
+
+        <!-- Category Nodes -->
+        {categoryNodes.map((cat) => {
+          const style = categoryStyle[cat.slug] ?? categoryStyle.etc;
+          return (
+            <button
+              type="button"
+              class={`graph-node graph-node-category absolute -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer group`}
+              style={`top: ${cat.y}%; left: ${cat.x}%;`}
+              data-node-type="category"
+              data-node-slug={cat.slug}
+              data-node-label={cat.label}
+              data-node-count={cat.count}
+            >
+              <div class={`w-12 h-12 rounded-full ${style.legendBg} flex items-center justify-center relative transition-transform group-hover:scale-110`} style={`border: 1px solid ${cat.slug === 'ml' || cat.slug === 'llm' ? 'rgba(212,187,255,0.4)' : cat.slug === 'devops' ? 'rgba(123,225,214,0.4)' : cat.slug === 'web' ? 'rgba(255,198,135,0.4)' : 'rgba(162,141,121,0.3)'};`}>
+                <span class={`w-2.5 h-2.5 rounded-full ${style.dot}`}></span>
+              </div>
+              <div class="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 text-xs font-label text-on-surface-variant group-hover:text-on-surface opacity-80 group-hover:opacity-100 transition-all uppercase tracking-wider">
+                {cat.label}
+              </div>
+            </button>
+          );
+        })}
+
+        <!-- Tag Nodes -->
+        {tagNodes.map((tag) => {
+          const style = categoryStyle[tag.category] ?? categoryStyle.etc;
+          const size = Math.min(10, 6 + tag.count);
+          return (
+            <button
+              type="button"
+              class={`graph-node graph-node-tag absolute -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer group`}
+              style={`top: ${tag.y}%; left: ${tag.x}%;`}
+              data-node-type="tag"
+              data-node-id={tag.id}
+              data-node-label={tag.name}
+              data-node-category={tag.category}
+              data-node-count={tag.count}
+              data-node-posts={JSON.stringify(tag.posts)}
+            >
+              <div class={`rounded-full ${style.nodeBg} flex items-center justify-center relative transition-transform group-hover:scale-125 ${style.nodeBorder}`} style={`width: ${size * 3}px; height: ${size * 3}px; border-width: 1px; border-style: solid;`}>
+                <span class={`rounded-full ${style.dot}`} style={`width: ${size / 2}px; height: ${size / 2}px;`}></span>
+              </div>
+              <div class="absolute top-full mt-1 left-1/2 -translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 text-[10px] font-label text-on-surface-variant group-hover:text-on-surface opacity-0 group-hover:opacity-100 transition-all">
+                #{tag.name}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <!-- Left Floating Panel -->
+      <aside class="absolute left-6 top-6 bottom-6 w-72 flex flex-col gap-6 z-20 pointer-events-none max-w-[calc(100%-3rem)]">
+        <div class="bg-surface-variant/60 backdrop-blur-xl rounded-xl p-5 pointer-events-auto shadow-[0_10px_40px_-10px_rgba(14,14,14,0.5)]" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+          <h1 class="font-headline text-xl font-bold text-on-surface mb-1">Knowledge Graph</h1>
+          <p class="font-body text-sm text-on-surface-variant mb-4">
+            Mapping conceptual density and relationships across posts.
+          </p>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span class="font-label text-xs text-primary">Live Mapping Active</span>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-headline text-xs tracking-wider text-on-surface-variant uppercase mb-2 font-bold">Taxonomy</h3>
+            {categoryNodes.map((cat) => {
+              const style = categoryStyle[cat.slug] ?? categoryStyle.etc;
+              return (
+                <a
+                  href={`/categories/${cat.slug}`}
+                  class="flex items-center justify-between group cursor-pointer no-underline"
+                >
+                  <div class="flex items-center gap-2">
+                    <span class={`w-3 h-3 rounded-sm ${style.legendBg}`} style={`border: 1px solid ${cat.slug === 'ml' || cat.slug === 'llm' ? 'rgba(212,187,255,0.3)' : cat.slug === 'devops' ? 'rgba(123,225,214,0.3)' : cat.slug === 'web' ? 'rgba(255,198,135,0.3)' : 'rgba(162,141,121,0.3)'};`}></span>
+                    <span class="font-label text-sm text-on-surface group-hover:text-primary transition-colors">{cat.label}</span>
+                  </div>
+                  <span class="font-headline text-xs text-on-surface-variant">{String(cat.count).padStart(2, '0')}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="bg-surface-variant/60 backdrop-blur-xl rounded-xl p-5 pointer-events-auto mt-auto" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+          <div class="flex justify-between items-end mb-4">
+            <div>
+              <h3 class="font-headline text-xs tracking-wider text-on-surface-variant uppercase font-bold">Density Score</h3>
+              <div class="font-headline text-2xl font-bold text-on-surface">{densityScore}</div>
+            </div>
+            <span class="material-symbols-outlined text-primary text-xl">monitoring</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <div class="font-headline text-lg font-bold text-primary">{posts.length}</div>
+              <div class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Posts</div>
+            </div>
+            <div>
+              <div class="font-headline text-lg font-bold text-primary">{tagNodes.length}</div>
+              <div class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Tags</div>
+            </div>
+            <div>
+              <div class="font-headline text-lg font-bold text-primary">{categoryNodes.length}</div>
+              <div class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Cats</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Floating Detail Panel -->
+      <aside class="absolute right-6 top-6 w-80 z-20 pointer-events-none hidden lg:block max-w-[calc(100%-3rem)]">
+        <div
+          id="node-detail"
+          class="bg-surface-container-lowest/80 backdrop-blur-xl rounded-xl p-6 pointer-events-auto shadow-[0_10px_40px_-10px_rgba(14,14,14,0.5)] hidden"
+          style="border: 1px solid rgba(84, 68, 51, 0.15);"
+        >
+          <div class="flex items-start justify-between mb-4">
+            <span id="node-detail-chip" class="font-label text-xs px-2 py-0.5 rounded-sm">—</span>
+            <button type="button" id="node-detail-close" class="text-on-surface-variant hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+          </div>
+          <h2 id="node-detail-title" class="font-headline text-2xl font-bold text-on-surface mb-2">—</h2>
+          <p id="node-detail-desc" class="font-body text-sm text-on-surface-variant mb-6 leading-relaxed">—</p>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-label text-xs text-on-surface-variant mb-2 uppercase tracking-wider">Related Posts</h4>
+              <div id="node-detail-posts" class="flex flex-col gap-2"></div>
+            </div>
+            <div class="pt-4" style="border-top: 1px solid rgba(84, 68, 51, 0.15);">
+              <a
+                id="node-detail-link"
+                class="flex items-center gap-2 text-primary font-label text-sm hover:text-primary-fixed-dim transition-colors no-underline"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                Browse this node
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="node-detail-empty" class="bg-surface-container-lowest/80 backdrop-blur-xl rounded-xl p-6 pointer-events-auto text-center" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+          <span class="material-symbols-outlined text-primary text-3xl mb-2 block">touch_app</span>
+          <p class="font-label text-sm text-on-surface-variant">Select a node to inspect.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const detail = document.getElementById("node-detail");
+      const empty = document.getElementById("node-detail-empty");
+      const closeBtn = document.getElementById("node-detail-close");
+      const chip = document.getElementById("node-detail-chip");
+      const title = document.getElementById("node-detail-title");
+      const desc = document.getElementById("node-detail-desc");
+      const postsEl = document.getElementById("node-detail-posts");
+      const link = document.getElementById("node-detail-link");
+
+      const chipClass = {
+        ml: "bg-secondary-container text-on-secondary-container",
+        llm: "bg-secondary-container text-on-secondary-container",
+        devops: "bg-tertiary-container/30 text-tertiary",
+        web: "bg-primary-container/20 text-primary",
+        etc: "bg-surface-variant/60 text-on-surface",
+      };
+
+      const categoryLabels = {
+        ml: "Machine Learning",
+        devops: "DevOps",
+        web: "Web Development",
+        llm: "LLM",
+        etc: "ETC",
+      };
+
+      function hideDetail() {
+        detail.classList.add("hidden");
+        empty.classList.remove("hidden");
+        document.querySelectorAll("[data-edge-for]").forEach((l) => {
+          l.setAttribute("stroke", "#a28d79");
+          l.setAttribute("stroke-opacity", "0.18");
+        });
+      }
+
+      function showDetail(node) {
+        empty.classList.add("hidden");
+        detail.classList.remove("hidden");
+
+        const type = node.dataset.nodeType;
+        if (type === "category") {
+          const slug = node.dataset.nodeSlug;
+          const label = node.dataset.nodeLabel;
+          const count = node.dataset.nodeCount;
+          chip.className = "font-label text-xs px-2 py-0.5 rounded-sm " + (chipClass[slug] || chipClass.etc);
+          chip.textContent = "Category";
+          title.textContent = label;
+          desc.textContent = `${count}개의 포스트가 이 카테고리에 속합니다.`;
+          postsEl.innerHTML = "";
+          link.href = `/categories/${slug}`;
+          link.querySelector("span.material-symbols-outlined").nextSibling.textContent = " View Category";
+        } else if (type === "tag") {
+          const label = node.dataset.nodeLabel;
+          const cat = node.dataset.nodeCategory;
+          const count = node.dataset.nodeCount;
+          let posts = [];
+          try { posts = JSON.parse(node.dataset.nodePosts || "[]"); } catch (e) {}
+          chip.className = "font-label text-xs px-2 py-0.5 rounded-sm " + (chipClass[cat] || chipClass.etc);
+          chip.textContent = categoryLabels[cat] || cat;
+          title.textContent = "#" + label;
+          desc.textContent = `이 태그와 연결된 ${count}개의 포스트가 있습니다.`;
+          postsEl.innerHTML = "";
+          posts.forEach((p) => {
+            const a = document.createElement("a");
+            a.href = "/blog/" + p.id + "/";
+            a.className = "block text-sm font-body text-on-surface-variant hover:text-primary transition-colors no-underline truncate px-3 py-2 rounded bg-surface-container-low";
+            a.textContent = p.title;
+            postsEl.appendChild(a);
+          });
+          link.href = "/tags/" + label;
+          link.querySelector("span.material-symbols-outlined").nextSibling.textContent = " View Tag";
+
+          // Highlight edge
+          document.querySelectorAll("[data-edge-for]").forEach((l) => {
+            if (l.dataset.edgeFor === node.dataset.nodeId) {
+              l.setAttribute("stroke", "#ff9f00");
+              l.setAttribute("stroke-opacity", "0.7");
+            } else {
+              l.setAttribute("stroke", "#a28d79");
+              l.setAttribute("stroke-opacity", "0.08");
+            }
+          });
+        }
+      }
+
+      document.querySelectorAll(".graph-node").forEach((node) => {
+        node.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showDetail(node);
+        });
+      });
+
+      closeBtn?.addEventListener("click", hideDetail);
+
+      document.getElementById("graph-canvas")?.addEventListener("click", (e) => {
+        if (!e.target.closest(".graph-node")) hideDetail();
+      });
+    })();
+  </script>
+</BaseLayout>

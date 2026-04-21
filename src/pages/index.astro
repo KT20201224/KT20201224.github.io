@@ -1,143 +1,171 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/blog/PostCard.astro";
 import FormattedDate from "../components/common/FormattedDate.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
-import { getFirstImage, getImageUrl } from "../lib/utils";
+import {
+  getPublishedPosts,
+  getCategoriesWithCount,
+  getFirstImage,
+  getImageUrl,
+} from "../lib/utils";
 
-const posts = (await getCollection("blog"))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4);
+const allPosts = await getCollection("blog");
+const publishedPosts = getPublishedPosts(allPosts);
+const recentPosts = publishedPosts.slice(0, 5);
+const categoriesWithCount = getCategoriesWithCount(publishedPosts);
 
 const news = (await getCollection("news"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
+
+const [featured, ...restPosts] = recentPosts;
+const standardPosts = restPosts.slice(0, 3);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
   <!-- Hero Section -->
-  <section class="relative w-full min-h-[432px] flex items-center overflow-hidden rounded-2xl mb-16">
-    <!-- Full background image -->
-    <img
-      src="/images/etc/wallpaper.JPG"
-      alt="Jerry"
-      class="absolute inset-0 w-full h-full object-cover"
-      style="object-position: 50% top;"
-    />
-    <!-- Dark overlay -->
-    <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(16,20,26,0.85) 0%, rgba(16,20,26,0.6) 50%, rgba(16,20,26,0.4) 100%)"></div>
-    <!-- Accent glow -->
-    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 60%, rgba(0,229,255,0.08) 0%, transparent 60%)"></div>
-    <div class="relative z-10 max-w-3xl space-y-6 p-8 md:p-12">
-      <h1 class="text-5xl md:text-7xl font-black font-headline tracking-tighter text-on-surface leading-[0.95]">
-        안녕하세요,<br/>
-        <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
-          Jerry
-        </span>입니다.
+  <section
+    class="relative w-full h-[400px] rounded-xl overflow-hidden mb-16 flex items-center justify-center"
+    style="border: 1px solid rgba(84, 68, 51, 0.15);"
+  >
+    <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent z-10"></div>
+    <div
+      class="absolute inset-0 opacity-40 mix-blend-luminosity bg-cover bg-center"
+      style="background-image: url('/images/etc/wallpaper.JPG'); background-position: 50% top;"
+    ></div>
+    <div class="relative z-20 text-center flex flex-col items-center gap-4 px-6">
+      <span class="font-label text-xs uppercase tracking-[0.3em] text-primary">
+        The Editorial Intelligence
+      </span>
+      <h1 class="font-headline text-4xl md:text-6xl font-black text-on-surface tracking-tighter drop-shadow-2xl">
+        안녕하세요 <span class="text-primary-container">Jerry</span>입니다.
       </h1>
-      <p class="text-xl font-body italic text-on-surface-variant leading-relaxed max-w-xl">
+      <p class="font-body text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed">
         {SITE_DESCRIPTION}
       </p>
-      <div class="flex flex-wrap gap-4 pt-2">
-        <a href="/blog"
-          class="px-8 py-3 rounded-lg font-label font-bold text-sm tracking-wide text-on-primary hover:brightness-110 transition-all active:scale-95 no-underline"
-          style="background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%); box-shadow: 0 8px 24px rgba(0,229,255,0.2)">
-          최신 글 읽기
-        </a>
-        <a href="/about"
-          class="px-8 py-3 rounded-lg border border-outline-variant/30 bg-surface-container text-on-surface font-label font-bold text-sm hover:bg-surface-container-high transition-all no-underline">
-          소개 보기
-        </a>
-      </div>
     </div>
   </section>
 
-  <!-- Recent Posts -->
-  <section class="mb-16">
-    <div class="flex justify-between items-end mb-10">
-      <div>
-        <h2 class="text-4xl font-headline font-bold text-on-surface">최신 포스트</h2>
-        <p class="text-outline font-label text-sm mt-2 uppercase tracking-widest">Recent Posts</p>
-      </div>
-      <a href="/blog"
-        class="text-primary-container font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
-        전체 보기
-        <span class="material-symbols-outlined text-lg">arrow_forward</span>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {posts.map((post, i) => {
-        const image = post.data.heroImage || getFirstImage(post.body);
-        const isFeatured = i === 0;
-        return (
-          <a
-            href={`/blog/${post.id}/`}
-            class={`group space-y-4 cursor-pointer no-underline ${isFeatured ? 'md:col-span-2' : ''}`}
-          >
-            {image && (
-              <div class="overflow-hidden rounded-xl bg-surface-container aspect-video">
-                <img
-                  src={getImageUrl(image)}
-                  alt={post.data.title}
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-            )}
-            <div class="space-y-2">
-              <div class="flex items-center gap-4 text-xs font-label font-bold text-primary-fixed-dim uppercase tracking-wider">
-                {post.data.category && <span>{post.data.category.toUpperCase()}</span>}
-                <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-                <span class="text-outline font-body lowercase tracking-normal font-normal italic">
-                  <FormattedDate date={post.data.pubDate} />
-                </span>
-              </div>
-              <h3 class={`font-headline font-bold text-on-surface group-hover:text-primary-container transition-colors ${isFeatured ? 'text-3xl' : 'text-xl'}`}>
-                {post.data.title}
-              </h3>
-              {post.data.description && (
-                <p class="text-on-surface-variant font-body leading-relaxed line-clamp-2">
-                  {post.data.description}
-                </p>
-              )}
-            </div>
-          </a>
-        );
-      })}
-    </div>
-  </section>
-
-  <!-- Tech News Section -->
-  {news.length > 0 && (
-    <section class="mb-16">
-      <div class="flex justify-between items-end mb-10">
-        <div>
-          <h2 class="text-4xl font-headline font-bold text-on-surface">Tech News</h2>
-          <p class="text-outline font-label text-sm mt-2 uppercase tracking-widest">Latest Updates</p>
+  <!-- Main Layout: 3:9 Asymmetric Grid (denser on ultra-wide) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left Column: Sidebar / Stats -->
+    <aside class="col-span-1 lg:col-span-3 2xl:col-span-2 flex flex-col gap-6">
+      <!-- Topics/Categories Widget -->
+      {categoriesWithCount.length > 0 && (
+        <div class="bg-surface-container-low rounded-xl p-6" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+          <h3 class="font-headline text-sm uppercase tracking-widest text-on-surface-variant mb-6 font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-sm">category</span>
+            Nodes
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {categoriesWithCount.map((cat) => (
+              <a
+                href={`/categories/${cat.slug}`}
+                class="bg-surface-container-highest hover:bg-primary-container/20 hover:text-primary text-on-surface px-3 py-1 rounded-sm font-label text-xs uppercase tracking-wider transition-colors no-underline"
+              >
+                {cat.label}
+              </a>
+            ))}
+          </div>
         </div>
-        <a href="/news"
-          class="text-primary-container font-label text-sm font-bold flex items-center gap-2 hover:gap-4 transition-all no-underline">
-          전체 보기
-          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+      )}
+    </aside>
+
+    <!-- Right Column: Main Content -->
+    <div class="col-span-1 lg:col-span-9 2xl:col-span-10 flex flex-col gap-8">
+      <!-- Search Bar -->
+      <div
+        class="bg-surface-container-low rounded-xl p-2 flex items-center relative group focus-within:shadow-[0_0_15px_rgba(255,159,0,0.1)] transition-all"
+        style="border: 1px solid rgba(84, 68, 51, 0.15);"
+      >
+        <span class="material-symbols-outlined text-on-surface-variant ml-4 mr-2 group-focus-within:text-primary transition-colors">search</span>
+        <input
+          type="text"
+          placeholder="Search the archive..."
+          class="w-full bg-transparent border-none text-on-surface font-body text-base placeholder:text-on-surface-variant/50 focus:ring-0 focus:outline-none"
+        />
+        <div class="mr-2 flex gap-2">
+          <kbd class="hidden md:inline-flex items-center justify-center px-2 py-1 text-xs font-label text-on-surface-variant bg-surface-container-highest rounded-md">⌘K</kbd>
+        </div>
+      </div>
+
+      <!-- Bento Feed -->
+      <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
+        {featured && (
+          <div class="md:col-span-2 2xl:col-span-3">
+            <PostCard
+              title={featured.data.title}
+              href={`/blog/${featured.id}/`}
+              date={featured.data.pubDate}
+              description={featured.data.description}
+              imageUrl={getImageUrl(featured.data.heroImage || getFirstImage(featured.body))}
+              category={featured.data.category}
+              featured={true}
+            />
+          </div>
+        )}
+
+        {standardPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            href={`/blog/${post.id}/`}
+            date={post.data.pubDate}
+            description={post.data.description}
+            imageUrl={getImageUrl(post.data.heroImage || getFirstImage(post.body))}
+            category={post.data.category}
+          />
+        ))}
+
+        <!-- News teaser (spans 2 cols) -->
+        {news.length > 0 && (
+          <article class="md:col-span-2 2xl:col-span-3 bg-surface-container-low rounded-xl p-8 relative overflow-hidden flex flex-col lg:flex-row items-start gap-8" style="border: 1px solid rgba(84, 68, 51, 0.15);">
+            <div class="w-full lg:w-1/3 z-10">
+              <div class="font-label text-xs uppercase tracking-[0.3em] text-primary mb-3">Latest Signals</div>
+              <h3 class="font-headline text-xl font-bold text-on-surface mb-2">Tech News</h3>
+              <p class="font-body text-sm text-on-surface-variant mb-6">
+                업계의 최신 소식과 주요 릴리즈를 추적합니다.
+              </p>
+              <a
+                href="/news"
+                class="text-primary font-headline text-sm font-bold uppercase tracking-wide flex items-center gap-2 hover:text-primary-fixed-dim transition-colors no-underline"
+              >
+                View All News
+                <span class="material-symbols-outlined text-sm">open_in_new</span>
+              </a>
+            </div>
+            <div class="w-full lg:w-2/3 flex flex-col gap-3">
+              {news.map((item) => (
+                <a
+                  href={`/news/${item.id}/`}
+                  class="group/item p-4 rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors no-underline flex flex-col gap-1"
+                >
+                  <div class="flex items-center gap-2 font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    <FormattedDate date={item.data.pubDate} />
+                  </div>
+                  <h4 class="font-headline text-sm font-bold text-on-surface group-hover/item:text-primary transition-colors leading-snug">
+                    {item.data.title}
+                  </h4>
+                </a>
+              ))}
+            </div>
+          </article>
+        )}
+      </div>
+
+      <!-- Load More -->
+      <div class="flex justify-center mt-4">
+        <a
+          href="/blog"
+          class="bg-transparent text-primary font-headline text-sm font-bold uppercase tracking-wider px-8 py-3 rounded-lg hover:bg-surface-bright/10 transition-colors flex items-center gap-2 no-underline"
+          style="border: 1px solid #a28d79;"
+        >
+          <span class="material-symbols-outlined text-sm">refresh</span>
+          Load Historical Data
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {news.map((item) => (
-          <a href={`/news/${item.id}/`} class="block p-6 rounded-xl bg-surface-container border border-outline-variant/20 hover:border-primary-container/20 transition-colors no-underline">
-            <div class="mb-3">
-              <span class="text-[10px] font-label font-bold text-primary-container bg-primary-container/10 px-2 py-1 rounded uppercase tracking-wider">
-                <FormattedDate date={item.data.pubDate} />
-              </span>
-            </div>
-            <h3 class="font-headline font-bold text-on-surface text-base mb-2 leading-snug">{item.data.title}</h3>
-            {item.data.description && (
-              <p class="text-sm text-outline font-body line-clamp-2">{item.data.description}</p>
-            )}
-          </a>
-        ))}
-      </div>
-    </section>
-  )}
+    </div>
+  </div>
 </BaseLayout>

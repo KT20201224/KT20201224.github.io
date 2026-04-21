@@ -1,108 +1,138 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FormattedDate from '../../components/common/FormattedDate.astro';
+import PostCard from '../../components/blog/PostCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../lib/constants';
-import { getFirstImage, getImageUrl } from '../../lib/utils';
+import {
+  getPublishedPosts,
+  getCategoriesWithCount,
+  getFirstImage,
+  getImageUrl,
+} from '../../lib/utils';
 
-const posts = (await getCollection('blog'))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allPosts = await getCollection('blog');
+const posts = getPublishedPosts(allPosts);
+const totalPosts = posts.length;
+const categoriesWithCount = getCategoriesWithCount(posts);
+
+const indexHealth = totalPosts > 0
+  ? Math.min(99.9, 85 + Math.min(totalPosts, 30) * 0.5)
+  : 0;
+
+const [featured, ...rest] = posts;
 ---
 
 <BaseLayout title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
-  <!-- Page Header -->
-  <header class="mb-16">
-    <span class="font-label text-xs uppercase tracking-[0.3em] text-primary-container mb-4 block">Index of Knowledge</span>
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div>
-        <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tighter text-on-surface leading-tight">
-          Latest <br/>
-          <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%)">
-            Articles.
-          </span>
-        </h1>
-      </div>
-      <div class="flex gap-4">
-        <div class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg font-label text-xs text-outline">
-          <span class="material-symbols-outlined text-sm">article</span>
-          총 {posts.length}개의 글
+  <div class="flex flex-col md:flex-row gap-8 md:gap-12">
+    <!-- Left Sidebar: Taxonomy -->
+    <aside class="w-full md:w-64 flex flex-col gap-8 shrink-0">
+      <!-- Search -->
+      <div class="flex flex-col gap-2">
+        <label class="sr-only" for="search-posts">Search Posts</label>
+        <div class="relative group">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+          <input
+            id="search-posts"
+            type="text"
+            placeholder="Search the archive..."
+            class="w-full bg-surface-container-low text-on-surface placeholder-on-surface-variant rounded py-3 pl-10 pr-4 focus:outline-none focus:shadow-[0_0_8px_rgba(255,198,135,0.1)] transition-all font-body text-sm"
+            style="border: 1px solid rgba(84, 68, 51, 0.15);"
+          />
         </div>
       </div>
-    </div>
-  </header>
 
-  <!-- Post Listing (Stitch style) -->
-  <section class="space-y-12">
-    {posts.map((post) => {
-      const image = post.data.heroImage || getFirstImage(post.body);
-      const imageUrl = getImageUrl(image);
-      return (
-        <article class="group relative grid md:grid-cols-12 gap-8 items-start py-8 transition-all hover:bg-surface-container-low/50 rounded-2xl px-4 -mx-4 cursor-pointer">
-          <a href={`/blog/${post.id}/`} class="absolute inset-0 z-0 rounded-2xl" aria-label={post.data.title}></a>
-          {/* Thumbnail */}
-          <div class="md:col-span-4 aspect-video rounded-xl overflow-hidden bg-surface-container-high">
-            {imageUrl ? (
-              <img
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                src={imageUrl}
-                alt={post.data.title}
-                loading="lazy"
+      <!-- Category Filters -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-headline text-lg font-bold text-on-surface tracking-wide uppercase opacity-80">Taxonomy</h3>
+        <div class="flex flex-col gap-2 font-label text-sm">
+          <a
+            href="/blog"
+            class="text-left py-2 px-3 rounded bg-surface-container hover:bg-surface-bright/10 transition-colors flex justify-between items-center text-primary border-l-2 border-primary no-underline"
+          >
+            <span>All Nodes</span>
+            <span class="text-xs bg-surface-variant/60 px-2 py-0.5 rounded-sm">{totalPosts}</span>
+          </a>
+          {categoriesWithCount.map((cat) => (
+            <a
+              href={`/categories/${cat.slug}`}
+              class="text-left py-2 px-3 rounded hover:bg-surface-container transition-colors flex justify-between items-center text-on-surface-variant hover:text-on-surface no-underline"
+            >
+              <span>{cat.label}</span>
+              <span class="text-xs bg-surface-container-lowest px-2 py-0.5 rounded-sm">{cat.count}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Archive Status (Glassmorphism) -->
+      <div
+        class="mt-auto bg-surface-variant/60 backdrop-blur-md rounded-lg p-5 flex flex-col gap-3 relative overflow-hidden"
+        style="border: 1px solid rgba(84, 68, 51, 0.15);"
+      >
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"></div>
+        <h4 class="font-headline text-sm font-bold text-on-surface-variant uppercase tracking-widest relative z-10">Archive Status</h4>
+        <div class="flex items-end gap-2 relative z-10">
+          <span class="font-headline text-3xl font-bold text-primary leading-none">{indexHealth.toFixed(1)}%</span>
+          <span class="font-label text-xs text-on-surface-variant mb-1">Index Health</span>
+        </div>
+        <div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden mt-1 relative z-10">
+          <div
+            class="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(255,198,135,0.5)]"
+            style={`width: ${indexHealth}%;`}
+          ></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Content: Post Grid -->
+    <div class="flex-grow flex flex-col gap-8">
+      <header class="flex justify-between items-end pb-4" style="border-bottom: 1px solid rgba(84, 68, 51, 0.15);">
+        <div>
+          <h1 class="font-headline text-4xl md:text-5xl font-bold text-on-surface mb-2 tracking-tight">Neural Archive</h1>
+          <p class="font-body text-on-surface-variant text-sm">
+            Chronological registry of thoughts, experiments, and architectural patterns.
+          </p>
+        </div>
+        <div class="hidden sm:flex items-center gap-3 text-sm font-label text-on-surface-variant">
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            Live Sync
+          </span>
+        </div>
+      </header>
+
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {featured && (
+            <div class="xl:col-span-2">
+              <PostCard
+                title={featured.data.title}
+                href={`/blog/${featured.id}/`}
+                date={featured.data.pubDate}
+                description={featured.data.description}
+                imageUrl={getImageUrl(featured.data.heroImage || getFirstImage(featured.body))}
+                category={featured.data.category}
+                featured={true}
               />
-            ) : (
-              <div class="w-full h-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-4xl text-outline-variant">article</span>
-              </div>
-            )}
-          </div>
-
-          {/* Content */}
-          <div class="md:col-span-8 flex flex-col justify-between h-full">
-            <div>
-              <div class="flex items-center gap-4 mb-4">
-                <span class="font-label text-[10px] uppercase tracking-widest text-outline">
-                  <FormattedDate date={post.data.pubDate} />
-                </span>
-                {post.data.category && (
-                  <>
-                    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-                    <span class="font-label text-[10px] uppercase tracking-widest text-outline">
-                      {post.data.category}
-                    </span>
-                  </>
-                )}
-              </div>
-              <h2 class="text-2xl font-bold font-headline mb-3 text-on-surface group-hover:text-primary-container transition-colors">
-                {post.data.title}
-              </h2>
-              {post.data.description && (
-                <p class="text-outline font-body leading-relaxed mb-6 text-lg line-clamp-2">
-                  {post.data.description}
-                </p>
-              )}
             </div>
-            {post.data.tags && post.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-2">
-                {post.data.tags.slice(0, 3).map((tag: string) => (
-                  <a
-                    href={`/tags/${tag}`}
-                    class="relative z-10 px-3 py-1 rounded-full bg-primary-container/10 text-primary-container font-label text-[10px] uppercase tracking-wider border border-primary-container/20 hover:bg-primary-container/20 transition-colors no-underline"
-                  >
-                    {tag}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </article>
-      );
-    })}
-  </section>
-
-  {posts.length === 0 && (
-    <div class="text-center py-20">
-      <span class="material-symbols-outlined text-6xl text-outline-variant mb-4 block">article</span>
-      <p class="text-outline font-label uppercase tracking-widest text-sm">아직 게시글이 없습니다</p>
+          )}
+          {rest.map((post) => (
+            <PostCard
+              title={post.data.title}
+              href={`/blog/${post.id}/`}
+              date={post.data.pubDate}
+              description={post.data.description}
+              imageUrl={getImageUrl(post.data.heroImage || getFirstImage(post.body))}
+              category={post.data.category}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20">
+          <span class="material-symbols-outlined text-6xl text-outline-variant mb-4 block">article</span>
+          <p class="text-on-surface-variant font-label uppercase tracking-widest text-sm">아직 게시글이 없습니다</p>
+        </div>
+      )}
     </div>
-  )}
+  </div>
 </BaseLayout>

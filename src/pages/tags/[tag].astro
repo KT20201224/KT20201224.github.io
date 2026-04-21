@@ -40,6 +40,7 @@ const posts = getPostsByTag(publishedPosts, tag);
         date={post.data.pubDate}
         description={post.data.description}
         imageUrl={getImageUrl(post.data.heroImage || getFirstImage(post.body))}
+        category={post.data.category}
       />
     ))}
   </section>
