@@ -50,61 +50,77 @@ const {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
+<!-- KaTeX styles for math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous" />
+
+<!-- Theme detection (runs before paint to avoid flash) -->
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = stored || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  })();
+</script>
+
 <!-- Tailwind CSS with Editorial Intelligence Design System -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" is:inline></script>
 <script is:inline>
+  const c = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
   tailwind.config = {
     darkMode: "class",
     theme: {
       extend: {
         colors: {
-          "surface": "#131313",
-          "surface-dim": "#131313",
-          "surface-bright": "#3a3939",
-          "surface-container-lowest": "#0e0e0e",
-          "surface-container-low": "#1c1b1b",
-          "surface-container": "#201f1f",
-          "surface-container-high": "#2a2a2a",
-          "surface-container-highest": "#353534",
-          "surface-variant": "#353534",
-          "surface-tint": "#ffb866",
-          "background": "#131313",
-          "on-background": "#e5e2e1",
-          "on-surface": "#e5e2e1",
-          "on-surface-variant": "#dac3ad",
-          "inverse-surface": "#e5e2e1",
-          "inverse-on-surface": "#313030",
-          "outline": "#a28d79",
-          "outline-variant": "#544433",
-          "primary": "#ffc687",
-          "primary-container": "#ff9f00",
-          "primary-fixed": "#ffddba",
-          "primary-fixed-dim": "#ffb866",
-          "on-primary": "#482900",
-          "on-primary-container": "#663d00",
-          "on-primary-fixed": "#2b1700",
-          "on-primary-fixed-variant": "#673d00",
-          "inverse-primary": "#875200",
-          "secondary": "#d4bbff",
-          "secondary-container": "#572e99",
-          "secondary-fixed": "#ebdcff",
-          "secondary-fixed-dim": "#d4bbff",
-          "on-secondary": "#3f0f81",
-          "on-secondary-container": "#c6a5ff",
-          "on-secondary-fixed": "#260058",
-          "on-secondary-fixed-variant": "#572e99",
-          "tertiary": "#7be1d6",
-          "tertiary-container": "#5ec5bb",
-          "tertiary-fixed": "#8ef4e9",
-          "tertiary-fixed-dim": "#71d7cd",
-          "on-tertiary": "#003733",
-          "on-tertiary-container": "#004f4a",
-          "on-tertiary-fixed": "#00201d",
-          "on-tertiary-fixed-variant": "#00504a",
-          "error": "#ffb4ab",
-          "error-container": "#93000a",
-          "on-error": "#690005",
-          "on-error-container": "#ffdad6"
+          "surface": c("surface"),
+          "surface-dim": c("surface-dim"),
+          "surface-bright": c("surface-bright"),
+          "surface-container-lowest": c("surface-container-lowest"),
+          "surface-container-low": c("surface-container-low"),
+          "surface-container": c("surface-container"),
+          "surface-container-high": c("surface-container-high"),
+          "surface-container-highest": c("surface-container-highest"),
+          "surface-variant": c("surface-variant"),
+          "surface-tint": c("surface-tint"),
+          "background": c("background"),
+          "on-background": c("on-background"),
+          "on-surface": c("on-surface"),
+          "on-surface-variant": c("on-surface-variant"),
+          "inverse-surface": c("inverse-surface"),
+          "inverse-on-surface": c("inverse-on-surface"),
+          "outline": c("outline"),
+          "outline-variant": c("outline-variant"),
+          "primary": c("primary"),
+          "primary-container": c("primary-container"),
+          "primary-fixed": c("primary-fixed"),
+          "primary-fixed-dim": c("primary-fixed-dim"),
+          "on-primary": c("on-primary"),
+          "on-primary-container": c("on-primary-container"),
+          "on-primary-fixed": c("on-primary-fixed"),
+          "on-primary-fixed-variant": c("on-primary-fixed-variant"),
+          "inverse-primary": c("inverse-primary"),
+          "secondary": c("secondary"),
+          "secondary-container": c("secondary-container"),
+          "secondary-fixed": c("secondary-fixed"),
+          "secondary-fixed-dim": c("secondary-fixed-dim"),
+          "on-secondary": c("on-secondary"),
+          "on-secondary-container": c("on-secondary-container"),
+          "on-secondary-fixed": c("on-secondary-fixed"),
+          "on-secondary-fixed-variant": c("on-secondary-fixed-variant"),
+          "tertiary": c("tertiary"),
+          "tertiary-container": c("tertiary-container"),
+          "tertiary-fixed": c("tertiary-fixed"),
+          "tertiary-fixed-dim": c("tertiary-fixed-dim"),
+          "on-tertiary": c("on-tertiary"),
+          "on-tertiary-container": c("on-tertiary-container"),
+          "on-tertiary-fixed": c("on-tertiary-fixed"),
+          "on-tertiary-fixed-variant": c("on-tertiary-fixed-variant"),
+          "error": c("error"),
+          "error-container": c("error-container"),
+          "on-error": c("on-error"),
+          "on-error-container": c("on-error-container")
         },
         fontFamily: {
           "headline": ["Space Grotesk", "sans-serif"],

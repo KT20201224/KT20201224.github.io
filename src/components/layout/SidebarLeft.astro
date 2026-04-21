@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { CATEGORIES, SOCIAL_LINKS } from "../../lib/constants";
 import { getPublishedPosts, getTagsWithCount } from "../../lib/utils";
+import ThemeToggle from "../ui/ThemeToggle.astro";
 
 const pathname = Astro.url.pathname;
 
@@ -17,15 +18,15 @@ const recentCount = publishedPosts.filter(
 ).length;
 
 const categoryIcons: Record<string, string> = {
-  ml: "hub",
-  llm: "psychology",
-  web: "code",
-  devops: "memory",
+  "ai-ml": "psychology",
+  dev: "code",
+  news: "newspaper",
+  til: "school",
   etc: "more_horiz",
 };
 ---
 
-<aside class="fixed left-0 top-0 h-screen pt-20 w-64 hidden lg:flex flex-col bg-surface-container-low z-40 overflow-y-auto">
+<aside class="sticky top-24 self-start mx-4 mb-4 h-[calc(100vh-7rem)] w-64 hidden lg:flex flex-col flex-shrink-0 rounded-2xl shadow-xl bg-surface-container-low z-40 overflow-y-auto ghost-border">
   <!-- Compact Profile -->
   <div class="px-6 pt-6 pb-4 flex items-center gap-3">
     <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container flex-shrink-0">
@@ -35,14 +36,15 @@ const categoryIcons: Record<string, string> = {
         class="w-full h-full object-cover"
       />
     </div>
-    <div class="min-w-0">
+    <div class="min-w-0 flex-1">
       <p class="text-sm font-bold font-headline text-on-surface leading-tight truncate">Kyoungtae Kim</p>
       <p class="text-[10px] font-mono tracking-widest text-outline uppercase opacity-60 mt-0.5">Jerry's Archive</p>
     </div>
+    <ThemeToggle />
   </div>
 
   <!-- System Metrics -->
-  <div class="mx-4 mb-4 p-4 rounded-xl bg-surface-container-high/60">
+  <div class="mx-4 mb-4 px-4 py-5 rounded-xl bg-surface-container-high/60">
     <h3 class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant mb-3 font-bold flex items-center gap-1.5">
       <span class="material-symbols-outlined text-primary text-sm">bar_chart</span>
       System Metrics
@@ -63,19 +65,30 @@ const categoryIcons: Record<string, string> = {
     </div>
   </div>
 
-  <!-- Category Nav -->
-  <nav class="flex-1 px-4 space-y-1">
-    <a
-      href="/blog"
-      class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all border-l-4 ${
-        pathname === '/blog'
-          ? 'bg-surface-container-high text-primary-container border-primary-container'
-          : 'text-slate-500 border-transparent hover:bg-surface-container-high/50 hover:text-slate-300'
-      }`}
-    >
-      <span class="material-symbols-outlined text-xl">article</span>
-      <span class="text-xs font-mono font-label uppercase tracking-wider">All Posts</span>
-    </a>
+  <!-- Category Nav (floating cards) -->
+  <nav class="px-4 space-y-2.5">
+    {(() => {
+      const isAllPostsActive = pathname === '/blog';
+      return (
+        <a
+          href="/blog"
+          class={`flex items-center gap-3 px-3 py-4 rounded-xl shadow-md transition-all no-underline ${
+            isAllPostsActive
+              ? 'bg-primary-container/15 text-primary-container ring-1 ring-primary-container/30'
+              : 'bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+          }`}
+        >
+          <span class={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+            isAllPostsActive
+              ? 'bg-primary-container/30 text-primary-container'
+              : 'bg-surface-container-highest text-outline'
+          }`}>
+            <span class="material-symbols-outlined text-lg">article</span>
+          </span>
+          <span class="text-xs font-mono font-label uppercase tracking-wider">ALL</span>
+        </a>
+      );
+    })()}
 
     {CATEGORIES.map((cat) => {
       const href = `/categories/${cat.slug}`;
@@ -83,13 +96,19 @@ const categoryIcons: Record<string, string> = {
       return (
         <a
           href={href}
-          class={`flex items-center gap-3 px-4 py-3 rounded-lg group transition-all border-l-4 ${
+          class={`flex items-center gap-3 px-3 py-4 rounded-xl shadow-md transition-all no-underline ${
             isActive
-              ? 'bg-surface-container-high text-primary-container border-primary-container'
-              : 'text-slate-500 border-transparent hover:bg-surface-container-high/50 hover:text-slate-300'
+              ? 'bg-primary-container/15 text-primary-container ring-1 ring-primary-container/30'
+              : 'bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
           }`}
         >
-          <span class="material-symbols-outlined text-xl">{categoryIcons[cat.slug] || 'folder'}</span>
+          <span class={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+            isActive
+              ? 'bg-primary-container/30 text-primary-container'
+              : 'bg-surface-container-highest text-outline'
+          }`}>
+            <span class="material-symbols-outlined text-lg">{categoryIcons[cat.slug] || 'folder'}</span>
+          </span>
           <span class="text-xs font-mono font-label uppercase tracking-wider">{cat.label}</span>
         </a>
       );

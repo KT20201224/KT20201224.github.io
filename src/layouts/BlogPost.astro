@@ -4,7 +4,6 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/common/FormattedDate.astro";
 import SeriesNav from "../components/blog/SeriesNav.astro";
-import Comments from "../components/blog/Comments.astro";
 import { getSeriesInfo, getPublishedPosts, getReadingTime, getCategoryLabel } from "../lib/utils";
 
 interface Heading {
@@ -156,13 +155,6 @@ const categoryLabel = category ? getCategoryLabel(category) : null;
         <slot />
       </div>
 
-      <!-- Discussion -->
-      <section class="mt-20 pt-10" style="border-top: 1px solid rgba(84, 68, 51, 0.15);">
-        <div class="flex items-center justify-between mb-8">
-          <h3 class="font-headline text-2xl font-bold text-on-surface">Discussion</h3>
-        </div>
-        <Comments />
-      </section>
     </article>
 
     <!-- Right Sidebar -->
@@ -221,6 +213,41 @@ const categoryLabel = category ? getCategoryLabel(category) : null;
     </aside>
 
   </div>
+
+  <!-- Mermaid diagram renderer: lazy-loads mermaid only when code blocks exist -->
+  <script is:inline>
+    (async function () {
+      const blocks = document.querySelectorAll('pre > code.language-mermaid');
+      if (blocks.length === 0) return;
+
+      const mermaid = (await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs')).default;
+      const isDark = document.documentElement.classList.contains('dark');
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: isDark ? 'dark' : 'default',
+        securityLevel: 'loose',
+        themeVariables: isDark
+          ? { primaryColor: '#ff9f00', primaryTextColor: '#e5e2e1', lineColor: '#a28d79' }
+          : { primaryColor: '#ff9f00', primaryTextColor: '#1f1b13', lineColor: '#847568' },
+      });
+
+      for (let i = 0; i < blocks.length; i++) {
+        const block = blocks[i];
+        const code = block.textContent;
+        const id = `mermaid-${Date.now()}-${i}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          const wrapper = document.createElement('div');
+          wrapper.className = 'my-6 flex justify-center overflow-x-auto';
+          wrapper.innerHTML = svg;
+          const pre = block.closest('pre');
+          (pre || block).replaceWith(wrapper);
+        } catch (err) {
+          console.error('Mermaid render error:', err);
+        }
+      }
+    })();
+  </script>
 
   {h2Headings.length > 0 && (
     <script is:inline>

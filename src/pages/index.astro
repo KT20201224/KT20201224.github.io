@@ -6,7 +6,6 @@ import FormattedDate from "../components/common/FormattedDate.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../lib/constants";
 import {
   getPublishedPosts,
-  getCategoriesWithCount,
   getFirstImage,
   getImageUrl,
 } from "../lib/utils";
@@ -14,7 +13,6 @@ import {
 const allPosts = await getCollection("blog");
 const publishedPosts = getPublishedPosts(allPosts);
 const recentPosts = publishedPosts.slice(0, 5);
-const categoriesWithCount = getCategoriesWithCount(publishedPosts);
 
 const news = (await getCollection("news"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -25,56 +23,30 @@ const standardPosts = restPosts.slice(0, 3);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <!-- Hero Section -->
-  <section
-    class="relative w-full h-[400px] rounded-xl overflow-hidden mb-16 flex items-center justify-center"
-    style="border: 1px solid rgba(84, 68, 51, 0.15);"
-  >
-    <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent z-10"></div>
-    <div
-      class="absolute inset-0 opacity-40 mix-blend-luminosity bg-cover bg-center"
-      style="background-image: url('/images/etc/wallpaper.JPG'); background-position: 50% top;"
-    ></div>
-    <div class="relative z-20 text-center flex flex-col items-center gap-4 px-6">
-      <span class="font-label text-xs uppercase tracking-[0.3em] text-primary">
-        The Editorial Intelligence
-      </span>
-      <h1 class="font-headline text-4xl md:text-6xl font-black text-on-surface tracking-tighter drop-shadow-2xl">
-        안녕하세요 <span class="text-primary-container">Jerry</span>입니다.
-      </h1>
-      <p class="font-body text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-        {SITE_DESCRIPTION}
-      </p>
-    </div>
-  </section>
+  <div class="flex flex-col gap-8">
+    <!-- Hero Section -->
+    <section
+      class="relative w-full h-[400px] rounded-xl overflow-hidden flex items-center justify-start"
+      style="border: 1px solid rgba(84, 68, 51, 0.15);"
+    >
+      <div
+        class="absolute inset-0 bg-cover bg-center"
+        style="background-image: url('/images/etc/wallpaper.JPG'); background-position: 50% 30%;"
+      ></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/60 to-transparent z-10"></div>
+      <div class="relative z-20 text-left flex flex-col items-start gap-4 px-8 md:px-12 max-w-xl">
+        <span class="font-label text-xs uppercase tracking-[0.3em] text-primary">
+          The Editorial Intelligence
+        </span>
+        <h1 class="font-headline text-4xl md:text-6xl font-black text-on-surface tracking-tighter drop-shadow-2xl">
+          안녕하세요<br /><span class="text-primary-container">Jerry</span>입니다.
+        </h1>
+        <p class="font-body text-base md:text-lg text-on-surface-variant leading-relaxed">
+          {SITE_DESCRIPTION}
+        </p>
+      </div>
+    </section>
 
-  <!-- Main Layout: 3:9 Asymmetric Grid (denser on ultra-wide) -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-    <!-- Left Column: Sidebar / Stats -->
-    <aside class="col-span-1 lg:col-span-3 2xl:col-span-2 flex flex-col gap-6">
-      <!-- Topics/Categories Widget -->
-      {categoriesWithCount.length > 0 && (
-        <div class="bg-surface-container-low rounded-xl p-6" style="border: 1px solid rgba(84, 68, 51, 0.15);">
-          <h3 class="font-headline text-sm uppercase tracking-widest text-on-surface-variant mb-6 font-bold flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-sm">category</span>
-            Nodes
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {categoriesWithCount.map((cat) => (
-              <a
-                href={`/categories/${cat.slug}`}
-                class="bg-surface-container-highest hover:bg-primary-container/20 hover:text-primary text-on-surface px-3 py-1 rounded-sm font-label text-xs uppercase tracking-wider transition-colors no-underline"
-              >
-                {cat.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-    </aside>
-
-    <!-- Right Column: Main Content -->
-    <div class="col-span-1 lg:col-span-9 2xl:col-span-10 flex flex-col gap-8">
       <!-- Search Bar -->
       <div
         class="bg-surface-container-low rounded-xl p-2 flex items-center relative group focus-within:shadow-[0_0_15px_rgba(255,159,0,0.1)] transition-all"
@@ -166,6 +138,5 @@ const standardPosts = restPosts.slice(0, 3);
           Load Historical Data
         </a>
       </div>
-    </div>
   </div>
 </BaseLayout>

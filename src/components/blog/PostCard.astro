@@ -56,7 +56,7 @@ const chip = categoryStyles[categoryKey] ?? {
       </div>
     </a>
 
-    <div class="w-full md:w-3/5 p-6 md:p-8 md:pl-0 flex flex-col justify-center gap-4 relative z-10">
+    <div class="w-full md:w-3/5 px-6 py-8 md:px-8 md:py-10 md:pl-0 flex flex-col justify-center gap-4 relative z-10">
       <div class="font-label text-xs text-on-surface-variant flex items-center gap-3 uppercase tracking-widest">
         <FormattedDate date={date} />
         <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
@@ -79,7 +79,7 @@ const chip = categoryStyles[categoryKey] ?? {
     </div>
   </article>
 ) : (
-  <article class="group bg-surface-container-low rounded-lg p-6 flex flex-col gap-4 relative hover:bg-surface-container transition-colors duration-300">
+  <article class="group bg-surface-container-low rounded-lg px-6 py-8 flex flex-col gap-4 relative hover:bg-surface-container transition-colors duration-300">
     <div class="flex justify-between items-start">
       <span class={`${chip.bg} ${chip.text} font-label text-[10px] px-2 py-1 rounded-sm uppercase tracking-wider`}>
         {chip.label}

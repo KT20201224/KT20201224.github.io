@@ -10,18 +10,16 @@ export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Posts' },
   { href: '/graph', label: 'Graph' },
-  { href: '/news', label: 'News' },
   { href: '/projects', label: 'Projects' },
-  { href: '/til', label: 'TIL' },
   { href: '/about', label: 'About' },
 ] as const;
 
 // Categories
 export const CATEGORIES = [
-  { slug: 'ml', label: 'Machine Learning', description: '머신러닝 및 딥러닝 관련 글' },
-  { slug: 'devops', label: 'DevOps', description: 'DevOps, CI/CD, 인프라 관련 글' },
-  { slug: 'web', label: 'Web Development', description: '웹 개발 관련 글' },
-  { slug: 'llm', label: 'LLM', description: 'LLM 및 AI 관련 글' },
+  { slug: 'ai-ml', label: 'AI/ML', description: 'AI, ML, LLM 관련 글' },
+  { slug: 'dev', label: 'DEV', description: 'DevOps, Web, 개발 전반' },
+  { slug: 'news', label: 'NEWS', description: '업계 소식과 최신 릴리즈' },
+  { slug: 'til', label: 'TIL', description: 'Today I Learned' },
   { slug: 'etc', label: 'ETC', description: '기타 글' },
 ] as const;
 

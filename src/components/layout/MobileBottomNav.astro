@@ -1,0 +1,30 @@
+---
+import { NAV_LINKS } from "../../lib/constants";
+const pathname = Astro.url.pathname;
+const navIcons: Record<string, string> = {
+  '/': 'home',
+  '/blog': 'article',
+  '/graph': 'hub',
+  '/projects': 'grid_view',
+  '/about': 'person',
+};
+---
+
+<!--
+  Sticks to viewport bottom while scrolling through content, releases
+  when the flex-col wrapper ends so the footer can take full width.
+-->
+<nav class="md:hidden sticky bottom-0 w-full bg-surface-container-low/90 backdrop-blur-lg py-3 px-6 z-40 flex justify-around">
+  {NAV_LINKS.map((link) => {
+    const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href + '/'));
+    return (
+      <a
+        href={link.href}
+        class={`flex flex-col items-center gap-1 no-underline ${isActive ? 'text-primary-container' : 'text-on-surface-variant'}`}
+      >
+        <span class="material-symbols-outlined text-[22px]">{navIcons[link.href] || 'circle'}</span>
+        <span class="text-[9px] font-label uppercase tracking-wider">{link.label}</span>
+      </a>
+    );
+  })}
+</nav>

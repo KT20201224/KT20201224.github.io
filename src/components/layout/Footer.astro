@@ -1,33 +1,31 @@
 ---
-import { SITE_TITLE, SOCIAL_LINKS } from "../../lib/constants";
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-surface-container-lowest w-full py-12 mt-20 pb-24 md:pb-12 opacity-80 hover:opacity-100 transition-opacity">
+<footer class="bg-surface-container-lowest w-full py-12 mt-20 opacity-80 hover:opacity-100 transition-opacity">
   <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-    <div class="font-headline text-lg font-bold text-on-surface">
-      {SITE_TITLE}
-    </div>
-
-    <div class="font-label text-[11px] tracking-widest uppercase text-on-surface-variant text-center order-last md:order-none">
+    <div class="font-label text-[11px] tracking-widest uppercase text-on-surface-variant text-center md:text-left">
       © {year} Kyoungtae Kim. All rights reserved.
     </div>
 
-    <nav class="flex items-center gap-6 font-label text-[11px] tracking-widest uppercase">
+    <div class="font-label text-[10px] tracking-widest uppercase text-outline text-center order-last md:order-none">
+      Built with
       <a
-        href={SOCIAL_LINKS.github}
+        href="https://astro.build"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-on-surface-variant hover:text-primary-container transition-colors no-underline"
-      >
-        GitHub
-      </a>
+        class="hover:text-primary-container transition-colors no-underline"
+      >Astro</a>
+      · Deployed on
       <a
-        href={`mailto:${SOCIAL_LINKS.email}`}
-        class="text-on-surface-variant hover:text-primary-container transition-colors no-underline"
-      >
-        Email
-      </a>
+        href="https://pages.github.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-primary-container transition-colors no-underline"
+      >GitHub Pages</a>
+    </div>
+
+    <nav class="flex items-center gap-6 font-label text-[11px] tracking-widest uppercase">
       <a
         href="/rss.xml"
         target="_blank"
