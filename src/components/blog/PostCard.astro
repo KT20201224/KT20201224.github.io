@@ -33,7 +33,7 @@ const chip = categoryStyles[categoryKey] ?? {
   <article class="group relative overflow-hidden bg-surface-container-low rounded-lg flex flex-col md:flex-row gap-6 p-1 transition-colors">
     <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-    <a href={href} class="w-full md:w-2/5 aspect-video md:aspect-auto rounded-md overflow-hidden bg-surface-container-lowest relative no-underline">
+    <div class="w-full md:w-2/5 aspect-video md:aspect-auto rounded-md overflow-hidden bg-surface-container-lowest relative">
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -54,15 +54,15 @@ const chip = categoryStyles[categoryKey] ?? {
           <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> New
         </span>
       </div>
-    </a>
+    </div>
 
-    <div class="w-full md:w-3/5 px-6 py-8 md:px-8 md:py-10 md:pl-0 flex flex-col justify-center gap-4 relative z-10">
+    <div class="w-full md:w-3/5 px-6 py-8 md:px-8 md:py-10 md:pl-0 flex flex-col justify-center gap-4">
       <div class="font-label text-xs text-on-surface-variant flex items-center gap-3 uppercase tracking-widest">
         <FormattedDate date={date} />
         <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
         <span>8 min read</span>
       </div>
-      <a href={href} class="no-underline">
+      <a href={href} class="no-underline after:absolute after:inset-0 after:content-['']">
         <h2 class="font-headline text-2xl md:text-3xl font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-tight">
           {title}
         </h2>
@@ -71,10 +71,10 @@ const chip = categoryStyles[categoryKey] ?? {
         <p class="font-body text-on-surface-variant line-clamp-3">{description}</p>
       )}
       <div class="mt-2">
-        <a href={href} class="inline-flex items-center gap-2 font-headline text-sm font-bold text-primary uppercase tracking-wider hover:text-primary-fixed-dim transition-colors no-underline">
+        <span class="inline-flex items-center gap-2 font-headline text-sm font-bold text-primary uppercase tracking-wider group-hover:text-primary-fixed-dim transition-colors">
           Access Node
           <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-        </a>
+        </span>
       </div>
     </div>
   </article>
@@ -89,7 +89,7 @@ const chip = categoryStyles[categoryKey] ?? {
       </span>
     </div>
 
-    <a href={href} class="no-underline">
+    <a href={href} class="no-underline after:absolute after:inset-0 after:content-['']">
       <h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors leading-snug tracking-tight">
         {title}
       </h3>
@@ -104,10 +104,10 @@ const chip = categoryStyles[categoryKey] ?? {
         <span class="w-8 h-1 bg-outline-variant/30 rounded-full"></span>
         <span class="w-2 h-1 bg-outline-variant/30 rounded-full"></span>
       </div>
-      <a href={href} class="inline-flex items-center gap-1 font-headline text-xs font-bold text-on-surface hover:text-primary transition-colors uppercase tracking-widest no-underline">
+      <span class="inline-flex items-center gap-1 font-headline text-xs font-bold text-on-surface group-hover:text-primary transition-colors uppercase tracking-widest">
         Read
         <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-      </a>
+      </span>
     </div>
   </article>
 )}
