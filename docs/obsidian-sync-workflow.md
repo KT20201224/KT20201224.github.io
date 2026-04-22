@@ -149,12 +149,14 @@ sed -i "s/^category: ['\"]web['\"]$/category: dev/" "blog-repo/src/content/blog/
 
 **순서 중요**: 앨리어스 있는 패턴을 먼저 처리한 뒤 단순 패턴을 처리하세요. 반대 순서로 하면 앨리어스 매칭이 안 됩니다.
 
+**delimiter 주의**: 앨리어스 패턴에는 `|`가 리터럴로 등장하므로 sed의 delimiter로 `|`를 쓰면 `unknown option to 's'` 에러가 납니다. `#` 같은 다른 문자를 delimiter로 사용하세요.
+
 ```bash
 # 1) 앨리어스 있는 위키링크: ![[img.png|alt text]] → ![alt text](/images/blog/img.png)
-sed -i 's|!\[\[\([^|]*\)|\([^]]*\)\]\]|![\2](/images/blog/\1)|g' "blog-repo/src/content/blog/$filename"
+sed -i 's#!\[\[\([^|]*\)|\([^]]*\)\]\]#![\2](/images/blog/\1)#g' "blog-repo/src/content/blog/$filename"
 
 # 2) 앨리어스 없는 위키링크: ![[img.png]] → ![img.png](/images/blog/img.png)
-sed -i 's|!\[\[\([^]]*\)\]\]|![\1](/images/blog/\1)|g' "blog-repo/src/content/blog/$filename"
+sed -i 's#!\[\[\([^]]*\)\]\]#![\1](/images/blog/\1)#g' "blog-repo/src/content/blog/$filename"
 ```
 
 ### 4.3 파이썬 기반 URL 인코딩 (권장)
@@ -313,10 +315,10 @@ jobs:
             filename=$(basename "$file")
             cp "$file" "blog-repo/src/content/blog/$filename"
 
-            # Wikilinks: aliased form first
-            sed -i 's|!\[\[\([^|]*\)|\([^]]*\)\]\]|![\2](/images/blog/\1)|g' "blog-repo/src/content/blog/$filename"
+            # Wikilinks: aliased form first (delimiter '#' so '|' is literal in pattern)
+            sed -i 's#!\[\[\([^|]*\)|\([^]]*\)\]\]#![\2](/images/blog/\1)#g' "blog-repo/src/content/blog/$filename"
             # Wikilinks: simple form
-            sed -i 's|!\[\[\([^]]*\)\]\]|![\1](/images/blog/\1)|g' "blog-repo/src/content/blog/$filename"
+            sed -i 's#!\[\[\([^]]*\)\]\]#![\1](/images/blog/\1)#g' "blog-repo/src/content/blog/$filename"
 
             # Obsidian attachment paths
             sed -i 's|!\[\([^]]*\)\](attachments/\([^)]*\))|![\1](/images/blog/\2)|g' "blog-repo/src/content/blog/$filename"
@@ -346,8 +348,8 @@ jobs:
               filename=$(basename "$file")
               cp "$file" "blog-repo/src/content/til/$filename"
               # 위키링크 처리는 Blog와 동일하게 TIL에도 적용
-              sed -i 's|!\[\[\([^|]*\)|\([^]]*\)\]\]|![\2](/images/blog/\1)|g' "blog-repo/src/content/til/$filename"
-              sed -i 's|!\[\[\([^]]*\)\]\]|![\1](/images/blog/\1)|g' "blog-repo/src/content/til/$filename"
+              sed -i 's#!\[\[\([^|]*\)|\([^]]*\)\]\]#![\2](/images/blog/\1)#g' "blog-repo/src/content/til/$filename"
+              sed -i 's#!\[\[\([^]]*\)\]\]#![\1](/images/blog/\1)#g' "blog-repo/src/content/til/$filename"
             done
           fi
 
