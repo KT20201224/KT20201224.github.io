@@ -2,10 +2,10 @@
 title: 성능이 좋은 프롬프트 작성하기
 pubDate: 2025-11-29
 description: AI를 다루는 마법의 주문 프롬프트
-author: Kyoungtea Kim
 tags:
   - Prompt
   - AI
+category: ai-ml
 ---
 ## 프롬프트와 프롬프트 템플릿
 프롬프트는 AI에게 주는 하나의 요청 메시지 전체를 의미한다. 

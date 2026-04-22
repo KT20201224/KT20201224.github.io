@@ -2,10 +2,10 @@
 title: 다층 퍼셉트론, Multi Layer Perceptron
 pubDate: 2025-10-23
 description: MLP 기본 개념 정리
-author: Kyoungtea Kim
 tags:
   - Perceptron
   - MLP
+category: ai-ml
 ---
 전에 살펴봤던 단일 퍼셉트론은 비선형 문제는 해결할 수 없었습니다. 실제로 단일층 퍼셉트론이 XOR 문제를 해결할 수 없다는 것이 1969년 수학적으로 증명되면서, 다층 구조에 대해 연구가 이루어졌지만 다층 네트워크를 학습시키는 방법이 없었습니다. 1986년 역전파 알고리즘이 널리 보급되면서 은닉층의 가중치를 조정할 수 있게 되었고, MLP가 등장했습니다.
 

@@ -2,12 +2,12 @@
 title: 실시간 통신과 웹소켓
 pubDate: 2025-11-29
 description: 실시간 통신을 학습하고 네트워크에 대한 이해를 키워본다.
-author: Kyoungtea Kim
 tags:
   - WebScoket
   - Netwrok
   - TCP
   - Polling
+category: dev
 ---
 실시간 소통(Real-Time Communication)과 소켓(Socket)은 네트워크/백엔드/프론트엔드 나눌 것 없이 서비스를 개발하려면 반드시 알아야하는 주제이다. 이번 기회에 부족했던 개념들을 한번에 정리하고자 한다.
 

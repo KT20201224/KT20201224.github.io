@@ -2,13 +2,13 @@
 title: 활성화 함수
 pubDate: 2025-10-21
 description: 활성화 함수에 대한 공부
-author: Kyoungtea Kim
 tags:
   - ActivationFunction
   - StepFunction
   - ReLU
   - Sigmoid
   - Tanh
+category: ai-ml
 ---
 활성화 함수는 MLP나 인공 신경망에서 뉴런이 얼마나 활성화 될지를 결정하는 "비선형 함수"이다. 단순한 선형 모델을 비선형 문제로 확장시켜주는 핵심 역할을 합니다.
 

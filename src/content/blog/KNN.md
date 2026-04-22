@@ -2,10 +2,10 @@
 title: K-Nearest Neighbors, KNN
 pubDate: 2025-10-14
 description: KNN 알고리즘 학습, 실습
-author: Kyoungtea Kim
 tags:
   - KNN
   - ML
+category: ai-ml
 ---
 ## K-Nearest Neighbors 알고리즘 
 KNN의 핵심아이디어는 "비슷한 것들은 가까이 있다."입니다. 새로운 데이터 포인트가 주어졌을 때, 그 주변의 가장 가까운 K개의 이웃들의 정보를 바탕으로 정답을 예측합니다.

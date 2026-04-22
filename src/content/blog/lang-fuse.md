@@ -2,9 +2,9 @@
 title: LangFuse
 pubDate: 2025-12-13
 description: Langfuse에 대한 정리
-author: Kyoungtea Kim
 tags:
   - LangFuse
+category: ai-ml
 ---
 # Langfuse 개요
 

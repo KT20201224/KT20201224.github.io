@@ -2,11 +2,11 @@
 title: AWS EC2 체험기
 pubDate: 2025-12-12
 description: AWS 체험기
-author: Kyoungtea Kim
 tags:
   - AWS
   - EC2
   - Cloud
+category: dev
 ---
 ## AWS EC2 인스턴스 생성하기 - 기본편
 

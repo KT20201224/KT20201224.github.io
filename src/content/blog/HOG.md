@@ -2,10 +2,10 @@
 title: Histogram of Oriented Gradients, HOG
 pubDate: 2025-10-01
 description: HOG에 대한 공부
-author: Kyoungtea Kim
 tags:
   - HOG
   - AI
+category: ai-ml
 ---
 Histogram of Oriented Gradients 직역하면 "기울기 지향 히스토그램" 이다. 히스토그램은 도수분포표를 시각화 한 그래프를 말하는데, 그러면 기울기의 분포를 구간별로 나타낸 그래프라고 해석이 된다.
 

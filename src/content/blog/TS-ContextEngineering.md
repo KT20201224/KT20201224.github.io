@@ -2,11 +2,11 @@
 title: "[TroubleShooting] gpt-4o-mini에서 A.X 7B 모델로 바꾸면서 발생한 컨텍스트 문제"
 pubDate: 2026-03-03
 description: api에서 로컬모델로 변경하면서 모델이 길을 잃기 시작했다.
-author: Kyoungtea Kim
 tags:
   - TroubleShooting
   - LLM
   - ContextEngineering
+category: ai-ml
 ---
 기존 OpenAI api를 사용하다가 비용문제로 로컬모델로 변경하는 과정에서 소형 모델(7B)이 긴 컨텍스트 속에서 답을 제대로 내지 못하는(Lost in the middle) 문제가 발생했다. 
 
