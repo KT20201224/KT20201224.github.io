@@ -3,12 +3,13 @@ title: LLM FineTuning
 pubDate: 2025-12-02
 description: LLM 파인튜닝의 대한 학습
 tags:
-  - LLM
-  - FineTuning
-  - LoRA
-  - QLoRA
+- LLM
+- FineTuning
+- LoRA
+- QLoRA
 category: ai-ml
 ---
+
 ## 파인튜닝이란?
 파인튜닝을 이해하려면, 먼저 LLM이 처음에 어떻게 만들어지는지 이해할 필요가 있다. LLM은 Large Language Model의 약자로 인터넷, 책, 코드, 등 방대한 양의 텍스트 데이터를 모으고 "앞에 단어들이 주어졌을 때, 다음 단어를 예측해봐"라는 문제를 시킨다. 이 행동을 적게는 수십억 많게는 수조번 반복하면서 문법, 상식, 패턴, 등을 자연스럽게 익힌다. 이를 사전학습(Pretraining)이라고 한다. 사전학습은 전체적인 패턴을 이해하지만, 특정 도메인을 학습하지는 않습니다. 특정 회사의 정책이나, 게임 규칙 같이 도메인의 영역으로 들어가면 자세히 알지 못합니다.
 

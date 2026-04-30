@@ -1,7 +1,9 @@
 ---
-title: "Astro v5 정식 출시"
-description: "더 빨라진 빌드 속도와 Content Collections 개선이 포함되었습니다."
+title: Astro v5 정식 출시
+description: 더 빨라진 빌드 속도와 Content Collections 개선이 포함되었습니다.
 pubDate: 2025-12-15
+source: https://astro.build/blog/astro-5/
+sourceName: Astro Blog
 ---
 
 정적 사이트 생성기 **Astro**가 v5 버전을 정식 출시했습니다.

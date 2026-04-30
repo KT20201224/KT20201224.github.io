@@ -3,12 +3,13 @@ title: 랭체인의 전체적인 흐름
 pubDate: 2025-12-09
 description: 랭체인에서 이루어지는 과정들을 간단하게 정리
 tags:
-  - LangChain
-  - Prompt
-  - Embedding
-  - VectorStore
+- LangChain
+- Prompt
+- Embedding
+- VectorStore
 category: ai-ml
 ---
+
 #### 1. 데이터 로더
 여러 raw data(pdf, Markdown, web Page)를 한 곳에 모아 LangChain이 쓸 수 있는 Document 객체 리스트로 만든다. LangChain은 다양한 로더들이 존재하기 때문에 어떤 형식의 문서도 Document화 시킬 수 있다.
 1. PDF 로더 : pdf의 경우에는 각 페이지가 한 document로 로드된다.

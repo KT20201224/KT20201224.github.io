@@ -3,13 +3,14 @@ title: DevOps와 AWS 기초
 pubDate: 2025-12-03
 description: Devops와 AWS의 기초 배우기
 tags:
-  - DevOps
-  - NeuralNetworks
-  - RDS
-  - EC2
-  - Docker
+- DevOps
+- NeuralNetworks
+- RDS
+- EC2
+- Docker
 category: dev
 ---
+
 개발자가 코드를 작성하고 사용자가 실제로 서비스를 이용하기까지 필요한 내용은 다음과 같습니다.
 1. 개발자가 코드 작성
 2. Github에 Push

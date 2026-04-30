@@ -3,10 +3,11 @@ title: Prompt caching, OpenAI
 pubDate: 2025-12-08
 description: OpenAI 프롬프트 캐싱의 원리
 tags:
-  - OpenAI
-  - PromptCahcing
+- OpenAI
+- PromptCahcing
 category: ai-ml
 ---
+
 모델 프롬프트는 가끔 반복되는 내용들이 들어갈 수 있다. OpenAI API에서는 프롬프트 캐싱을 통해 같은 프롬프트에 대한 요청을 빠르고 저렴하게 사용할 수 있는 기능을 자동으로 제공한다. 프롬프트 캐싱은 latency를 최대 80%, token cost를 최대 90%까지 절감 할 수 있다. 해당 기능은 API 요청 시 별도의 과금 없이 자동으로 제공된다.
 
 캐시히트는 프롬프트의 앞부분인 prefix가 정확히 일치해야 작동한다. 캐시 히트를 높이려면 지시문 같은 정적인 내용을 앞에 배치하고 자주바뀌거나 개인적인 내용은 뒤로 배치하는 전략이 유리하다. 이미지나 툴의 경우에도 예외없이 같은 전략을 사용하는 것이 좋다.

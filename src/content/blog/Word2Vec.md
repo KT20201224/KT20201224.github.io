@@ -3,9 +3,10 @@ title: Word2Vec 논문 내용 정리
 pubDate: 2025-11-05
 description: Word2Vec 논문 내용 정리
 tags:
-  - Word2Vec
+- Word2Vec
 category: ai-ml
 ---
+
 ## Word2Vec 이전
 기존의 NLP 방식에서는 구현이 쉽고 직관적이라는 이유로 단어를 사전 상의 인덱스로 표현했습니다. 
 - "사과" = 15

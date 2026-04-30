@@ -3,10 +3,11 @@ title: Histogram of Oriented Gradients, HOG
 pubDate: 2025-10-01
 description: HOG에 대한 공부
 tags:
-  - HOG
-  - AI
+- HOG
+- AI
 category: ai-ml
 ---
+
 Histogram of Oriented Gradients 직역하면 "기울기 지향 히스토그램" 이다. 히스토그램은 도수분포표를 시각화 한 그래프를 말하는데, 그러면 기울기의 분포를 구간별로 나타낸 그래프라고 해석이 된다.
 
 처음 접하면 내용들이 어려워 한단계씩 정의해 나가야한다. HOG는 머신러닝인가? 라고 한다면 사실 그렇지는 않다. 정확히는 Feature Descriptor이라는 표현이 더 정확하다. 그렇다면 Feature Descriptor는 무엇인가?

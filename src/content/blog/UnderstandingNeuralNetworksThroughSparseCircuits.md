@@ -3,10 +3,11 @@ title: Understanding neural networks through sparse circuits, OpenAI
 pubDate: 2025-11-14
 description: 희소 회로로 이해하는 신경망
 tags:
-  - OpenAI
-  - NeuralNetworks
+- OpenAI
+- NeuralNetworks
 category: ai-ml
 ---
+
 현대 인공지능은 놀라울 정도의 성능을 보여줍니다. 하지만, 치명적인 약점이 존재합니다. 제가 느낀 모델은 x -> F(x) 를 대입법으로 함수를 구하는 과정이라고 생각합니다. 즉, 데이터로 학습을 하지만 왜 그렇게 대답했는지는 그 누구도 모르는 것이죠.
 
 이것은 전통적인 신경망의 구조에서 나오는 한계입니다. 일반적인 딥러닝 모델은 "Dense Network"입니다. 각 뉴런이 수천 개의 뉴런과 연결되어 활성화되어 있습니다. 기존의 연구자들은 이렇게 복잡하게 훈련된 모델을 분석하려고 했습니다. 하지만 너무 복잡한 구조로 인해 풀어내지 못했습니다.

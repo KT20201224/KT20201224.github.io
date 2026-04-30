@@ -3,10 +3,11 @@ title: 퍼셉트론, Perceptron
 pubDate: 2025-10-20
 description: 퍼셉트론에 대한 정리
 tags:
-  - DeepLearning
-  - Perceptron
+- DeepLearning
+- Perceptron
 category: ai-ml
 ---
+
 퍼셉트론은 인공신경망의 가장 기본이 되는 단일 뉴런 모델이다. 1957년 프랭크 로젠블라트(Frank Rosenblatt)가 제안한 것으로, 오늘날 딥러닝의 출발점이기도 합니다. 퍼셉트론은 단일 "뉴런" 모델로, 실제 인간의 뉴런의 동작 방식에 영감을 받았습니다.
 #### 생물학적 뉴런
 ![퍼셉트론-20251021-1.png](/images/blog/%ED%8D%BC%EC%85%89%ED%8A%B8%EB%A1%A0-20251021-1.png)

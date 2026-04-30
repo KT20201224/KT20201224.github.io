@@ -3,11 +3,12 @@ title: AWS EC2 체험기
 pubDate: 2025-12-12
 description: AWS 체험기
 tags:
-  - AWS
-  - EC2
-  - Cloud
+- AWS
+- EC2
+- Cloud
 category: dev
 ---
+
 ## AWS EC2 인스턴스 생성하기 - 기본편
 
 ### 1. 애플리케이션 및 OS 이미지(AMI)

@@ -3,11 +3,12 @@ title: CrewAI Observability 선정부터 트러블 슈팅까지
 pubDate: 2026-02-11
 description: Langfuse를 선택하게 된 이유부터 Tracing 과정 정리
 tags:
-  - LangFuse
-  - CrewAI
-  - TroubleShooting
+- LangFuse
+- CrewAI
+- TroubleShooting
 category: ai-ml
 ---
+
 팀 프로젝트에서 CrewAI를 사용하고 어느정도 개발이 진행된 시점에서 비용 비교와 모델 선정에 있어서 CLI에서는 한계를 느끼고 여러 메트릭들을 시각화하는 과정이 필요해졌다. 
 
 # CrewAI 공식 문서에 있는 Observability

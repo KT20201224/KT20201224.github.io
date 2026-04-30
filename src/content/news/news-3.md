@@ -1,7 +1,9 @@
 ---
-title: "2026년 웹 개발 트렌드 전망"
-description: "Rust 기반 툴체인과 Wasm의 부상이 예상됩니다."
+title: 2026년 웹 개발 트렌드 전망
+description: Rust 기반 툴체인과 Wasm의 부상이 예상됩니다.
 pubDate: 2025-12-10
+source: https://2024.stateofjs.com/
+sourceName: State of JS
 ---
 
 2026년을 앞두고 웹 개발 생태계는 **Rust** 기반의 고성능 툴체인(Turbopack, Rolldown 등)으로 급격히 재편되고 있습니다.

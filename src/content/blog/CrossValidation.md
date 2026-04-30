@@ -3,11 +3,12 @@ title: 교차 검증, Cross Validation (K-Fold CV)
 pubDate: 2025-10-23
 description: 데이터 교차 검증 학습 내용 정리
 tags:
-  - Data
-  - CrossValidation
-  - K-FoldCV
+- Data
+- CrossValidation
+- K-FoldCV
 category: ai-ml
 ---
+
 교차 검증은 머신러닝 모델의 성능을 평가하고 과적합(overfitting)을 방지하기 위한 핵심적인 검증 기법입니다. 단순히 데이터를 Train,Validation,Test로 한번만 나누면 데이터 분할 방식이나 랜덤성에 의하여 성능평가가 크게 달라질 수 있습니다. 예를 들어서 Test 데이터에 너무 쉬운 데이터만 가득하거나 그 반대의 상황이 생기면 모델의 예측 결과가 일반적이지 못하게 됩니다. 또, 한번만 사용하고 버리기엔 제한된 데이터를 최대한 활용하지 못하는 것이기도 합니다.
 
 #### K-Fold CV

@@ -3,10 +3,11 @@ title: Git, 어떻게 해야 잘쓰는 걸까?
 pubDate: 2025-10-15
 description: git을 맛있게 쓰자
 tags:
-  - git
-  - github
+- git
+- github
 category: dev
 ---
+
 ## Git은 타임스톤이다.
 Git은 "버전 관리 시스템"이다. 코드의 변경 이력을 기록하고 관리하는 도구이다. 버전을 관리해주고, 분산 저장 시스템이며...(주저리 주저리)
 

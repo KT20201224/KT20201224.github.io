@@ -3,11 +3,12 @@ title: Poetry
 pubDate: 2025-12-13
 description: Poetry로 환경을 구성할 때 장단점과 그 특징
 tags:
-  - pip
-  - venv
-  - poetry
+- pip
+- venv
+- poetry
 category: dev
 ---
+
 ## 기존의 방식
 
 파이썬으로 개발할 때 초기 세팅은 venv나 conda 같은 가상환경에 `pip install requirements.txt` 방식으로 패키지를 설치해왔다. 독립적인 가상환경으로 의존성을 수정하고 싶은 경우에 가상 환경을 바꿔주면 됐다. 
